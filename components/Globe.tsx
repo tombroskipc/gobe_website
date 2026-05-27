@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { memo, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { EarthAssetModel } from "./EarthAssetModel";
+import { SHOW_GLOBES } from "./globeVisibility";
 
 type GlobeProps = {
   className?: string;
@@ -86,6 +87,10 @@ function GlobeCanvas({ scrollZoom }: { scrollZoom?: number }) {
 }
 
 function GlobeComponent({ className = "", scrollZoom = 0 }: GlobeProps) {
+  if (!SHOW_GLOBES) {
+    return null;
+  }
+
   return (
     <div className={`relative h-full min-h-[520px] w-full ${className}`}>
       <GlobeCanvas scrollZoom={scrollZoom} />

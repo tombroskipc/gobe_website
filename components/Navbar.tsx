@@ -1,14 +1,15 @@
 ﻿"use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
 const menuItems = [
-  { label: "TRANG CH\u1ee6", href: "#home" },
-  { label: "V\u1ec0 CH\u00daNG T\u00d4I", href: "#stack" },
-  { label: "TUY\u1ec2N D\u1ee4NG", href: "#contact" },
-  { label: "HO\u1ea0T \u0110\u1ed8NG", href: "#operations" },
-  { label: "TIN T\u1ee8C", href: "#proof" },
+  { label: "TRANG CH\u1ee6", href: "/", match: "/" },
+  { label: "V\u1ec0 CH\u00daNG T\u00d4I", href: "/ve-chung-toi", match: "/ve-chung-toi" },
+  { label: "TUY\u1ec2N D\u1ee4NG", href: "/tuyen-dung", match: "/tuyen-dung" },
+  { label: "HO\u1ea0T \u0110\u1ed8NG", href: "/#operations", match: "/#operations" },
+  { label: "TIN T\u1ee8C", href: "/#proof", match: "/#proof" },
 ];
 
 function Icon({ children, className = "" }: { children: ReactNode; className?: string }) {
@@ -29,6 +30,7 @@ function Icon({ children, className = "" }: { children: ReactNode; className?: s
 }
 
 export function Navbar() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export function Navbar() {
   return (
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[#0c1018]/60 shadow-[0_12px_42px_rgba(0,0,0,0.24)] backdrop-blur-2xl">
       <div className="mx-auto flex min-h-[78px] max-w-7xl items-center gap-4 px-5 sm:px-6 lg:px-8">
-        <a href="#home" className="flex items-center gap-3" aria-label="GoBe home">
+        <a href="/" className="flex items-center gap-3" aria-label="GoBe home">
           <img src="/Logo_2.png" alt="GOBeyond go global or go home" className="h-auto w-[164px] object-contain md:w-[202px]" />
         </a>
 
@@ -50,14 +52,22 @@ export function Navbar() {
             <a
               key={item.href}
               href={item.href}
-              aria-current={index === 0 ? "page" : undefined}
+              aria-current={
+                item.match === "/"
+                  ? pathname === "/"
+                    ? "page"
+                    : undefined
+                  : pathname.startsWith(item.match)
+                    ? "page"
+                    : undefined
+              }
               className="rounded-full border border-transparent px-5 py-3 text-xs font-black uppercase tracking-[0.12em] text-white/70 transition hover:border-white/15 hover:bg-white/10 hover:text-white aria-[current=page]:border-[#F26522]/35 aria-[current=page]:bg-[#F26522]/10 aria-[current=page]:text-white"
             >
               {item.label}
             </a>
           ))}
           <a
-            href="#contact"
+            href="/tuyen-dung"
             className="magnetic ml-2 inline-flex min-h-11 items-center rounded-full border border-[#F26522]/45 bg-[#F26522] px-5 text-xs font-black uppercase tracking-[0.12em] text-white shadow-[0_14px_34px_rgba(242,101,34,0.26)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
           >
             {"\u1ee8ng tuy\u1ec3n"}

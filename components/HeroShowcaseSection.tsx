@@ -4,6 +4,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 import { EarthAssetModel } from "./EarthAssetModel";
+import { SHOW_GLOBES } from "./globeVisibility";
 
 const ORANGE = "#F26522";
 
@@ -69,7 +70,7 @@ export function HeroShowcaseSection() {
       />
 
       <div className="relative mx-auto min-h-[68vh] max-w-7xl">
-        <HeroGlobesCanvas />
+        {SHOW_GLOBES ? <HeroGlobesCanvas /> : null}
 
         <div className="flex min-h-[68vh] items-center justify-center">
           <figure className="relative z-10 w-full max-w-5xl">

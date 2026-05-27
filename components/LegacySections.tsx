@@ -291,6 +291,7 @@ export function CoreValuesSection() {
     <section
       id="stack"
       ref={sectionRef}
+      data-scroll-section
       className="values-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90"
       onPointerMove={(event) => {
         const element = sectionRef.current;
@@ -324,6 +325,7 @@ export function CoreValuesSection() {
               <button
                 key={item.title}
                 type="button"
+                data-scroll-card
                 data-index={item.index}
                 data-letter={item.code}
                 className="value-card group absolute left-1/2 top-1/2 overflow-hidden border border-white/20 bg-[#111827]/82 p-5 text-left shadow-[0_36px_110px_rgba(0,0,0,0.52)] outline-none backdrop-blur-md"
@@ -351,10 +353,11 @@ export function CoreValuesSection() {
         </div>
 
         <div className="values-intro pointer-events-none relative z-[5] flex min-h-screen w-full max-w-[45rem] flex-col justify-center px-5 py-24 text-left sm:px-8 lg:px-[clamp(2.5rem,4.6vw,5rem)]">
-          <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">CORE VALUES</p>
+          <p data-scroll-reveal className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">CORE VALUES</p>
 
           <h3
             id="values-title"
+            data-scroll-reveal
             className="mt-5 text-[clamp(3.9rem,7.1vw,8.35rem)] font-black uppercase leading-[0.84] tracking-normal text-white drop-shadow-[0_20px_48px_rgba(0,0,0,0.62)]"
           >
             {"CORE VALUE \n "}
@@ -406,7 +409,7 @@ export function CoreValuesSection() {
 
 export function OperationsSection() {
   return (
-    <section id="operations" className="operation-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90">
+    <section id="operations" data-scroll-section className="operation-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90">
       <div
         className="absolute inset-0 bg-[radial-gradient(circle_at_54%_46%,rgba(242,101,34,0.16),transparent_24%),radial-gradient(circle_at_80%_22%,rgba(255,255,255,0.06),transparent_22%),linear-gradient(135deg,#030711_0%,#060b18_55%,#01030a_100%)]"
         aria-hidden="true"
@@ -414,7 +417,7 @@ export function OperationsSection() {
       <div className="grid-mask pointer-events-none absolute inset-0 opacity-24" aria-hidden="true" />
 
       <div className="relative mx-auto grid min-h-screen max-w-[92rem] items-center gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[0.34fr_0.18fr_0.48fr] lg:px-12">
-        <div className="relative z-[3]">
+        <div data-scroll-reveal className="relative z-[3]">
           <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">COMPANY OPERATION</p>
           <h2 className="mt-7 text-[clamp(4.2rem,7vw,8rem)] font-black leading-[0.9] tracking-normal text-white">
             How Gobe Operate
@@ -432,6 +435,7 @@ export function OperationsSection() {
           {operations.map((item) => (
             <article
               key={item.title}
+              data-scroll-card
               className="operation-card relative grid gap-4 border border-white/12 bg-[#101520]/72 p-5 shadow-[0_28px_80px_rgba(0,0,0,0.38)] backdrop-blur-md sm:grid-cols-[72px_1fr_120px] sm:items-center"
             >
               <span className="operation-index">{item.index}</span>
@@ -450,7 +454,7 @@ export function OperationsSection() {
 
 export function ScaleSection() {
   return (
-    <section id="proof" className="scale-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90">
+    <section id="proof" data-scroll-section className="scale-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90">
       <div
         className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(242,101,34,0.12),transparent_26%),linear-gradient(135deg,#050911_0%,#070a13_48%,#120806_100%)]"
         aria-hidden="true"
@@ -461,7 +465,7 @@ export function ScaleSection() {
       </div>
 
       <div className="relative z-[2] mx-auto grid min-h-screen max-w-[94rem] items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[0.44fr_0.56fr] lg:px-12">
-        <div>
+        <div data-scroll-reveal>
           <p className="text-xs font-black uppercase tracking-[0.36em] text-white/62">Company scale</p>
           <h2 className="mt-7 text-[clamp(4.4rem,7.4vw,8.5rem)] font-black leading-[0.88] tracking-normal text-white">
             How GoBe Scale
@@ -470,7 +474,7 @@ export function ScaleSection() {
 
         <div className="scale-card-stack grid gap-6">
           {scaleNodes.map((node) => (
-            <article key={node.title} className="scale-card border border-white/12 bg-[#111622]/76 p-7 shadow-[0_28px_82px_rgba(0,0,0,0.32)] backdrop-blur-md">
+            <article key={node.title} data-scroll-card className="scale-card border border-white/12 bg-[#111622]/76 p-7 shadow-[0_28px_82px_rgba(0,0,0,0.32)] backdrop-blur-md">
               <h3 className="text-[clamp(1.9rem,2.4vw,3rem)] font-black leading-tight text-white">{node.title}</h3>
               <p className="mt-4 text-lg font-medium leading-8 text-white/66">{node.body}</p>
               <div className="mt-6 flex flex-wrap gap-2">
@@ -490,10 +494,10 @@ export function ScaleSection() {
 
 export function ContactCtaSection() {
   return (
-    <section id="contact" className="relative z-10 overflow-hidden px-5 py-20 sm:px-6 md:py-28 lg:px-8">
+    <section id="contact" data-scroll-section className="relative z-10 overflow-hidden px-5 py-20 sm:px-6 md:py-28 lg:px-8">
       <div className="absolute inset-0 bg-[#101726]/36 backdrop-blur-[1px]" aria-hidden="true" />
       <div className="grid-mask pointer-events-none absolute inset-0 opacity-28" aria-hidden="true" />
-      <div className="relative mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur-md md:p-12">
+      <div data-scroll-reveal className="relative mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur-md md:p-12">
         <h2 className="text-[clamp(2.4rem,6vw,5.8rem)] font-black uppercase leading-[0.9] tracking-normal text-white">
           Talk to the GoBe global team.
         </h2>
