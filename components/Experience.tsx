@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { GobeModel } from "./GobeModel";
 import { CustomCursor } from "./CustomCursor";
 import { GlobeScene } from "./GlobeScene";
 import { SHOW_GLOBES } from "./globeVisibility";

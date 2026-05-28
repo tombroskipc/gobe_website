@@ -4,6 +4,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef, useState, type CSSProperties } from "react";
 import * as THREE from "three";
 import { EarthAssetModel } from "./EarthAssetModel";
+import { GobeModel } from "./GobeModel";
 import { SHOW_GLOBES } from "./globeVisibility";
 
 type HeroStyle = CSSProperties & {
@@ -116,23 +117,35 @@ export function LandingHeroSection() {
         </div>
       ) : null}
 
-      <div className="relative z-[3] mx-auto flex min-h-[calc(100vh-6rem)] max-w-7xl flex-col items-center justify-end pb-[clamp(4rem,12vh,8rem)] text-center">
-        <h1 data-scroll-reveal className="max-w-5xl text-[clamp(2.5rem,6vw,6.8rem)] font-black leading-[0.9] tracking-normal text-white">
-          GOBEYOND LLC
-          <span className="block text-[clamp(1.15rem,2.4vw,2.5rem)] font-medium italic leading-tight text-white/86">
-            Go Global or Go Home
-          </span>
-        </h1>
-        <p data-scroll-reveal className="mt-6 max-w-2xl text-base font-medium leading-8 text-white/70 md:text-lg">
-          Building global e-commerce teams, creative operations, and scalable systems from Vietnam to worldwide markets.
-        </p>
-        <a
-          href="#contact"
-          data-scroll-reveal
-          className="magnetic mt-8 inline-flex min-h-12 items-center rounded-full border border-white px-7 text-sm font-semibold text-white transition duration-300 hover:border-[#F26522] hover:bg-[#F26522] hover:shadow-[0_0_42px_rgba(242,101,34,0.38)]"
+      <div className="relative z-[3] mx-auto grid min-h-[calc(100vh-6rem)] w-full max-w-7xl items-center gap-10 pb-[clamp(4rem,12vh,8rem)] lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,0.82fr)]">
+        <div className="flex max-w-3xl flex-col text-left">
+          <h1 data-scroll-reveal className="max-w-5xl text-[clamp(2.5rem,6vw,6.8rem)] font-black leading-[0.9] tracking-normal text-white">
+            GOBEYOND LLC
+            <span className="block text-[clamp(1.15rem,2.4vw,2.5rem)] font-medium italic leading-tight text-white/86">
+              Go Global or Go Home
+            </span>
+          </h1>
+          <p data-scroll-reveal className="mt-6 max-w-2xl text-base font-medium leading-8 text-white/70 md:text-lg">
+            Building global e-commerce teams, creative operations, and scalable systems from Vietnam to worldwide markets.
+          </p>
+          <a
+            href="#contact"
+            data-scroll-reveal
+            className="magnetic mt-8 inline-flex min-h-12 items-center rounded-full border border-white px-7 text-sm font-semibold text-white transition duration-300 hover:border-[#F26522] hover:bg-[#F26522] hover:shadow-[0_0_42px_rgba(242,101,34,0.38)] w-fit"
+          >
+            Talk to Us
+          </a>
+        </div>
+        <div
+          data-scroll-media
+          className="relative hidden h-[clamp(28rem,54vh,42rem)] min-h-[460px] w-[min(58vw,900px)] -ml-16 items-center justify-center lg:flex"
         >
-          Talk to Us
-        </a>
+          <div
+            className="pointer-events-none absolute inset-x-[-8%] top-1/2 h-[42%] -translate-y-1/2 rounded-full bg-[#F26522]/12 blur-3xl"
+            aria-hidden="true"
+          />
+          <GobeModel className="relative z-[2]" scale={1} autoRotate={false} />
+        </div>
       </div>
     </section>
   );
