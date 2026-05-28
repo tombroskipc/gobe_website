@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AboutPage } from "@/components/AboutPage";
+import { ClientAboutPage } from "@/components/ClientPages";
 
 export const metadata: Metadata = {
   title: "Về chúng tôi - GoBeyond LLC",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function AboutRoute() {
-  return <AboutPage />;
+  return <ClientAboutPage />;
 }

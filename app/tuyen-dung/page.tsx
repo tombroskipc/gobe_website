@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CareersPage } from "@/components/CareersPage";
+import { ClientCareersPage } from "@/components/ClientPages";
 
 export const metadata: Metadata = {
   title: "Tuyển dụng - GoBeyond LLC",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function CareersRoute() {
-  return <CareersPage />;
+  return <ClientCareersPage />;
 }

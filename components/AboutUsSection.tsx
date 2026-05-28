@@ -1,11 +1,11 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { ReactElement, ReactNode } from "react";
 
 type Trait = {
   title: string;
   subtext: string;
-  icon: JSX.Element;
+  icon: ReactElement;
 };
 
 const ORANGE = "#F26522";
