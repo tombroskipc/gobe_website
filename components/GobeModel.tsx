@@ -5,6 +5,16 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as THREE from "three";
 
+const MODEL_PATH = "/models/gobeyond3d2.web.glb";
+const BLENDER_CAMERA_FOV = THREE.MathUtils.radToDeg(0.7427104693450297);
+const FALLBACK_CAMERA_POSITION = new THREE.Vector3(3.067650079727173, 2.698859453201294, 3.5093698501586914);
+const FALLBACK_CAMERA_QUATERNION = new THREE.Quaternion(
+  -0.11975622177124023,
+  0.20744825899600983,
+  0.023914916440844536,
+  0.9705935120582581
+);
+
 interface GobeModelProps {
   scale?: number;
   autoRotate?: boolean;
@@ -23,19 +33,20 @@ function ModelContent({
   const { camera } = useThree();
   const [loaded, setLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const baseCameraPosition = useRef(new THREE.Vector3(3.0676538944244385, 2.6688594818115234, 3.5093698501586914));
-  const baseCameraQuaternion = useRef(new THREE.Quaternion());
-  const baseLookTarget = useRef(new THREE.Vector3());
+  const baseCameraPosition = useRef(FALLBACK_CAMERA_POSITION.clone());
+  const baseCameraQuaternion = useRef(FALLBACK_CAMERA_QUATERNION.clone());
+  const baseLookTarget = useRef(
+    FALLBACK_CAMERA_POSITION.clone().add(new THREE.Vector3(0, 0, -1).applyQuaternion(FALLBACK_CAMERA_QUATERNION).multiplyScalar(6))
+  );
   const desiredCameraPosition = useRef(new THREE.Vector3());
   const desiredLookTarget = useRef(new THREE.Vector3());
 
   useEffect(() => {
-    const gltfPath = "/models/scene.gltf";
     const loader = new GLTFLoader();
     let mounted = true;
 
     loader.load(
-      gltfPath,
+      MODEL_PATH,
       (gltf) => {
         if (!mounted || !groupRef.current) return;
 
@@ -63,6 +74,14 @@ function ModelContent({
           perspective.near = 0.01;
           perspective.far = 220;
           perspective.updateProjectionMatrix();
+        } else {
+          const perspective = camera as THREE.PerspectiveCamera;
+          perspective.position.copy(baseCameraPosition.current);
+          perspective.quaternion.copy(baseCameraQuaternion.current);
+          perspective.fov = BLENDER_CAMERA_FOV;
+          perspective.near = 0.01;
+          perspective.far = 220;
+          perspective.updateProjectionMatrix();
         }
 
         groupRef.current.add(scene);
@@ -85,17 +104,17 @@ function ModelContent({
     if (!groupRef.current || !loaded) return;
 
     const perspective = camera as THREE.PerspectiveCamera;
-    const parallaxX = pointer.x * 0.18;
-    const parallaxY = pointer.y * 0.1;
+    const parallaxX = pointer.x * 0.08;
+    const parallaxY = pointer.y * 0.045;
 
     desiredCameraPosition.current.set(
       baseCameraPosition.current.x + parallaxX,
       baseCameraPosition.current.y + parallaxY,
-      baseCameraPosition.current.z + pointer.x * 0.08
+      baseCameraPosition.current.z + pointer.x * 0.03
     );
     desiredLookTarget.current.set(
-      baseLookTarget.current.x + pointer.x * 0.16,
-      baseLookTarget.current.y + pointer.y * 0.08,
+      baseLookTarget.current.x + pointer.x * 0.06,
+      baseLookTarget.current.y + pointer.y * 0.035,
       baseLookTarget.current.z
     );
 
@@ -136,8 +155,9 @@ export function GobeModel({
   return (
     <div className={className} style={{ width: "100%", height: "100%" }}>
       <Canvas
-        camera={{ position: [0.1, 1.35, 5.2], fov: 36, near: 0.01, far: 220 }}
-        dpr={[1, 1.5]}
+        camera={{ position: [3.067650079727173, 2.698859453201294, 3.5093698501586914], fov: BLENDER_CAMERA_FOV, near: 0.01, far: 220 }}
+        dpr={[0.8, 1.15]}
+        gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
         style={{ background: "transparent" }}
       >
         <ambientLight intensity={0.86} />

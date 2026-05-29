@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import * as THREE from "three";
 import { EarthAssetModel } from "./EarthAssetModel";
 import { GobeModel } from "./GobeModel";
@@ -82,6 +82,28 @@ function HeroEarthCanvas() {
 
 export function LandingHeroSection() {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [isModelOpen, setIsModelOpen] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("hero-model-open", isModelOpen);
+
+    if (!isModelOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsModelOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.documentElement.classList.remove("hero-model-open");
+    };
+  }, [isModelOpen]);
 
   return (
     <section
@@ -118,7 +140,7 @@ export function LandingHeroSection() {
       ) : null}
 
       <div className="relative z-[3] mx-auto grid min-h-[calc(100vh-6rem)] w-full max-w-7xl items-center gap-10 pb-[clamp(4rem,12vh,8rem)] lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,0.82fr)]">
-        <div className="flex max-w-3xl flex-col text-left">
+        <div className="relative z-[3] flex max-w-3xl flex-col text-left">
           <h1 data-scroll-reveal className="max-w-5xl text-[clamp(2.5rem,6vw,6.8rem)] font-black leading-[0.9] tracking-normal text-white">
             GOBEYOND LLC
             <span className="block text-[clamp(1.15rem,2.4vw,2.5rem)] font-medium italic leading-tight text-white/86">
@@ -137,14 +159,57 @@ export function LandingHeroSection() {
           </a>
         </div>
         <div
-          data-scroll-media
-          className="relative hidden h-[clamp(28rem,54vh,42rem)] min-h-[460px] w-[min(58vw,900px)] -ml-16 items-center justify-center lg:flex"
+          data-hero-model
+          className={[
+            "transition-[background-color,opacity,transform,width,height,inset] duration-700 ease-[cubic-bezier(.2,.72,.18,1)]",
+            isModelOpen
+              ? "fixed inset-0 z-[80] flex h-screen w-screen cursor-grab items-center justify-center bg-[#000314]/96 p-3 active:cursor-grabbing sm:p-5"
+              : "pointer-events-auto relative z-[2] hidden aspect-[16/9] w-full max-w-[660px] cursor-zoom-in items-center justify-center justify-self-end overflow-hidden rounded-lg border border-white/12 bg-[#111827]/58 shadow-[0_28px_90px_rgba(0,0,0,0.38)] lg:flex",
+          ].join(" ")}
+          role="button"
+          tabIndex={0}
+          aria-label={isModelOpen ? "3D showroom fullscreen" : "Open 3D showroom"}
+          aria-expanded={isModelOpen}
+          onClick={() => {
+            if (!isModelOpen) {
+              setIsModelOpen(true);
+            }
+          }}
+          onKeyDown={(event) => {
+            if (!isModelOpen && (event.key === "Enter" || event.key === " ")) {
+              event.preventDefault();
+              setIsModelOpen(true);
+            }
+          }}
         >
           <div
-            className="pointer-events-none absolute inset-x-[-8%] top-1/2 h-[42%] -translate-y-1/2 rounded-full bg-[#F26522]/12 blur-3xl"
+            className={[
+              "pointer-events-none absolute top-1/2 h-[42%] -translate-y-1/2 rounded-full bg-[#F26522]/12 blur-3xl transition-all duration-700",
+              isModelOpen ? "inset-x-[8%] opacity-60" : "inset-x-[-8%] opacity-100",
+            ].join(" ")}
             aria-hidden="true"
           />
-          <GobeModel className="relative z-[2]" scale={1} autoRotate={false} />
+          <GobeModel
+            className={[
+              "relative z-[2] transition-[height,width,transform] duration-700 ease-[cubic-bezier(.2,.72,.18,1)]",
+              isModelOpen ? "h-full w-full" : "h-full w-full",
+            ].join(" ")}
+            scale={1}
+            autoRotate={false}
+          />
+          {isModelOpen ? (
+            <button
+              type="button"
+              aria-label="Close 3D showroom"
+              className="magnetic absolute left-5 top-1/2 z-[4] grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-black/40 text-xl font-semibold leading-none text-white shadow-[0_18px_48px_rgba(0,0,0,0.34)] backdrop-blur-md transition hover:border-[#F26522]/70 hover:bg-[#F26522]"
+              onClick={(event) => {
+                event.stopPropagation();
+                setIsModelOpen(false);
+              }}
+            >
+              X
+            </button>
+          ) : null}
         </div>
       </div>
     </section>

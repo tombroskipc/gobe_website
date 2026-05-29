@@ -119,6 +119,11 @@ html.value-card-open {
   overflow: hidden;
 }
 
+html.hero-model-open,
+html.hero-model-open body {
+  overflow: hidden;
+}
+
 .core-values {
   isolation: isolate;
 }
