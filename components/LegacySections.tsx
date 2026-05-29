@@ -323,7 +323,7 @@ export function CoreValuesSection() {
           <div className="values-panel-track pointer-events-auto" aria-label="GOBE-ER core values">
             {coreValues.map((item) => (
               <button
-                key={item.title}
+                key={item.index}
                 type="button"
                 data-scroll-card
                 data-index={item.index}

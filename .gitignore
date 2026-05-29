@@ -1,2 +1,21 @@
 .next/
 node_modules/
+payload.db*
+public/media/
+
+# Local media uploads
+media/
+
+# Backups
+.next.bak/
+node_modules.bak/
+
+# Secrets / local env
+.env.local
+
+# OS / tooling
+.DS_Store
+.agent/
+.minimax/
+.omx/
+.claude/

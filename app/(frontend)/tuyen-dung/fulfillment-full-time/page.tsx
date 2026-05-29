@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { FulfillmentJobPage } from "@/components/CareersPage";
+import { ClientFulfillmentJobPage } from "@/components/ClientPages";
 
 export const metadata: Metadata = {
   title: "Tuyển dụng Fulfillment Full-time - GoBeyond LLC",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function FulfillmentRoute() {
-  return <FulfillmentJobPage />;
+  return <ClientFulfillmentJobPage />;
 }
