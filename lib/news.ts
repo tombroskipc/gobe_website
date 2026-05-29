@@ -79,6 +79,30 @@ export async function getPublishedNews(): Promise<NewsPost[]> {
   }
 }
 
+// Draft-aware lookup for Live Preview: returns the latest version (incl. drafts)
+// regardless of publish status, so editors see unsaved/unpublished edits.
+export async function getNewsDraftBySlug(slug: string): Promise<NewsPost | null> {
+  try {
+    const payload = await getPayloadClient();
+    const result = await payload.find({
+      collection: "news",
+      depth: 2,
+      limit: 1,
+      draft: true,
+      where: {
+        slug: {
+          equals: slug,
+        },
+      },
+    });
+
+    return (result.docs[0] as NewsPost | undefined) || null;
+  } catch (error) {
+    console.warn("Payload news draft query failed.", error);
+    return null;
+  }
+}
+
 export async function getPublishedNewsBySlug(slug: string): Promise<NewsPost | null> {
   try {
     const payload = await getPayloadClient();

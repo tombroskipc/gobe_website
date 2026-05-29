@@ -1,5 +1,11 @@
 import Link from "next/link";
+import { RichText } from "@payloadcms/richtext-lexical/react";
+import type { SerializedEditorState } from "@payloadcms/richtext-lexical/lexical";
 import type { NewsBlock, NewsPost } from "@/lib/news";
+
+function isLexical(value: unknown): value is SerializedEditorState {
+  return Boolean(value && typeof value === "object" && "root" in (value as Record<string, unknown>));
+}
 
 function getMediaUrl(media: unknown) {
   if (media && typeof media === "object" && "url" in media && typeof media.url === "string") {
@@ -25,15 +31,19 @@ function renderBlock(block: NewsBlock, index: number) {
       );
     case "bodyCopy":
       return (
-        <section key={block.id || index} className="news-rich-text max-w-3xl text-white/78">
-          {getText(block.content)
-            .split("\n")
-            .filter(Boolean)
-            .map((paragraph, paragraphIndex) => (
-              <p key={paragraphIndex} className="mb-5 text-lg leading-8">
-                {paragraph}
-              </p>
-            ))}
+        <section key={block.id || index} className="news-rich-text max-w-3xl text-lg leading-8 text-white/78">
+          {isLexical(block.content) ? (
+            <RichText data={block.content} />
+          ) : (
+            getText(block.content)
+              .split("\n")
+              .filter(Boolean)
+              .map((paragraph, paragraphIndex) => (
+                <p key={paragraphIndex} className="mb-5">
+                  {paragraph}
+                </p>
+              ))
+          )}
         </section>
       );
     case "featureImage": {
@@ -97,6 +107,22 @@ function renderBlock(block: NewsBlock, index: number) {
           </Link>
         </section>
       );
+    case "reusableCta": {
+      // `cta` is a relationship; depth>=1 populates it to the full doc.
+      const cta = block.cta && typeof block.cta === "object" ? (block.cta as Record<string, unknown>) : null;
+      if (!cta) {
+        return null;
+      }
+      return (
+        <section key={block.id || index} className="border border-[#F26522]/45 bg-[#F26522]/10 p-7 md:p-9">
+          <h2 className="text-3xl font-black text-white">{getText(cta.heading)}</h2>
+          {cta.body ? <p className="mt-4 max-w-2xl text-white/70">{getText(cta.body)}</p> : null}
+          <Link href={getText(cta.href, "/#contact")} className="mt-7 inline-flex bg-[#F26522] px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white">
+            {getText(cta.label, "Contact GoBeyond")}
+          </Link>
+        </section>
+      );
+    }
     default:
       return null;
   }

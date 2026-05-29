@@ -34,10 +34,10 @@ export const BodyCopyBlock: Block = {
   fields: [
     {
       name: "content",
-      type: "textarea",
+      type: "richText",
       required: true,
       admin: {
-        rows: 10,
+        description: "Rich text: headings, lists, links, bold/italic, quotes — like a WordPress editor.",
       },
     },
   ],
@@ -168,4 +168,32 @@ export const CTABlock: Block = {
   ],
 };
 
-export const newsBlocks = [LeadBlock, BodyCopyBlock, FeatureImageBlock, PullQuoteBlock, StatsGridBlock, ChecklistBlock, CTABlock];
+export const ReusableCtaBlock: Block = {
+  slug: "reusableCta",
+  labels: {
+    singular: "Reusable CTA",
+    plural: "Reusable CTAs",
+  },
+  fields: [
+    {
+      name: "cta",
+      type: "relationship",
+      relationTo: "reusable-ctas",
+      required: true,
+      admin: {
+        description: "Pick a shared CTA. Edit it once in Reusable CTAs and every post updates.",
+      },
+    },
+  ],
+};
+
+export const newsBlocks = [
+  LeadBlock,
+  BodyCopyBlock,
+  FeatureImageBlock,
+  PullQuoteBlock,
+  StatsGridBlock,
+  ChecklistBlock,
+  CTABlock,
+  ReusableCtaBlock,
+];
