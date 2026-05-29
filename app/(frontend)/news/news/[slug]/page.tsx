@@ -1,1 +1,1 @@
-export { default, dynamic } from "@/app/tin-tuc/[slug]/page";
+export { default, dynamic } from "../../../tin-tuc/[slug]/page";

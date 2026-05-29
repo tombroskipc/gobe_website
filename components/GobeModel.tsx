@@ -32,7 +32,7 @@ function ModelContent({
 }) {
   const { camera } = useThree();
   const [loaded, setLoaded] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const baseCameraPosition = useRef(FALLBACK_CAMERA_POSITION.clone());
   const baseCameraQuaternion = useRef(FALLBACK_CAMERA_QUATERNION.clone());
   const baseLookTarget = useRef(
@@ -44,59 +44,71 @@ function ModelContent({
   useEffect(() => {
     const loader = new GLTFLoader();
     let mounted = true;
+    let retryTimer: number | undefined;
 
-    loader.load(
-      MODEL_PATH,
-      (gltf) => {
-        if (!mounted || !groupRef.current) return;
+    const loadModel = () => {
+      setIsLoading(true);
 
-        const scene = gltf.scene;
-        gltf.scene.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
+      loader.load(
+        MODEL_PATH,
+        (gltf) => {
+          if (!mounted || !groupRef.current) return;
+
+          const scene = gltf.scene;
+          gltf.scene.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+            }
+          });
+
+          const sourceCamera = gltf.cameras[0] as THREE.PerspectiveCamera | undefined;
+          if (sourceCamera) {
+            sourceCamera.updateMatrixWorld(true);
+            sourceCamera.getWorldPosition(baseCameraPosition.current);
+            sourceCamera.getWorldQuaternion(baseCameraQuaternion.current);
+
+            const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(baseCameraQuaternion.current);
+            baseLookTarget.current.copy(baseCameraPosition.current).add(forward.multiplyScalar(6));
+
+            const perspective = camera as THREE.PerspectiveCamera;
+            perspective.position.copy(baseCameraPosition.current);
+            perspective.quaternion.copy(baseCameraQuaternion.current);
+            perspective.fov = sourceCamera.fov;
+            perspective.near = 0.01;
+            perspective.far = 220;
+            perspective.updateProjectionMatrix();
+          } else {
+            const perspective = camera as THREE.PerspectiveCamera;
+            perspective.position.copy(baseCameraPosition.current);
+            perspective.quaternion.copy(baseCameraQuaternion.current);
+            perspective.fov = BLENDER_CAMERA_FOV;
+            perspective.near = 0.01;
+            perspective.far = 220;
+            perspective.updateProjectionMatrix();
           }
-        });
 
-        const sourceCamera = gltf.cameras[0] as THREE.PerspectiveCamera | undefined;
-        if (sourceCamera) {
-          sourceCamera.updateMatrixWorld(true);
-          sourceCamera.getWorldPosition(baseCameraPosition.current);
-          sourceCamera.getWorldQuaternion(baseCameraQuaternion.current);
-
-          const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(baseCameraQuaternion.current);
-          baseLookTarget.current.copy(baseCameraPosition.current).add(forward.multiplyScalar(6));
-
-          const perspective = camera as THREE.PerspectiveCamera;
-          perspective.position.copy(baseCameraPosition.current);
-          perspective.quaternion.copy(baseCameraQuaternion.current);
-          perspective.fov = sourceCamera.fov;
-          perspective.near = 0.01;
-          perspective.far = 220;
-          perspective.updateProjectionMatrix();
-        } else {
-          const perspective = camera as THREE.PerspectiveCamera;
-          perspective.position.copy(baseCameraPosition.current);
-          perspective.quaternion.copy(baseCameraQuaternion.current);
-          perspective.fov = BLENDER_CAMERA_FOV;
-          perspective.near = 0.01;
-          perspective.far = 220;
-          perspective.updateProjectionMatrix();
+          groupRef.current.add(scene);
+          setLoaded(true);
+          setIsLoading(false);
+        },
+        undefined,
+        (error) => {
+          console.error("Error loading GLTF. Retrying:", error);
+          if (mounted) {
+            retryTimer = window.setTimeout(loadModel, 1600);
+          }
         }
+      );
+    };
 
-        groupRef.current.add(scene);
-        setHasError(false);
-        setLoaded(true);
-      },
-      undefined,
-      (error) => {
-        console.error("Error loading GLTF:", error);
-        setHasError(true);
-      }
-    );
+    loadModel();
 
     return () => {
       mounted = false;
+      if (retryTimer) {
+        window.clearTimeout(retryTimer);
+      }
     };
   }, [camera, groupRef]);
 
@@ -129,16 +141,10 @@ function ModelContent({
 
   return (
     <>
-      {!loaded && !hasError && (
+      {!loaded && isLoading && (
         <mesh scale={scale}>
           <sphereGeometry args={[0.3, 16, 16]} />
           <meshBasicMaterial color="#F26522" wireframe />
-        </mesh>
-      )}
-      {hasError && (
-        <mesh scale={scale}>
-          <torusKnotGeometry args={[0.34, 0.1, 120, 18]} />
-          <meshStandardMaterial color="#F26522" emissive="#5d220b" emissiveIntensity={0.22} />
         </mesh>
       )}
     </>

@@ -15,7 +15,7 @@ export default function FrontendLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark mdl-js" suppressHydrationWarning>
       <body className="text-[#18213d] antialiased">
         <SuppressDevWarnings />
         {children}

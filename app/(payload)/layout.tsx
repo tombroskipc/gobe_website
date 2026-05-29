@@ -12,6 +12,7 @@ const serverFunction: ServerFunctionClient = async (args) => {
   return handleServerFunctions({
     ...args,
     config,
+    importMap,
   });
 };
 
