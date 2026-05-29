@@ -9,7 +9,12 @@
   --fg-soft: rgba(255, 255, 255, 0.72);
   --cursor-x: 50vw;
   --cursor-y: 50vh;
-  --font-inter: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* --font-body / --font-display are injected on <html> by next/font.
+     We feed the loaded Inter into the existing --font-inter token (used by
+     Tailwind's `sans`) and expose a separate display stack for headings.
+     Names differ from the next/font vars so there is no self-reference cycle. */
+  --font-inter: var(--font-body), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display-stack: var(--font-display), var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
 
 * {
@@ -38,6 +43,16 @@ body {
   overscroll-behavior-y: contain;
   scroll-behavior: auto;
   scroll-snap-type: y mandatory;
+  font-family: var(--font-inter);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Display face + crafted tracking on headings — the single biggest "designed,
+   not generated" signal. Effects/colors are untouched. */
+h1, h2, h3, h4 {
+  font-family: var(--font-display-stack);
+  letter-spacing: -0.02em;
 }
 
 #home,
@@ -82,6 +97,25 @@ body::before {
 
 .text-balance {
   text-wrap: balance;
+}
+
+/* Fixed, grayscale film grain. Sits above section gradients (z-10) but below
+   the navbar (z-50) and cursor, so chrome stays crisp. Pointer-transparent. */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain-overlay {
+    opacity: 0.04;
+  }
 }
 
 .glass-panel {
@@ -634,8 +668,8 @@ html.value-card-open {
   width: clamp(190px, 15.2vw, 284px);
   transform:
     translate3d(var(--card-x), var(--card-y), var(--card-z))
-    rotateY(-50deg)
-    rotateX(12deg)
+    rotateY(-28deg)
+    rotateX(7deg)
     rotateZ(var(--card-r))
     scale(var(--card-s));
   transform-style: preserve-3d;

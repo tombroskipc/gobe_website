@@ -16,6 +16,8 @@ node_modules.bak/
 # OS / tooling
 .DS_Store
 .agent/
+.agents/
 .minimax/
 .omx/
 .claude/
+skills-lock.json
