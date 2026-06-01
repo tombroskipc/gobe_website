@@ -1,4 +1,4 @@
-import type { Block } from "payload";
+import type { Block, CollectionSlug } from "payload";
 
 export const LeadBlock: Block = {
   slug: "lead",
@@ -178,7 +178,7 @@ export const ReusableCtaBlock: Block = {
     {
       name: "cta",
       type: "relationship",
-      relationTo: "reusable-ctas",
+      relationTo: "reusable-ctas" as CollectionSlug,
       required: true,
       admin: {
         description: "Pick a shared CTA. Edit it once in Reusable CTAs and every post updates.",

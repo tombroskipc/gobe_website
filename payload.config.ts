@@ -35,14 +35,8 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || "gobe-local-payload-secret-change-before-production",
   sharp,
   localization: {
-    locales: [
-      {
-        label: "English",
-        value: "en",
-      },
-    ],
+    locales: ["en"],
     defaultLocale: "en",
-    fallbackLocale: "en",
   },
   plugins: [
     seoPlugin({
