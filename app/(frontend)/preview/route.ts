@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const secret = searchParams.get("secret");
   const slug = searchParams.get("slug");
+  const type = searchParams.get("type");
 
   if (secret !== process.env.PAYLOAD_SECRET) {
     return new Response("Invalid preview secret.", { status: 401 });
@@ -17,5 +18,5 @@ export async function GET(req: NextRequest) {
   const draft = await draftMode();
   draft.enable();
 
-  redirect(`/tin-tuc/${slug || ""}`);
+  redirect(type === "careers" ? `/tuyen-dung/${slug || ""}` : `/tin-tuc/${slug || ""}`);
 }

@@ -1130,27 +1130,27 @@ html.hero-model-open body {
   }
 
   .values-showcase .value-card:nth-child(1) {
-    --card-x: clamp(-160px, -8vw, -100px);
+    --card-x: clamp(-108px, -5.2vw, -62px);
   }
 
   .values-showcase .value-card:nth-child(2) {
-    --card-x: clamp(-35px, 1vw, 24px);
+    --card-x: clamp(-4px, 1.8vw, 46px);
   }
 
   .values-showcase .value-card:nth-child(3) {
-    --card-x: clamp(92px, 8vw, 150px);
+    --card-x: clamp(120px, 8.7vw, 172px);
   }
 
   .values-showcase .value-card:nth-child(4) {
-    --card-x: clamp(218px, 15vw, 278px);
+    --card-x: clamp(242px, 15.5vw, 300px);
   }
 
   .values-showcase .value-card:nth-child(5) {
-    --card-x: clamp(334px, 22vw, 400px);
+    --card-x: clamp(356px, 21.6vw, 424px);
   }
 
   .values-showcase .value-card:nth-child(6) {
-    --card-x: clamp(426px, 28vw, 496px);
+    --card-x: clamp(462px, 27.2vw, 538px);
   }
 
   .values-showcase .value-body {

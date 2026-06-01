@@ -516,25 +516,118 @@ export function ContactCtaSection() {
 }
 
 export function FooterSection() {
+  const pageLinks = [
+    { href: "/", label: "Trang chủ" },
+    { href: "/ve-chung-toi", label: "Về chúng tôi" },
+    { href: "/tuyen-dung", label: "Tuyển dụng" },
+    { href: "/tin-tuc", label: "Tin tức" },
+  ];
+
+  const socialLinks = [
+    { href: "https://www.facebook.com/gobeyond.asia", label: "Facebook", mark: "f" },
+    { href: "https://www.tiktok.com/@gobeyond.asia", label: "TikTok", mark: "tt" },
+    { href: "mailto:info@gobe.asia", label: "Email", mark: "@" },
+    { href: "tel:0786541658", label: "Phone", mark: "tel" },
+    { href: "https://www.linkedin.com/company/gobeyond-asia", label: "LinkedIn", mark: "in" },
+  ];
+
   return (
-    <footer className="relative z-10 overflow-hidden border-t border-white/10 bg-[#090d14]/58 px-5 py-12 text-white backdrop-blur-[1px] sm:px-6 lg:px-8">
-      <div className="relative mx-auto flex max-w-7xl flex-col gap-8 pt-8 md:flex-row md:items-center md:justify-between">
+    <footer className="relative z-10 overflow-hidden bg-[radial-gradient(circle_at_54%_26%,rgba(255,176,65,0.9),transparent_19%),linear-gradient(112deg,#ef2b0b_0%,#ff5b13_36%,#f03b0c_72%,#e7260a_100%)] px-5 pb-8 pt-20 text-white sm:px-6 lg:px-8">
+      <svg
+        className="pointer-events-none absolute inset-x-0 top-0 h-14 w-full text-white"
+        viewBox="0 0 1440 90"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M0 0h1440v36c-122 22-248 8-371 0-166-11-331 7-496 16-165 9-329 7-493-15C51 33 24 28 0 22V0z"
+          fill="currentColor"
+          opacity=".92"
+        />
+        <path
+          d="M0 30c146 22 269 37 431 22 221-21 347-51 589-20 174 22 260-10 420-12v42H0V30z"
+          fill="#ff9b55"
+          opacity=".48"
+        />
+        <path
+          d="M0 48c184 11 304 39 493 24 221-18 367-47 598-18 142 18 241-18 349-17v53H0V48z"
+          fill="#ff6a2a"
+          opacity=".48"
+        />
+      </svg>
+
+      <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.15fr_.9fr_.55fr]">
         <div>
-          <img src="/Logo_2.png" alt="GOBeyond" className="w-44" />
-          <p className="mt-4 max-w-md text-sm leading-7 text-white/60">
-            GoBe is a dynamic business growing with the global e-commerce industry.
+          <img src="/Logo_2.png" alt="GOBeyond" className="w-64 max-w-full brightness-0 invert" />
+          <p className="mt-8 max-w-[34rem] text-base font-semibold leading-8 text-white">
+            Gobe is a dynamic business growing with the Cross-border E-commerce industry, focusing on Print on Demand and
+            Drop-shipping
           </p>
+
+          <div className="mt-7 flex flex-wrap gap-3" aria-label="GoBeyond social links">
+            {socialLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                aria-label={link.label}
+                className="inline-flex size-11 items-center justify-center rounded-full border-2 border-white text-sm font-black text-white transition hover:-translate-y-1 hover:bg-white hover:text-[#f04413]"
+              >
+                {link.mark}
+              </a>
+            ))}
+          </div>
         </div>
-        <nav className="flex flex-wrap gap-4 text-xs font-black uppercase tracking-[0.12em] text-white/60">
-          <a href="#home" className="transition hover:text-white">Home</a>
-          <a href="#stack" className="transition hover:text-white">Values</a>
-          <a href="#operations" className="transition hover:text-white">Operation</a>
-          <a href="#proof" className="transition hover:text-white">Scale</a>
+
+        <div>
+          <h2 className="text-3xl font-black tracking-normal text-white">Contact</h2>
+          <div className="mt-7 space-y-4 text-base font-semibold leading-7 text-white">
+            <p className="flex gap-3">
+              <span className="mt-1 min-w-8 text-xs font-black uppercase tracking-[0.08em]" aria-hidden="true">pin</span>
+              <span>St Moritz, 1014 Đường Phạm Văn Đồng, Phường Thủ Đức, Thành phố Hồ Chí Minh</span>
+            </p>
+            <p className="flex gap-3">
+              <span className="mt-1 min-w-8 text-xs font-black uppercase tracking-[0.08em]" aria-hidden="true">tel</span>
+              <a href="tel:0786541658" className="transition hover:text-white/72">078.654.1658</a>
+            </p>
+            <p className="flex gap-3">
+              <span className="mt-1 min-w-8 text-xs font-black uppercase tracking-[0.08em]" aria-hidden="true">@</span>
+              <span>
+                <a href="mailto:info@gobe.asia" className="transition hover:text-white/72">info@gobe.asia</a>
+                {" | "}
+                <a href="mailto:tuyendung@gobe.asia" className="transition hover:text-white/72">tuyendung@gobe.asia</a>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <nav aria-label="Footer pages">
+          <h2 className="text-3xl font-black tracking-normal text-white">Pages</h2>
+          <div className="mt-7 flex flex-col gap-4 text-base font-semibold text-white">
+            {pageLinks.map((link) => (
+              <a key={link.href} href={link.href} className="transition hover:translate-x-1 hover:text-white/72">
+                {link.label}
+              </a>
+            ))}
+          </div>
         </nav>
       </div>
-      <div className="relative mx-auto mt-8 max-w-7xl text-xs font-semibold text-white/50">
-        Copyright (c) 2024 - GoBeyond All Right Reserved.
+
+      <div className="relative mx-auto mt-14 max-w-7xl border-t border-white/78 pt-7 text-center text-sm font-semibold text-white">
+        Copyright © 2024 - GoBeyond All Right Reserved.
       </div>
+
+      <button
+        type="button"
+        aria-label="Back to top"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className="absolute bottom-10 right-7 inline-flex size-14 items-center justify-center rounded-full bg-[#31b73e] text-white shadow-[0_18px_40px_rgba(49,183,62,0.34)] transition hover:-translate-y-1 hover:bg-[#28a733]"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 14.5 12 8l6 6.5" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
     </footer>
   );
 }

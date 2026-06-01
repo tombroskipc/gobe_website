@@ -4,6 +4,7 @@ import { seoPlugin } from "@payloadcms/plugin-seo";
 import type { GenerateTitle, GenerateDescription } from "@payloadcms/plugin-seo/types";
 import { buildConfig } from "payload";
 import sharp from "sharp";
+import { Careers } from "./collections/Careers.ts";
 import { Media } from "./collections/Media.ts";
 import { News } from "./collections/News.ts";
 import { ReusableCtas } from "./collections/ReusableCtas.ts";
@@ -25,7 +26,7 @@ export default buildConfig({
     },
   },
   editor: lexicalEditor(),
-  collections: [Users, Media, News, ReusableCtas],
+  collections: [Users, Media, News, Careers, ReusableCtas],
   globals: [],
   db: sqliteAdapter({
     client: {

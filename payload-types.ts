@@ -70,6 +70,8 @@ export interface Config {
     users: User;
     media: Media;
     news: News;
+    careers: Career;
+    'reusable-ctas': ReusableCta;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +82,8 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
+    careers: CareersSelect<false> | CareersSelect<true>;
+    'reusable-ctas': ReusableCtasSelect<false> | ReusableCtasSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -88,10 +92,10 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | 'en' | 'en'[];
   globals: {};
   globalsSelect: {};
-  locale: null;
+  locale: 'en';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -210,7 +214,24 @@ export interface News {
         blockType: 'lead';
       }
     | {
-        content: string;
+        /**
+         * Rich text: headings, lists, links, bold/italic, quotes — like a WordPress editor.
+         */
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
         id?: string | null;
         blockName?: string | null;
         blockType: 'bodyCopy';
@@ -262,9 +283,109 @@ export interface News {
         blockName?: string | null;
         blockType: 'cta';
       }
+    | {
+        /**
+         * Pick a shared CTA. Edit it once in Reusable CTAs and every post updates.
+         */
+        cta: number | ReusableCta;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'reusableCta';
+      }
   )[];
   /**
    * Internal editor notes. Not rendered publicly.
+   */
+  notes?: string | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Shared calls-to-action edited once and reused across News posts.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reusable-ctas".
+ */
+export interface ReusableCta {
+  id: number;
+  /**
+   * Internal name for picking this CTA in a post.
+   */
+  title: string;
+  heading: string;
+  body?: string | null;
+  label: string;
+  href: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Manage GoBeyond recruitment roles and Lark JD links for the careers page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "careers".
+ */
+export interface Career {
+  id: number;
+  title: string;
+  /**
+   * Auto-filled from the title if left blank.
+   */
+  slug: string;
+  status?: ('draft' | 'published') | null;
+  /**
+   * Tag shown on the recruitment card.
+   */
+  tag: 'hiring' | 'marketing' | 'creative' | 'operations' | 'customerService' | 'humanResource' | 'internship';
+  publishedAt?: string | null;
+  /**
+   * Short date shown on the card, e.g. 08 Th12.
+   */
+  dateLabel?: string | null;
+  department?: string | null;
+  employmentType?: string | null;
+  location?: string | null;
+  quantity?: string | null;
+  excerpt: string;
+  /**
+   * Public Lark wiki JD URL for this role.
+   */
+  larkUrl?: string | null;
+  /**
+   * Application link or mailto URL.
+   */
+  applyUrl?: string | null;
+  description?: string | null;
+  responsibilities?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  requirements?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  benefits?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  workingTime?: string | null;
+  /**
+   * Internal recruitment notes. Not rendered publicly.
    */
   notes?: string | null;
   updatedAt: string;
@@ -306,6 +427,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'news';
         value: number | News;
+      } | null)
+    | ({
+        relationTo: 'careers';
+        value: number | Career;
+      } | null)
+    | ({
+        relationTo: 'reusable-ctas';
+        value: number | ReusableCta;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -486,11 +615,81 @@ export interface NewsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        reusableCta?:
+          | T
+          | {
+              cta?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
+  notes?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "careers_select".
+ */
+export interface CareersSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  status?: T;
+  tag?: T;
+  publishedAt?: T;
+  dateLabel?: T;
+  department?: T;
+  employmentType?: T;
+  location?: T;
+  quantity?: T;
+  excerpt?: T;
+  larkUrl?: T;
+  applyUrl?: T;
+  description?: T;
+  responsibilities?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  requirements?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  benefits?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  workingTime?: T;
   notes?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reusable-ctas_select".
+ */
+export interface ReusableCtasSelect<T extends boolean = true> {
+  title?: T;
+  heading?: T;
+  body?: T;
+  label?: T;
+  href?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
