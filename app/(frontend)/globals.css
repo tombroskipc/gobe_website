@@ -72,6 +72,81 @@ footer {
   scroll-snap-align: end;
 }
 
+html.home-story-active:not(.home-story-released),
+html.home-story-active:not(.home-story-released) body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+html.home-story-active #scroll-story {
+  min-height: 100svh;
+  overflow: hidden;
+}
+
+html.home-story-active [data-home-story-section] {
+  inset: 0;
+  min-height: 100svh;
+  overflow: hidden;
+  position: fixed;
+  visibility: hidden;
+  width: 100%;
+}
+
+html.home-story-active [data-home-story-content] {
+  min-height: 100svh;
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+html.home-story-active [data-home-story-footer] {
+  display: none;
+}
+
+html.home-story-active.home-story-released,
+html.home-story-active.home-story-released body {
+  height: auto;
+  overflow-y: auto;
+  scroll-snap-type: none;
+}
+
+html.home-story-active.home-story-released #scroll-story {
+  min-height: auto;
+  overflow: visible;
+}
+
+html.home-story-active.home-story-released [data-home-story-section] {
+  display: none;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+html.home-story-active.home-story-released #contact[data-home-story-section] {
+  display: block;
+  inset: auto;
+  min-height: clamp(34rem, 62svh, 44rem);
+  opacity: 1 !important;
+  padding-bottom: clamp(2rem, 5vh, 3.5rem);
+  padding-top: clamp(5.5rem, 10vh, 7rem);
+  pointer-events: auto;
+  position: relative;
+  transform: none !important;
+  visibility: visible !important;
+  width: 100%;
+}
+
+html.home-story-active.home-story-released #contact [data-home-story-content] {
+  min-height: clamp(24rem, 46svh, 32rem);
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html.home-story-active.home-story-released [data-home-story-footer] {
+  display: block;
+  min-height: 0;
+  scroll-snap-align: none;
+}
+
 @media (max-width: 768px) {
   html {
     scroll-padding-top: 72px;
@@ -113,6 +188,21 @@ body::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html,
+  body {
+    height: auto;
+    overflow-y: auto;
+  }
+
+  [data-home-story-section] {
+    position: relative;
+    visibility: visible;
+  }
+
+  [data-home-story-footer] {
+    display: block;
+  }
+
   .grain-overlay {
     opacity: 0.04;
   }

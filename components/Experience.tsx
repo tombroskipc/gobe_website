@@ -5,6 +5,7 @@ import { GobeModel } from "./GobeModel";
 import { CustomCursor } from "./CustomCursor";
 import { GlobeScene } from "./GlobeScene";
 import { SHOW_GLOBES } from "./globeVisibility";
+import { HomeSectionStoryController } from "./HomeSectionStoryController";
 import { LandingHeroSection } from "./LandingHeroSection";
 import {
   ContactCtaSection,
@@ -24,6 +25,7 @@ export function Experience() {
       {SHOW_GLOBES ? <GlobeScene /> : null}
       <CustomCursor />
       <Navbar />
+      <HomeSectionStoryController />
       <LandingHeroSection />
       <CoreValuesSection />
       <OperationsSection />

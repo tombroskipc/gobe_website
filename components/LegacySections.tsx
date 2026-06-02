@@ -291,6 +291,7 @@ export function CoreValuesSection() {
     <section
       id="stack"
       ref={sectionRef}
+      data-home-story-section
       data-scroll-section
       className="values-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90"
       onPointerMove={(event) => {
@@ -310,59 +311,61 @@ export function CoreValuesSection() {
         element.style.setProperty("--panel-rotate-y", `${(x * 7).toFixed(2)}deg`);
       }}
     >
-      <div
-        className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(242,101,34,0.20),transparent_28%),radial-gradient(circle_at_24%_16%,rgba(54,160,255,0.16),transparent_30%),linear-gradient(135deg,#000314_0%,#060b26_54%,#02030b_100%)]"
-        aria-hidden="true"
-      />
-      <div className="grid-mask pointer-events-none absolute inset-0 z-0 opacity-25" aria-hidden="true" />
+      <div data-home-story-content className="relative min-h-screen overflow-hidden">
+        <div
+          className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(242,101,34,0.20),transparent_28%),radial-gradient(circle_at_24%_16%,rgba(54,160,255,0.16),transparent_30%),linear-gradient(135deg,#000314_0%,#060b26_54%,#02030b_100%)]"
+          aria-hidden="true"
+        />
+        <div className="grid-mask pointer-events-none absolute inset-0 z-0 opacity-25" aria-hidden="true" />
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[42%] bg-[linear-gradient(180deg,transparent,rgba(0,3,20,0.88))]" aria-hidden="true" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[42%] bg-[linear-gradient(180deg,transparent,rgba(0,3,20,0.88))]" aria-hidden="true" />
 
-      <div className="core-values relative min-h-screen" aria-labelledby="values-title">
-        <div className="values-panel-stage pointer-events-none absolute inset-0 z-[2]">
-          <div className="values-panel-track pointer-events-auto" aria-label="GOBE-ER core values">
-            {coreValues.map((item) => (
-              <button
-                key={item.index}
-                type="button"
-                data-scroll-card
-                data-index={item.index}
-                data-letter={item.code}
-                className="value-card group absolute left-1/2 top-1/2 overflow-hidden border border-white/20 bg-[#111827]/82 p-5 text-left shadow-[0_36px_110px_rgba(0,0,0,0.52)] outline-none backdrop-blur-md"
-                style={{ "--panel-accent": item.accent } as ValueCardStyle}
-                onClick={() => setActiveValue(item)}
-              >
-                <span className="value-card-corners" aria-hidden="true" />
-                <span className="value-card-corners alt" aria-hidden="true" />
-                <span className="absolute left-5 top-5 z-[2] text-[10px] font-black uppercase tracking-[0.16em] text-white/36">
-                  GOBE-ER / {item.index}
-                </span>
-
-                <div className="value-body relative z-[2]">
-                  <h3 className="max-w-[11ch] text-[clamp(1.2rem,1.6vw,1.9rem)] font-black uppercase leading-[0.94] text-white">
-                    [<span className="acronym-hit">{item.code}</span>]{item.title.slice(1)}
-                  </h3>
-                  <p className="mt-5 max-w-[24ch] text-sm font-semibold leading-[1.55] text-white/74">{item.body}</p>
-                  <span className="mt-7 inline-flex rounded-full border border-white/36 px-4 py-2 text-[11px] font-black uppercase tracking-[0.12em] text-white/78 transition group-hover:border-white group-hover:bg-white group-hover:text-[#050815]">
-                    {"Xem chi ti\u1ebft"}
+        <div className="core-values relative min-h-screen" aria-labelledby="values-title">
+          <div className="values-panel-stage pointer-events-none absolute inset-0 z-[2]">
+            <div className="values-panel-track pointer-events-auto" aria-label="GOBE-ER core values">
+              {coreValues.map((item) => (
+                <button
+                  key={item.index}
+                  type="button"
+                  data-scroll-card
+                  data-index={item.index}
+                  data-letter={item.code}
+                  className="value-card group absolute left-1/2 top-1/2 overflow-hidden border border-white/20 bg-[#111827]/82 p-5 text-left shadow-[0_36px_110px_rgba(0,0,0,0.52)] outline-none backdrop-blur-md"
+                  style={{ "--panel-accent": item.accent } as ValueCardStyle}
+                  onClick={() => setActiveValue(item)}
+                >
+                  <span className="value-card-corners" aria-hidden="true" />
+                  <span className="value-card-corners alt" aria-hidden="true" />
+                  <span className="absolute left-5 top-5 z-[2] text-[10px] font-black uppercase tracking-[0.16em] text-white/36">
+                    GOBE-ER / {item.index}
                   </span>
-                </div>
-              </button>
-            ))}
+
+                  <div className="value-body relative z-[2]">
+                    <h3 className="max-w-[11ch] text-[clamp(1.2rem,1.6vw,1.9rem)] font-black uppercase leading-[0.94] text-white">
+                      [<span className="acronym-hit">{item.code}</span>]{item.title.slice(1)}
+                    </h3>
+                    <p className="mt-5 max-w-[24ch] text-sm font-semibold leading-[1.55] text-white/74">{item.body}</p>
+                    <span className="mt-7 inline-flex px-4 py-2 font-black tracking-[0.12em] transition">
+                      {/* {"Xem chi ti\u1ebft"} */}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="values-intro pointer-events-none relative z-[5] flex min-h-screen w-full max-w-[45rem] flex-col justify-center px-5 py-24 text-left sm:px-8 lg:px-[clamp(2.5rem,4.6vw,5rem)]">
-          <p data-scroll-reveal className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">CORE VALUES</p>
+          <div className="values-intro pointer-events-none relative z-[5] flex min-h-screen w-full max-w-[45rem] flex-col justify-center px-5 py-24 text-left sm:px-8 lg:px-[clamp(2.5rem,4.6vw,5rem)]">
+            <p data-scroll-reveal className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">CORE VALUES</p>
 
-          <h3
-            id="values-title"
-            data-scroll-reveal
-            className="mt-5 text-[clamp(3.9rem,7.1vw,8.35rem)] font-black uppercase leading-[0.84] tracking-normal text-white drop-shadow-[0_20px_48px_rgba(0,0,0,0.62)]"
-          >
-            {"CORE VALUE \n "}
-            <span className="text-[#ff7648]">GOBE-ER</span>
-          </h3>
+            <h3
+              id="values-title"
+              data-scroll-reveal
+              className="mt-5 text-[clamp(3.9rem,7.1vw,8.35rem)] font-black uppercase leading-[0.84] tracking-normal text-white drop-shadow-[0_20px_48px_rgba(0,0,0,0.62)]"
+            >
+              {"CORE VALUE \n "}
+              <span className="text-[#ff7648]">GOBE-ER</span>
+            </h3>
+          </div>
         </div>
       </div>
 
@@ -409,43 +412,45 @@ export function CoreValuesSection() {
 
 export function OperationsSection() {
   return (
-    <section id="operations" data-scroll-section className="operation-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90">
-      <div
-        className="absolute inset-0 bg-[radial-gradient(circle_at_54%_46%,rgba(242,101,34,0.16),transparent_24%),radial-gradient(circle_at_80%_22%,rgba(255,255,255,0.06),transparent_22%),linear-gradient(135deg,#030711_0%,#060b18_55%,#01030a_100%)]"
-        aria-hidden="true"
-      />
-      <div className="grid-mask pointer-events-none absolute inset-0 opacity-24" aria-hidden="true" />
+    <section id="operations" data-home-story-section data-scroll-section className="operation-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90">
+      <div data-home-story-content className="relative min-h-screen overflow-hidden">
+        <div
+          className="absolute inset-0 bg-[radial-gradient(circle_at_54%_46%,rgba(242,101,34,0.16),transparent_24%),radial-gradient(circle_at_80%_22%,rgba(255,255,255,0.06),transparent_22%),linear-gradient(135deg,#030711_0%,#060b18_55%,#01030a_100%)]"
+          aria-hidden="true"
+        />
+        <div className="grid-mask pointer-events-none absolute inset-0 opacity-24" aria-hidden="true" />
 
-      <div className="relative mx-auto grid min-h-screen max-w-[92rem] items-center gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[0.34fr_0.18fr_0.48fr] lg:px-12">
-        <div data-scroll-reveal className="relative z-[3]">
-          <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">COMPANY OPERATION</p>
-          <h2 className="mt-7 text-[clamp(4.2rem,7vw,8rem)] font-black leading-[0.9] tracking-normal text-white">
-            How Gobe Operate
-          </h2>
-        </div>
-
-        <div className="operation-core relative z-[2] hidden items-center justify-center lg:flex">
-          <div className="operation-core-orb">
-            <span>GOBEYOND</span>
-            <small>COMPANY CORE</small>
+        <div className="relative mx-auto grid min-h-screen max-w-[92rem] items-center gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[0.34fr_0.18fr_0.48fr] lg:px-12">
+          <div data-scroll-reveal className="relative z-[3]">
+            <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">COMPANY OPERATION</p>
+            <h2 className="mt-7 text-[clamp(4.2rem,7vw,8rem)] font-black leading-[0.9] tracking-normal text-white">
+              How Gobe Operate
+            </h2>
           </div>
-        </div>
 
-        <div className="operation-list relative z-[3] grid gap-5">
-          {operations.map((item) => (
-            <article
-              key={item.title}
-              data-scroll-card
-              className="operation-card relative grid gap-4 border border-white/12 bg-[#101520]/72 p-5 shadow-[0_28px_80px_rgba(0,0,0,0.38)] backdrop-blur-md sm:grid-cols-[72px_1fr_120px] sm:items-center"
-            >
-              <span className="operation-index">{item.index}</span>
-              <span>
-                <h3 className="text-[clamp(2rem,3vw,3rem)] font-black leading-none text-white">{item.title}</h3>
-                <p className="mt-2 text-base font-medium leading-6 text-white/68">{item.body}</p>
-              </span>
-              <span className="hidden h-[3px] w-full bg-[linear-gradient(90deg,#F26522,transparent)] opacity-75 sm:block" aria-hidden="true" />
-            </article>
-          ))}
+          <div className="operation-core relative z-[2] hidden items-center justify-center lg:flex">
+            <div className="operation-core-orb">
+              <span>GOBEYOND</span>
+              <small>COMPANY CORE</small>
+            </div>
+          </div>
+
+          <div className="operation-list relative z-[3] grid gap-5">
+            {operations.map((item) => (
+              <article
+                key={item.title}
+                data-scroll-card
+                className="operation-card relative grid gap-4 border border-white/12 bg-[#101520]/72 p-5 shadow-[0_28px_80px_rgba(0,0,0,0.38)] backdrop-blur-md sm:grid-cols-[72px_1fr_120px] sm:items-center"
+              >
+                <span className="operation-index">{item.index}</span>
+                <span>
+                  <h3 className="text-[clamp(2rem,3vw,3rem)] font-black leading-none text-white">{item.title}</h3>
+                  <p className="mt-2 text-base font-medium leading-6 text-white/68">{item.body}</p>
+                </span>
+                <span className="hidden h-[3px] w-full bg-[linear-gradient(90deg,#F26522,transparent)] opacity-75 sm:block" aria-hidden="true" />
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -454,38 +459,40 @@ export function OperationsSection() {
 
 export function ScaleSection() {
   return (
-    <section id="proof" data-scroll-section className="scale-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90">
-      <div
-        className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(242,101,34,0.12),transparent_26%),linear-gradient(135deg,#050911_0%,#070a13_48%,#120806_100%)]"
-        aria-hidden="true"
-      />
-      <div className="grid-mask pointer-events-none absolute inset-0 opacity-24" aria-hidden="true" />
-      <div className="pointer-events-none absolute inset-0 z-[1] opacity-80" aria-hidden="true">
-        <PackageRain3D />
-      </div>
-
-      <div className="relative z-[2] mx-auto grid min-h-screen max-w-[94rem] items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[0.44fr_0.56fr] lg:px-12">
-        <div data-scroll-reveal>
-          <p className="text-xs font-black uppercase tracking-[0.36em] text-white/62">Company scale</p>
-          <h2 className="mt-7 text-[clamp(4.4rem,7.4vw,8.5rem)] font-black leading-[0.88] tracking-normal text-white">
-            How GoBe Scale
-          </h2>
+    <section id="proof" data-home-story-section data-scroll-section className="scale-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90">
+      <div data-home-story-content className="relative min-h-screen overflow-hidden">
+        <div
+          className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(242,101,34,0.12),transparent_26%),linear-gradient(135deg,#050911_0%,#070a13_48%,#120806_100%)]"
+          aria-hidden="true"
+        />
+        <div className="grid-mask pointer-events-none absolute inset-0 opacity-24" aria-hidden="true" />
+        <div className="pointer-events-none absolute inset-0 z-[1] opacity-80" aria-hidden="true">
+          <PackageRain3D />
         </div>
 
-        <div className="scale-card-stack grid gap-6">
-          {scaleNodes.map((node) => (
-            <article key={node.title} data-scroll-card className="scale-card border border-white/12 bg-[#111622]/76 p-7 shadow-[0_28px_82px_rgba(0,0,0,0.32)] backdrop-blur-md">
-              <h3 className="text-[clamp(1.9rem,2.4vw,3rem)] font-black leading-tight text-white">{node.title}</h3>
-              <p className="mt-4 text-lg font-medium leading-8 text-white/66">{node.body}</p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {node.chips.map((chip) => (
-                  <span key={chip} className="rounded-full border border-white/12 bg-white/[0.035] px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-white/78">
-                    {chip}
-                  </span>
-                ))}
-              </div>
-            </article>
-          ))}
+        <div className="relative z-[2] mx-auto grid min-h-screen max-w-[94rem] items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[0.44fr_0.56fr] lg:px-12">
+          <div data-scroll-reveal>
+            <p className="text-xs font-black uppercase tracking-[0.36em] text-white/62">Company scale</p>
+            <h2 className="mt-7 text-[clamp(4.4rem,7.4vw,8.5rem)] font-black leading-[0.88] tracking-normal text-white">
+              How GoBe Scale
+            </h2>
+          </div>
+
+          <div className="scale-card-stack grid gap-6">
+            {scaleNodes.map((node) => (
+              <article key={node.title} data-scroll-card className="scale-card border border-white/12 bg-[#111622]/76 p-7 shadow-[0_28px_82px_rgba(0,0,0,0.32)] backdrop-blur-md">
+                <h3 className="text-[clamp(1.9rem,2.4vw,3rem)] font-black leading-tight text-white">{node.title}</h3>
+                <p className="mt-4 text-lg font-medium leading-8 text-white/66">{node.body}</p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {node.chips.map((chip) => (
+                    <span key={chip} className="rounded-full border border-white/12 bg-white/[0.035] px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-white/78">
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -494,22 +501,24 @@ export function ScaleSection() {
 
 export function ContactCtaSection() {
   return (
-    <section id="contact" data-scroll-section className="relative z-10 overflow-hidden px-5 py-20 sm:px-6 md:py-28 lg:px-8">
-      <div className="absolute inset-0 bg-[#101726]/36 backdrop-blur-[1px]" aria-hidden="true" />
-      <div className="grid-mask pointer-events-none absolute inset-0 opacity-28" aria-hidden="true" />
-      <div data-scroll-reveal className="relative mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur-md md:p-12">
-        <h2 className="text-[clamp(2.4rem,6vw,5.8rem)] font-black uppercase leading-[0.9] tracking-normal text-white">
-          Talk to the GoBe global team.
-        </h2>
-        <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/65">
-          {"Li\u00ean h\u1ec7 GoBe v\u1ec1 s\u1ea3n ph\u1ea9m, h\u1ee3p t\u00e1c, tuy\u1ec3n d\u1ee5ng, truy\u1ec1n th\u00f4ng, ho\u1eb7c nh\u1eefng c\u01a1 h\u1ed9i li\u00ean quan \u0111\u1ebfn v\u1eadn h\u00e0nh th\u01b0\u01a1ng m\u1ea1i \u0111i\u1ec7n t\u1eed to\u00e0n c\u1ea7u."}
-        </p>
-        <a
-          href="mailto:info@gobe.asia"
-          className="magnetic mt-9 inline-flex min-h-12 items-center rounded-full bg-[#F26522] px-8 text-sm font-black uppercase tracking-[0.08em] text-white shadow-[0_18px_45px_rgba(242,101,34,0.28)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
-        >
-          Open contact page
-        </a>
+    <section id="contact" data-home-story-section data-scroll-section className="relative z-10 overflow-hidden px-5 py-20 sm:px-6 md:py-28 lg:px-8">
+      <div data-home-story-content className="relative flex min-h-screen items-center overflow-hidden">
+        <div className="absolute inset-0 bg-[#101726]/36 backdrop-blur-[1px]" aria-hidden="true" />
+        <div className="grid-mask pointer-events-none absolute inset-0 opacity-28" aria-hidden="true" />
+        <div data-scroll-reveal className="relative mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur-md md:p-12">
+          <h2 className="text-[clamp(2.4rem,6vw,5.8rem)] font-black uppercase leading-[0.9] tracking-normal text-white">
+            Talk to the GoBe global team.
+          </h2>
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/65">
+            {"Li\u00ean h\u1ec7 GoBe v\u1ec1 s\u1ea3n ph\u1ea9m, h\u1ee3p t\u00e1c, tuy\u1ec3n d\u1ee5ng, truy\u1ec1n th\u00f4ng, ho\u1eb7c nh\u1eefng c\u01a1 h\u1ed9i li\u00ean quan \u0111\u1ebfn v\u1eadn h\u00e0nh th\u01b0\u01a1ng m\u1ea1i \u0111i\u1ec7n t\u1eed to\u00e0n c\u1ea7u."}
+          </p>
+          <a
+            href="mailto:info@gobe.asia"
+            className="magnetic mt-9 inline-flex min-h-12 items-center rounded-full bg-[#F26522] px-8 text-sm font-black uppercase tracking-[0.08em] text-white shadow-[0_18px_45px_rgba(242,101,34,0.28)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
+          >
+            Open contact page
+          </a>
+        </div>
       </div>
     </section>
   );
@@ -532,7 +541,7 @@ export function FooterSection() {
   ];
 
   return (
-    <footer className="relative z-10 overflow-hidden bg-[radial-gradient(circle_at_54%_26%,rgba(255,176,65,0.9),transparent_19%),linear-gradient(112deg,#ef2b0b_0%,#ff5b13_36%,#f03b0c_72%,#e7260a_100%)] px-5 pb-8 pt-20 text-white sm:px-6 lg:px-8">
+    <footer data-home-story-footer className="relative z-10 overflow-hidden bg-[radial-gradient(circle_at_54%_26%,rgba(255,176,65,0.9),transparent_19%),linear-gradient(112deg,#ef2b0b_0%,#ff5b13_36%,#f03b0c_72%,#e7260a_100%)] px-5 pb-8 pt-20 text-white sm:px-6 lg:px-8">
       <svg
         className="pointer-events-none absolute inset-x-0 top-0 h-14 w-full text-white"
         viewBox="0 0 1440 90"
