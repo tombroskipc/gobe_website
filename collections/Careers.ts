@@ -85,8 +85,8 @@ export const Careers: CollectionConfig = {
       type: "select",
       defaultValue: "draft",
       options: [
-        { label: "Draft", value: "draft" },
-        { label: "Published", value: "published" },
+        { label: "Bản nháp", value: "draft" },
+        { label: "Đã xuất bản", value: "published" },
       ],
       admin: {
         position: "sidebar",
@@ -98,13 +98,13 @@ export const Careers: CollectionConfig = {
       defaultValue: "hiring",
       required: true,
       options: [
-        { label: "Hiring", value: "hiring" },
+        { label: "Đang tuyển", value: "hiring" },
         { label: "Marketing", value: "marketing" },
-        { label: "Creative", value: "creative" },
-        { label: "Operations", value: "operations" },
-        { label: "Customer Service", value: "customerService" },
-        { label: "Human Resource", value: "humanResource" },
-        { label: "Internship", value: "internship" },
+        { label: "Sáng tạo", value: "creative" },
+        { label: "Vận hành", value: "operations" },
+        { label: "Chăm sóc khách hàng", value: "customerService" },
+        { label: "Nhân sự", value: "humanResource" },
+        { label: "Thực tập", value: "internship" },
       ],
       admin: {
         position: "sidebar",
@@ -133,17 +133,17 @@ export const Careers: CollectionConfig = {
     {
       name: "department",
       type: "text",
-      defaultValue: "E-commerce",
+      defaultValue: "Thương mại điện tử",
     },
     {
       name: "employmentType",
       type: "text",
-      defaultValue: "Full-time",
+      defaultValue: "Toàn thời gian",
     },
     {
       name: "location",
       type: "text",
-      defaultValue: "St Moritz, 1014 Duong Pham Van Dong, TP. Ho Chi Minh",
+      defaultValue: "St Moritz, 1014 Đường Phạm Văn Đồng, TP. Hồ Chí Minh",
     },
     {
       name: "quantity",

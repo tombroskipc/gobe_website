@@ -15,63 +15,80 @@ const templateLayouts: Record<string, unknown[]> = {
   standard: [
     {
       blockType: "lead",
-      kicker: "GoBeyond News",
-      heading: "What happened",
-      body: "Start with the key update, why it matters, and who it affects.",
+      kicker: "Tin tức GoBeyond",
+      heading: "Điểm cập nhật chính",
+      body: "Bắt đầu với cập nhật quan trọng nhất, lý do nội dung này đáng chú ý và nhóm đối tượng liên quan.",
     },
     {
       blockType: "cta",
-      heading: "Work with GoBeyond",
-      body: "Build, operate, and scale global e-commerce systems with us.",
-      label: "Contact us",
+      heading: "Đồng hành cùng GoBeyond",
+      body: "Cùng xây dựng, vận hành và mở rộng hệ thống thương mại điện tử toàn cầu.",
+      label: "Liên hệ",
       href: "/#contact",
     },
   ],
   editorial: [
     {
       blockType: "lead",
-      kicker: "Perspective",
-      heading: "The big idea",
-      body: "Frame the problem, the point of view, and the argument the article will make.",
+      kicker: "Góc nhìn",
+      heading: "Ý tưởng chính",
+      body: "Nêu vấn đề, góc nhìn và luận điểm chính mà bài viết muốn truyền tải.",
     },
     {
       blockType: "pullQuote",
-      quote: "Add the sharpest quote or takeaway here.",
+      quote: "Thêm câu trích dẫn hoặc thông điệp nổi bật nhất tại đây.",
       attribution: "GoBeyond",
     },
   ],
   caseStudy: [
     {
       blockType: "lead",
-      kicker: "Case Study",
-      heading: "The challenge",
-      body: "Summarize the customer, market, constraint, and result.",
+      kicker: "Câu chuyện thực tế",
+      heading: "Thử thách",
+      body: "Tóm tắt khách hàng, thị trường, ràng buộc và kết quả đạt được.",
     },
     {
       blockType: "statsGrid",
       items: [
-        { value: "3x", label: "Example growth metric" },
-        { value: "48h", label: "Example turnaround" },
-        { value: "12", label: "Markets supported" },
+        { value: "3x", label: "Chỉ số tăng trưởng mẫu" },
+        { value: "48h", label: "Thời gian xử lý mẫu" },
+        { value: "12", label: "Thị trường hỗ trợ" },
       ],
     },
     {
       blockType: "checklist",
-      heading: "What GoBeyond handled",
-      items: [{ text: "Product and listing operations" }, { text: "Marketing feedback loop" }, { text: "Fulfillment coordination" }],
+      heading: "GoBeyond đã xử lý",
+      items: [{ text: "Vận hành sản phẩm và listing" }, { text: "Vòng phản hồi marketing" }, { text: "Điều phối fulfillment" }],
     },
   ],
   companyUpdate: [
     {
       blockType: "lead",
-      kicker: "Company Update",
-      heading: "Announcement",
-      body: "Write the announcement, internal context, and next step.",
+      kicker: "Cập nhật công ty",
+      heading: "Thông báo",
+      body: "Viết thông báo, bối cảnh nội bộ và bước tiếp theo.",
     },
     {
       blockType: "checklist",
-      heading: "Highlights",
-      items: [{ text: "First key point" }, { text: "Second key point" }, { text: "Third key point" }],
+      heading: "Điểm nổi bật",
+      items: [{ text: "Ý chính thứ nhất" }, { text: "Ý chính thứ hai" }, { text: "Ý chính thứ ba" }],
+    },
+  ],
+  activity: [
+    {
+      blockType: "lead",
+      kicker: "Hoạt động GoBeyond",
+      heading: "Hoạt động nổi bật",
+      body: "Tóm tắt bối cảnh, không khí sự kiện, những khoảnh khắc chính và ý nghĩa với đội ngũ GoBeyond.",
+    },
+    {
+      blockType: "checklist",
+      heading: "Gợi ý nội dung recap",
+      items: [
+        { text: "Không khí và mục tiêu của hoạt động" },
+        { text: "Các khoảnh khắc hoặc trò chơi nổi bật" },
+        { text: "Thông điệp hoặc lời kết cho đội ngũ" },
+      ],
     },
   ],
 };
@@ -99,19 +116,20 @@ const seedTemplateLayout: CollectionBeforeValidateHook = ({ data, operation }) =
 export const News: CollectionConfig = {
   slug: "news",
   labels: {
-    singular: "News post",
-    plural: "News",
+    singular: "Bài viết",
+    plural: "Tin tức",
   },
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "template", "status", "updatedAt"],
+    defaultColumns: ["title", "tag", "template", "status", "updatedAt"],
     group: "Website",
-    description: "Template-driven posts for GoBeyond news, announcements, editorials, and case studies.",
+    description: "Template-driven posts for GoBeyond news, activities, announcements, editorials, and case studies.",
     livePreview: {
       url: ({ data }) => {
         const base = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
         const secret = process.env.PAYLOAD_SECRET || "";
-        return `${base}/preview?secret=${encodeURIComponent(secret)}&slug=${encodeURIComponent(data?.slug || "")}`;
+        const type = data?.tag === "activity" ? "activity" : "news";
+        return `${base}/preview?type=${type}&secret=${encodeURIComponent(secret)}&slug=${encodeURIComponent(data?.slug || "")}`;
       },
       breakpoints: [
         { label: "Mobile", name: "mobile", width: 375, height: 667 },
@@ -155,11 +173,25 @@ export const News: CollectionConfig = {
       type: "select",
       defaultValue: "draft",
       options: [
-        { label: "Draft", value: "draft" },
-        { label: "Published", value: "published" },
+        { label: "Bản nháp", value: "draft" },
+        { label: "Đã xuất bản", value: "published" },
       ],
       admin: {
         position: "sidebar",
+      },
+    },
+    {
+      name: "tag",
+      type: "select",
+      defaultValue: "news",
+      required: true,
+      options: [
+        { label: "Tin tức", value: "news" },
+        { label: "Hoạt động", value: "activity" },
+      ],
+      admin: {
+        position: "sidebar",
+        description: "Chọn Hoạt động để đăng bài lên các trang Hoạt động công khai.",
       },
     },
     {
@@ -168,10 +200,11 @@ export const News: CollectionConfig = {
       defaultValue: "standard",
       required: true,
       options: [
-        { label: "Standard article", value: "standard" },
-        { label: "Editorial / thought leadership", value: "editorial" },
-        { label: "Case study", value: "caseStudy" },
-        { label: "Company update", value: "companyUpdate" },
+        { label: "Bài viết tiêu chuẩn", value: "standard" },
+        { label: "Góc nhìn biên tập", value: "editorial" },
+        { label: "Câu chuyện thực tế", value: "caseStudy" },
+        { label: "Cập nhật công ty", value: "companyUpdate" },
+        { label: "Recap hoạt động", value: "activity" },
       ],
       admin: {
         position: "sidebar",

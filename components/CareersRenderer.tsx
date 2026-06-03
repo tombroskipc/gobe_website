@@ -9,13 +9,13 @@ import { Navbar } from "./Navbar";
 import { initScrollController } from "./ScrollController";
 
 const tagLabels: Record<string, string> = {
-  hiring: "Hiring",
+  hiring: "Đang tuyển",
   marketing: "Marketing",
-  creative: "Creative",
-  operations: "Operations",
-  customerService: "Customer Service",
-  humanResource: "Human Resource",
-  internship: "Internship",
+  creative: "Sáng tạo",
+  operations: "Vận hành",
+  customerService: "Chăm sóc khách hàng",
+  humanResource: "Nhân sự",
+  internship: "Thực tập",
 };
 
 const tagColors: Record<string, string> = {
@@ -76,7 +76,7 @@ function JobCard({ job, index }: { job: CareerItem; index: number }) {
 
       <div className="mt-14 overflow-hidden rounded-[1.75rem] bg-white p-4 text-[#182452]">
         <div className="mx-auto w-fit rounded-full bg-black px-5 py-2 text-xs font-black uppercase tracking-[0.08em] text-white">
-          We are hiring!
+          Chúng tôi đang tuyển!
         </div>
         <div className="mt-4 rounded-2xl bg-[#F26522] px-4 py-4 text-center text-xl font-black text-white">
           {job.title}
@@ -122,21 +122,21 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
         <div className="relative mx-auto grid min-h-[calc(100vh-6rem)] max-w-7xl items-center gap-10 py-10 lg:grid-cols-[minmax(0,0.48fr)_minmax(0,0.52fr)]">
           <div>
             <div data-scroll-reveal>
-              <SectionMark current="01" label="Tuyen dung" />
+              <SectionMark current="01" label="" />
             </div>
-            <h1 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.86] tracking-normal sm:text-6xl lg:text-8xl xl:text-9xl">
-              Gia nhap
+            <h1 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.86] tracking-normal sm:text-6xl lg:text-7xl xl:text-8xl">
+              Gia nhập
               <span className="block text-[#ff7648]">GoBeyond</span>
             </h1>
             <p data-scroll-reveal className="mt-7 max-w-2xl text-base font-medium leading-8 text-white/70 md:text-lg">
-              Cac vi tri dang mo cho doi ngu e-commerce toan cau: marketing, creative, fulfillment, customer service va van hanh.
+              Các vị trí đang mở cho đội ngũ thương mại điện tử toàn cầu: marketing, sáng tạo, fulfillment, chăm sóc khách hàng và vận hành.
             </p>
             <div data-scroll-reveal className="mt-8 flex flex-wrap gap-3">
               <a
                 href="#open-roles"
                 className="magnetic inline-flex min-h-12 items-center rounded-full bg-[#F26522] px-7 text-sm font-black uppercase tracking-[0.1em] text-white shadow-[0_18px_45px_rgba(242,101,34,0.28)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
               >
-                Xem vi tri
+                Xem vị trí
               </a>
               <a
                 href={listingSourceUrl}
@@ -144,7 +144,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
                 rel="noreferrer"
                 className="magnetic inline-flex min-h-12 items-center rounded-full border border-white/18 px-7 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-white hover:text-white"
               >
-                Lark listings
+                Danh sách Lark
               </a>
             </div>
           </div>
@@ -153,7 +153,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
             <div className="absolute -inset-5 border border-[#F26522]/28 bg-[#F26522]/8 shadow-[0_34px_120px_rgba(242,101,34,0.14)]" />
             <img
               src="/careers/legacy-careers-list.png"
-              alt="GoBeyond career listings preview"
+              alt="Bản xem trước danh sách tuyển dụng GoBeyond"
               className="relative aspect-[4/3] w-full object-cover object-top"
             />
           </figure>
@@ -168,15 +168,15 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
           <div className="grid items-end gap-6 lg:grid-cols-[minmax(0,0.5fr)_minmax(0,0.5fr)]">
             <div>
               <div data-scroll-reveal>
-                <SectionMark current="02" label="Open roles" />
+                <SectionMark current="02" label="" />
               </div>
               <h2 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] sm:text-5xl lg:text-7xl">
-                Tat ca vi tri
-                <span className="block text-[#ff7648]">dang tuyen</span>
+                Tất cả vị trí
+                <span className="block text-[#ff7648]">đang tuyển</span>
               </h2>
             </div>
             <p data-scroll-reveal className="max-w-2xl text-base font-medium leading-8 text-white/68 md:text-lg">
-              Moi vai tro deu la mot manh ghep trong he thong van hanh toan cau cua GoBeyond. Noi dung co the chinh sua trong Payload CMS.
+              Mỗi vai trò đều là một mảnh ghép trong hệ thống vận hành toàn cầu của GoBeyond. Nội dung có thể chỉnh sửa trong Payload CMS.
             </p>
           </div>
 
@@ -188,7 +188,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
             </div>
           ) : (
             <div data-scroll-card className="mt-10 border border-white/12 bg-[#101520]/82 p-8 text-white shadow-[0_28px_82px_rgba(0,0,0,0.26)] backdrop-blur-md md:p-10">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Careers</p>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Tuyển dụng</p>
               <h3 className="mt-4 text-3xl font-black uppercase tracking-normal text-white md:text-5xl">
                 Chưa có tin tuyển dụng
               </h3>
@@ -201,7 +201,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
                 rel="noreferrer"
                 className="mt-7 inline-flex min-h-12 items-center rounded-full border border-white/18 px-6 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-[#F26522] hover:text-white"
               >
-                Xem Lark listings
+                Xem danh sách Lark
               </a>
             </div>
           )}
@@ -257,28 +257,28 @@ export function CareerDetail({ job }: { job: CareerItem }) {
         <div className="relative mx-auto grid min-h-[calc(100vh-6rem)] max-w-7xl items-center gap-10 py-10 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,0.45fr)]">
           <div>
             <div data-scroll-reveal>
-              <SectionMark current="JD" label={tagLabels[tag] || "Hiring"} />
+              <SectionMark current="JD" label={tagLabels[tag] || tagLabels.hiring} />
             </div>
             <h1 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] sm:text-5xl lg:text-7xl xl:text-8xl">
               {job.title}
             </h1>
             <p data-scroll-reveal className="mt-6 text-sm font-black uppercase tracking-[0.18em] text-white/46">
-              {job.dateLabel || job.publishedAt || "2026"} / {job.employmentType || "Full-time"}
+              {job.dateLabel || job.publishedAt || "2026"} / {job.employmentType || "Toàn thời gian"}
             </p>
             <p data-scroll-reveal className="mt-7 max-w-2xl text-base font-medium leading-8 text-white/70 md:text-lg">
               {job.description || job.excerpt}
             </p>
             <div data-scroll-reveal className="mt-8 flex flex-wrap gap-3">
               <a className="rounded-full bg-[#F26522] px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white transition hover:bg-[#d94d12]" href={job.applyUrl || "mailto:tuyendung@gobe.asia"}>
-                Ung tuyen
+                Ứng tuyển
               </a>
               {job.larkUrl ? (
                 <a className="rounded-full border border-white/20 px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-white hover:text-white" href={job.larkUrl} target="_blank" rel="noreferrer">
-                  Mo Lark JD
+                  Mở Lark JD
                 </a>
               ) : null}
               <Link className="rounded-full border border-white/20 px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-white hover:text-white" href="/tuyen-dung">
-                Vi tri khac
+                Vị trí khác
               </Link>
             </div>
           </div>
@@ -296,14 +296,14 @@ export function CareerDetail({ job }: { job: CareerItem }) {
 
         <div className="relative mx-auto grid max-w-7xl gap-5 lg:grid-cols-[minmax(0,0.36fr)_minmax(0,0.64fr)]">
           <aside data-scroll-reveal className="top-24 h-fit border border-white/12 bg-white/[0.04] p-6 text-white/72 backdrop-blur-md lg:sticky">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Thong tin tuyen dung</p>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Thông tin tuyển dụng</p>
             <dl className="mt-5 grid gap-4">
               {[
-                ["Vi tri", job.title],
-                ["Linh vuc", job.department || "E-commerce"],
-                ["Hinh thuc", job.employmentType || "Full-time"],
-                ["So luong", job.quantity || "01"],
-                ["Dia diem", job.location || "TP. Ho Chi Minh"],
+                ["Vị trí", job.title],
+                ["Lĩnh vực", job.department || "Thương mại điện tử"],
+                ["Hình thức", job.employmentType || "Toàn thời gian"],
+                ["Số lượng", job.quantity || "01"],
+                ["Địa điểm", job.location || "TP. Hồ Chí Minh"],
               ].map(([label, value]) => (
                 <div key={label}>
                   <dt className="text-xs font-black uppercase tracking-[0.14em] text-white/40">{label}</dt>
@@ -315,26 +315,26 @@ export function CareerDetail({ job }: { job: CareerItem }) {
 
           <div className="grid gap-5">
             {responsibilities.length > 0 ? (
-              <DetailSection eyebrow="01" title="Pham vi cong viec">
+              <DetailSection eyebrow="01" title="Phạm vi công việc">
                 <BulletList items={responsibilities} />
               </DetailSection>
             ) : null}
             {requirements.length > 0 ? (
-              <DetailSection eyebrow="02" title="Yeu cau">
+              <DetailSection eyebrow="02" title="Yêu cầu">
                 <BulletList items={requirements} />
               </DetailSection>
             ) : null}
             {benefits.length > 0 ? (
-              <DetailSection eyebrow="03" title="Quyen loi">
+              <DetailSection eyebrow="03" title="Quyền lợi">
                 <BulletList items={benefits} />
               </DetailSection>
             ) : null}
-            <DetailSection eyebrow="04" title="Thoi gian lam viec">
-              <p>{job.workingTime || "Thong tin se duoc trao doi cu the trong qua trinh phong van."}</p>
+            <DetailSection eyebrow="04" title="Thời gian làm việc">
+              <p>{job.workingTime || "Thông tin sẽ được trao đổi cụ thể trong quá trình phỏng vấn."}</p>
               <p className="mt-5 font-bold text-white">
-                Gui CV toi Email: tuyendung@gobe.asia
+                Gửi CV tới Email: tuyendung@gobe.asia
                 <br />
-                Tieu de: [GOBEYOND - {job.title.toUpperCase()}] Ho va ten
+                Tiêu đề: [GOBEYOND - {job.title.toUpperCase()}] Họ và tên
               </p>
             </DetailSection>
           </div>

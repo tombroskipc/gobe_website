@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import { CustomCursor } from "./CustomCursor";
+import { HomeSectionStoryController } from "./HomeSectionStoryController";
 import { FooterSection } from "./LegacySections";
 import { Navbar } from "./Navbar";
-import { initScrollController } from "./ScrollController";
 
 type AccentStyle = CSSProperties & {
   "--accent": string;
@@ -73,15 +73,19 @@ function SectionFrame({
   children,
   id,
   className = "",
+  releaseWithFooter = false,
 }: {
   children: ReactNode;
   id: string;
   className?: string;
+  releaseWithFooter?: boolean;
 }) {
   return (
     <section
       id={id}
       data-scroll-section
+      data-home-story-section
+      data-home-story-release-section={releaseWithFooter || undefined}
       className={`relative z-10 min-h-screen snap-start snap-always overflow-hidden bg-[#000314] px-5 pt-20 text-white sm:px-8 lg:px-12 ${className}`}
     >
       <div
@@ -93,21 +97,23 @@ function SectionFrame({
         className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,rgba(0,3,20,0.86))]"
         aria-hidden="true"
       />
-      {children}
+      <div data-home-story-content className="relative z-[2] min-h-screen">
+        {children}
+      </div>
     </section>
   );
 }
 
 export function AboutPage() {
-  useEffect(() => initScrollController(), []);
-
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#000314] text-white">
+    <main id="scroll-story" className="relative min-h-screen overflow-x-hidden bg-[#000314] text-white">
       <CustomCursor />
       <Navbar />
+      <HomeSectionStoryController />
 
       <nav
-        aria-label="About section navigation"
+        aria-label="Điều hướng các phần giới thiệu"
+        data-home-story-nav
         className="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 grid-cols-1 gap-3 lg:grid"
       >
         {["about-gobeyond", "about-numbers", "about-vision", "about-brands"].map((id) => (
@@ -115,7 +121,7 @@ export function AboutPage() {
             key={id}
             href={`#${id}`}
             className="h-2.5 w-2.5 rounded-full border border-white/50 bg-white/10 transition hover:border-[#F26522] hover:bg-[#F26522]"
-            aria-label={`Go to ${id}`}
+            aria-label={`Đi tới ${id}`}
           />
         ))}
       </nav>
@@ -124,9 +130,9 @@ export function AboutPage() {
         <div className="relative mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center gap-8 py-5 lg:grid-cols-[minmax(0,0.52fr)_minmax(0,0.48fr)]">
           <div className="min-w-0">
             <div data-scroll-reveal>
-              <SectionMark current="01" label="Về GoBeyond" />
+              <SectionMark current="01" label="" />
             </div>
-            <h1 data-scroll-reveal className="mt-6 max-w-4xl text-5xl font-black uppercase leading-[0.86] tracking-normal text-white sm:text-6xl lg:text-8xl xl:text-9xl">
+            <h1 data-scroll-reveal className="mt-6 max-w-4xl text-4xl font-black uppercase leading-[0.86] tracking-normal text-white sm:text-4xl lg:text-6xl xl:text-8xl">
               Về
               <span className="block text-[#ff7648]">GOBEYOND</span>
             </h1>
@@ -136,7 +142,7 @@ export function AboutPage() {
                 trường Bắc Mỹ và Châu Âu.
               </p>
               <p>
-                Đi cùng khẩu hiệu <strong className="text-white">Go Global or Go Home</strong>, chúng tôi tin rằng một
+                Đi cùng tinh thần <strong className="text-white">Đi toàn cầu, không dừng lại</strong>, chúng tôi tin rằng một
                 tập thể nhỏ nhưng có tài năng và nhiệt huyết luôn có thể làm nên việc lớn trên thị trường toàn cầu.
               </p>
             </div>
@@ -170,10 +176,10 @@ export function AboutPage() {
         <div className="relative mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center gap-8 py-5 lg:grid-cols-[minmax(0,0.38fr)_minmax(0,0.62fr)]">
           <div className="min-w-0">
             <div data-scroll-reveal>
-              <SectionMark current="02" label="Những con số" />
+              <SectionMark current="02" label="" />
             </div>
             <h2 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.9] tracking-normal sm:text-6xl lg:text-6xl xl:text-7xl">
-              Những con số
+              Ấn tượng về
               <span className="block text-[#ff7648]">GoBeyond</span>
             </h2>
             <p data-scroll-reveal className="mt-6 max-w-xl text-base font-medium leading-7 text-white/68 md:text-lg md:leading-8">
@@ -208,7 +214,7 @@ export function AboutPage() {
         <div className="relative mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl flex-col justify-center gap-6 py-5">
           <div className="max-w-4xl">
             <div data-scroll-reveal>
-              <SectionMark current="03" label="Tầm nhìn và sứ mệnh" />
+              <SectionMark current="03" label="" />
             </div>
             <h2 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.9] tracking-normal sm:text-6xl lg:text-6xl xl:text-7xl">
               Tầm nhìn
@@ -244,16 +250,19 @@ export function AboutPage() {
         </div>
       </SectionFrame>
 
-      <SectionFrame id="about-brands" className="bg-[#050911]">
-        <div className="relative mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl flex-col justify-center py-5">
+      <SectionFrame id="about-brands" className="bg-[#050911]" releaseWithFooter>
+        <div
+          data-home-story-release-content
+          className="relative mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl flex-col justify-center py-5"
+        >
           <div className="grid items-end gap-7 lg:grid-cols-[minmax(0,0.46fr)_minmax(0,0.54fr)]">
             <div className="min-w-0">
               <div data-scroll-reveal>
-                <SectionMark current="04" label="Nhãn hàng và nền tảng" />
+                <SectionMark current="04" label="" />
               </div>
               <h2 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.9] tracking-normal sm:text-6xl lg:text-6xl xl:text-7xl">
                 Hệ sinh thái
-                <span className="block text-[#ff7648]">đồng hành</span>
+                <span className="block mt-4 text-[#ff7648]">đồng hành</span>
               </h2>
             </div>
             <p data-scroll-reveal className="max-w-2xl text-base font-medium leading-8 text-white/68 md:text-lg">
@@ -276,7 +285,9 @@ export function AboutPage() {
         </div>
       </SectionFrame>
 
-      <FooterSection />
+      <div data-home-story-footer>
+        <FooterSection />
+      </div>
     </main>
   );
 }

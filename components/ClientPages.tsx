@@ -31,5 +31,3 @@ export const ClientCareersPage = createClientComponent(() => import("./CareersPa
 export const ClientFulfillmentJobPage = createClientComponent(() =>
   import("./CareersPage").then((mod) => mod.FulfillmentJobPage),
 );
-
-export const ClientAboutPage = createClientComponent(() => import("./AboutPage").then((mod) => mod.AboutPage));

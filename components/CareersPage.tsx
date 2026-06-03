@@ -33,41 +33,41 @@ const jobs: Job[] = [
     date: "08 Th12",
     excerpt: "Sản xuất video ngắn, visual angle và nội dung sáng tạo phục vụ các chiến dịch e-commerce.",
     href: "/tuyen-dung/creative-video",
-    title: "Creative Video",
+    title: "Sáng tạo Video",
     tone: "#D95B9F",
   },
   {
     date: "05 Th1",
     excerpt: "Chăm sóc khách hàng, xử lý phản hồi và phối hợp vận hành để trải nghiệm mua hàng mượt mà.",
     href: "/tuyen-dung/customer-service",
-    title: "Customer Service",
+    title: "Chăm sóc khách hàng",
     tone: "#2ED4A4",
   },
   {
     date: "29 Th8",
     excerpt: "Tuyển dụng, phát triển con người và xây dựng văn hóa vận hành chủ động trong đội ngũ.",
     href: "/tuyen-dung/human-resource",
-    title: "Human Resource",
+    title: "Nhân sự",
     tone: "#E9C15F",
   },
   {
     date: "21 Th4",
     excerpt: "Quản lý đơn hàng, điều phối supplier, logistics và theo dõi vận hành từ lúc nhận đơn đến khi giao thành công.",
     href: "/tuyen-dung/fulfillment-full-time",
-    title: "Fulfillment Full-time",
+    title: "Fulfillment Toàn thời gian",
     tone: "#F26522",
   },
   {
     date: "21 Th4",
     excerpt: "Thực tập vận hành sàn Etsy, hỗ trợ listing, tracking và quy trình xử lý dữ liệu sản phẩm.",
     href: "/tuyen-dung/van-hanh-san-etsy-intern",
-    title: "Vận hành sàn Etsy Intern",
+    title: "Thực tập Vận hành sàn Etsy",
     tone: "#5AA2E8",
   },
 ];
 
 const jobInfo = [
-  ["Vị trí", "Fulfillment Full-time"],
+  ["Vị trí", "Fulfillment Toàn thời gian"],
   ["Lĩnh vực", "Thương mại điện tử Âu Mỹ, Dropshipping, FBA, FBM"],
   ["Số lượng", "02"],
   ["Địa điểm", "Tòa St Moritz, 1014 Đường Phạm Văn Đồng, TP. Hồ Chí Minh"],
@@ -143,7 +143,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
 
       <div className="mt-14 overflow-hidden rounded-[1.75rem] bg-white p-4 text-[#182452]">
         <div className="mx-auto w-fit rounded-full bg-black px-5 py-2 text-xs font-black uppercase tracking-[0.08em] text-white">
-          We are hiring!
+          Chúng tôi đang tuyển!
         </div>
         <div className="mt-4 rounded-2xl bg-[#F26522] px-4 py-4 text-center text-xl font-black text-white">
           {job.title}
@@ -198,7 +198,7 @@ export function CareersPage() {
               <span className="block text-[#ff7648]">GoBeyond</span>
             </h1>
             <p data-scroll-reveal className="mt-7 max-w-2xl text-base font-medium leading-8 text-white/70 md:text-lg">
-              Những vị trí đang mở cho đội ngũ e-commerce toàn cầu: marketing, creative, fulfillment, customer service và vận hành.
+              Những vị trí đang mở cho đội ngũ thương mại điện tử toàn cầu: marketing, sáng tạo, fulfillment, chăm sóc khách hàng và vận hành.
             </p>
             <a
               href="#open-roles"
@@ -228,7 +228,7 @@ export function CareersPage() {
           <div className="grid items-end gap-6 lg:grid-cols-[minmax(0,0.5fr)_minmax(0,0.5fr)]">
             <div>
               <div data-scroll-reveal>
-                <SectionMark current="02" label="Open roles" />
+                <SectionMark current="02" label="Vị trí đang mở" />
               </div>
               <h2 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] sm:text-5xl lg:text-7xl">
                 Tất cả vị trí
@@ -284,7 +284,7 @@ export function FulfillmentJobPage() {
             <h1 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] sm:text-5xl lg:text-7xl xl:text-8xl">
               Tuyển dụng
               <span className="block text-[#ff7648]">Fulfillment</span>
-              <span className="block">Full-time</span>
+              <span className="block">Toàn thời gian</span>
             </h1>
             <p data-scroll-reveal className="mt-6 text-sm font-black uppercase tracking-[0.18em] text-white/46">
               Tháng 4 21, 2026
@@ -304,7 +304,7 @@ export function FulfillmentJobPage() {
 
           <figure data-scroll-media className="relative">
             <div className="absolute -inset-5 border border-[#F26522]/28 bg-[#F26522]/8 shadow-[0_34px_120px_rgba(242,101,34,0.14)]" />
-            <img src="/careers/legacy-fulfillment-jd.png" alt="JD Fulfillment old page preview" className="relative aspect-[4/3] w-full object-cover object-top" />
+            <img src="/careers/legacy-fulfillment-jd.png" alt="Bản xem trước JD Fulfillment" className="relative aspect-[4/3] w-full object-cover object-top" />
           </figure>
         </div>
       </section>
@@ -362,7 +362,7 @@ export function FulfillmentJobPage() {
               <p className="mt-5 font-bold text-white">
                 Gửi CV và Portfolio tới Email: tuyendung@gobe.asia
                 <br />
-                Tiêu đề: [GOBEYOND - FULFILLMENT FULL-TIME] Họ và tên
+                Tiêu đề: [GOBEYOND - FULFILLMENT TOÀN THỜI GIAN] Họ và tên
               </p>
             </DetailSection>
           </div>

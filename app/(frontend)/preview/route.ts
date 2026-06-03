@@ -18,5 +18,13 @@ export async function GET(req: NextRequest) {
   const draft = await draftMode();
   draft.enable();
 
-  redirect(type === "careers" ? `/tuyen-dung/${slug || ""}` : `/tin-tuc/${slug || ""}`);
+  if (type === "careers") {
+    redirect(`/tuyen-dung/${slug || ""}`);
+  }
+
+  if (type === "activity") {
+    redirect(`/hoat-dong/${slug || ""}`);
+  }
+
+  redirect(`/tin-tuc/${slug || ""}`);
 }

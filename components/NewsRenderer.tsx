@@ -3,6 +3,30 @@ import { RichText } from "@payloadcms/richtext-lexical/react";
 import type { SerializedEditorState } from "@payloadcms/richtext-lexical/lexical";
 import type { NewsBlock, NewsPost } from "@/lib/news";
 
+type NewsSurface = "news" | "activity";
+
+const surfaceCopy = {
+  news: {
+    backHref: "/tin-tuc",
+    backLabel: "Tin tức",
+    eyebrow: "Tin tức GoBeyond",
+    heading: "Câu chuyện, cập nhật và góc nhìn vận hành.",
+    emptyHeading: "Chưa có tin tức",
+    emptyBody: "Khi team đăng bài Tin tức trong Payload CMS, danh sách sẽ tự động hiển thị tại đây.",
+    readLabel: "Đọc bài viết",
+  },
+  activity: {
+    backHref: "/hoat-dong",
+    backLabel: "Hoạt động",
+    eyebrow: "Hoạt động GoBeyond",
+    heading: "Những hoạt động, sự kiện và khoảnh khắc của đội ngũ GoBeyond.",
+    emptyHeading: "Chưa có hoạt động",
+    emptyBody:
+      "Tạo bài trong Payload CMS, chọn tag Hoạt động, đặt trạng thái Đã xuất bản, nội dung hoạt động sẽ tự động hiển thị tại đây.",
+    readLabel: "Xem hoạt động",
+  },
+} satisfies Record<NewsSurface, Record<string, string>>;
+
 function isLexical(value: unknown): value is SerializedEditorState {
   return Boolean(value && typeof value === "object" && "root" in (value as Record<string, unknown>));
 }
@@ -50,7 +74,7 @@ function renderBlock(block: NewsBlock, index: number) {
       const imageUrl = getMediaUrl(block.image);
       return imageUrl ? (
         <figure key={block.id || index} className="overflow-hidden border border-white/12 bg-white/[0.03]">
-          <img src={imageUrl} alt={getText(block.caption, "GoBeyond news image")} className="aspect-[16/9] w-full object-cover" />
+          <img src={imageUrl} alt={getText(block.caption, "Hình ảnh tin tức GoBeyond")} className="aspect-[16/9] w-full object-cover" />
           {block.caption ? <figcaption className="px-5 py-4 text-sm text-white/58">{getText(block.caption)}</figcaption> : null}
         </figure>
       ) : null;
@@ -103,7 +127,7 @@ function renderBlock(block: NewsBlock, index: number) {
           <h2 className="text-3xl font-black text-white">{getText(block.heading)}</h2>
           {block.body ? <p className="mt-4 max-w-2xl text-white/70">{getText(block.body)}</p> : null}
           <Link href={getText(block.href, "/#contact")} className="mt-7 inline-flex bg-[#F26522] px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white">
-            {getText(block.label, "Contact GoBeyond")}
+            {getText(block.label, "Liên hệ GoBeyond")}
           </Link>
         </section>
       );
@@ -118,7 +142,7 @@ function renderBlock(block: NewsBlock, index: number) {
           <h2 className="text-3xl font-black text-white">{getText(cta.heading)}</h2>
           {cta.body ? <p className="mt-4 max-w-2xl text-white/70">{getText(cta.body)}</p> : null}
           <Link href={getText(cta.href, "/#contact")} className="mt-7 inline-flex bg-[#F26522] px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white">
-            {getText(cta.label, "Contact GoBeyond")}
+            {getText(cta.label, "Liên hệ GoBeyond")}
           </Link>
         </section>
       );
@@ -128,16 +152,17 @@ function renderBlock(block: NewsBlock, index: number) {
   }
 }
 
-export function NewsArticle({ post }: { post: NewsPost }) {
+export function NewsArticle({ post, surface = "news" }: { post: NewsPost; surface?: NewsSurface }) {
+  const copy = surfaceCopy[surface];
   const published = post.publishedAt
-    ? new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(new Date(post.publishedAt))
-    : "Draft";
+    ? new Intl.DateTimeFormat("vi-VN", { dateStyle: "medium" }).format(new Date(post.publishedAt))
+    : "Bản nháp";
 
   return (
     <main className="min-h-screen bg-[#0c1018] px-5 py-24 text-white md:px-10">
       <article className="mx-auto max-w-5xl">
-        <Link href="/tin-tuc" className="text-sm font-black uppercase tracking-[0.18em] text-[#F26522]">
-          News
+        <Link href={copy.backHref} className="text-sm font-black uppercase tracking-[0.18em] text-[#F26522]">
+          {copy.backLabel}
         </Link>
         <header className="mt-8 border-b border-white/12 pb-12">
           <p className="text-sm uppercase tracking-[0.18em] text-white/46">{published}</p>
@@ -150,25 +175,58 @@ export function NewsArticle({ post }: { post: NewsPost }) {
   );
 }
 
-export function NewsListing({ posts }: { posts: NewsPost[] }) {
+export function NewsListing({ posts, surface = "news" }: { posts: NewsPost[]; surface?: NewsSurface }) {
+  const copy = surfaceCopy[surface];
+
   return (
     <main className="min-h-screen bg-[#0c1018] px-5 py-24 text-white md:px-10">
       <section className="mx-auto max-w-6xl">
-        <p className="text-sm font-black uppercase tracking-[0.22em] text-[#F26522]">GoBeyond News</p>
-        <h1 className="mt-5 max-w-4xl text-5xl font-black leading-none tracking-tight md:text-7xl">Stories, updates, and operating playbooks.</h1>
-        <div className="mt-14 grid gap-px overflow-hidden border border-white/12 bg-white/12 md:grid-cols-3">
-          {posts.map((post) => (
-            <Link key={post.slug} href={`/tin-tuc/${post.slug}`} className="group bg-[#101722] p-6 transition hover:bg-[#151f2e]">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#F26522]">{post.template || "news"}</p>
-              <h2 className="mt-5 text-2xl font-black leading-tight text-white">{post.title}</h2>
-              <p className="mt-4 line-clamp-4 text-sm leading-6 text-white/62">{post.excerpt}</p>
-              <span className="mt-8 inline-block text-sm font-black uppercase tracking-[0.16em] text-white/70 group-hover:text-[#F26522]">
-                Read article
-              </span>
-            </Link>
-          ))}
-        </div>
+        <p className="text-sm font-black uppercase tracking-[0.22em] text-[#F26522]">{copy.eyebrow}</p>
+        <h1 className="mt-5 max-w-4xl text-5xl font-black leading-none tracking-tight md:text-7xl">{copy.heading}</h1>
+        {posts.length > 0 ? (
+          <div className="mt-14 grid gap-px overflow-hidden border border-white/12 bg-white/12 md:grid-cols-3">
+            {posts.map((post) => {
+              const heroUrl = getMediaUrl(post.heroImage);
+
+              return (
+                <Link
+                  key={post.slug}
+                  href={`${copy.backHref}/${post.slug}`}
+                  className="group bg-[#101722] transition hover:bg-[#151f2e]"
+                >
+                  {heroUrl ? (
+                    <img src={heroUrl} alt={post.title} className="aspect-[16/10] w-full object-cover opacity-90 transition group-hover:opacity-100" />
+                  ) : null}
+                  <div className="p-6">
+                    <p className="text-xs font-black uppercase tracking-[0.18em] text-[#F26522]">
+                      {surface === "activity" ? "Hoạt động" : "Tin tức"}
+                    </p>
+                    <h2 className="mt-5 text-2xl font-black leading-tight text-white">{post.title}</h2>
+                    <p className="mt-4 line-clamp-4 text-sm leading-6 text-white/62">{post.excerpt}</p>
+                    <span className="mt-8 inline-block text-sm font-black uppercase tracking-[0.16em] text-white/70 group-hover:text-[#F26522]">
+                      {copy.readLabel}
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="mt-14 border border-white/12 bg-[#101722] p-8 md:p-10">
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">{copy.backLabel}</p>
+            <h2 className="mt-4 text-3xl font-black uppercase text-white md:text-5xl">{copy.emptyHeading}</h2>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-white/66">{copy.emptyBody}</p>
+          </div>
+        )}
       </section>
     </main>
   );
+}
+
+export function ActivityListing({ posts }: { posts: NewsPost[] }) {
+  return <NewsListing posts={posts} surface="activity" />;
+}
+
+export function ActivityArticle({ post }: { post: NewsPost }) {
+  return <NewsArticle post={post} surface="activity" />;
 }

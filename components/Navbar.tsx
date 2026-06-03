@@ -8,7 +8,7 @@ const menuItems = [
   { label: "TRANG CH\u1ee6", href: "/", match: "/" },
   { label: "V\u1ec0 CH\u00daNG T\u00d4I", href: "/ve-chung-toi", match: "/ve-chung-toi" },
   { label: "TUY\u1ec2N D\u1ee4NG", href: "/tuyen-dung", match: "/tuyen-dung" },
-  { label: "HO\u1ea0T \u0110\u1ed8NG", href: "/#operations", match: "/#operations" },
+  { label: "HO\u1ea0T \u0110\u1ed8NG", href: "/hoat-dong", match: "/hoat-dong" },
   { label: "TIN T\u1ee8C", href: "/tin-tuc", match: "/tin-tuc" },
 ];
 
@@ -30,7 +30,7 @@ function Icon({ children, className = "" }: { children: ReactNode; className?: s
 }
 
 export function Navbar() {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -43,11 +43,11 @@ export function Navbar() {
   return (
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[#0c1018]/60 shadow-[0_12px_42px_rgba(0,0,0,0.24)] backdrop-blur-2xl">
       <div className="mx-auto flex min-h-[78px] max-w-7xl items-center gap-4 px-5 sm:px-6 lg:px-8">
-        <a href="/" className="flex items-center gap-3" aria-label="GoBe home">
-          <img src="/Logo_2.png" alt="GOBeyond go global or go home" className="h-auto w-[164px] object-contain md:w-[202px]" />
+        <a href="/" className="flex items-center gap-3" aria-label="Trang chủ GoBe">
+          <img src="/Logo_2.png" alt="GOBeyond - đi toàn cầu" className="h-auto w-[164px] object-contain md:w-[202px]" />
         </a>
 
-        <nav aria-label="Landing navigation" className="ml-auto hidden items-center gap-2 lg:flex">
+        <nav aria-label="Điều hướng chính" className="ml-auto hidden items-center gap-2 lg:flex">
           {menuItems.map((item, index) => (
             <a
               key={item.href}
@@ -76,7 +76,7 @@ export function Navbar() {
 
         <button
           type="button"
-          aria-label={open ? "Close menu" : "Open menu"}
+          aria-label={open ? "Đóng menu" : "Mở menu"}
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
           className="ml-auto grid h-11 w-11 place-items-center rounded-full border border-[#F26522]/35 bg-white/10 text-[#F26522] transition hover:bg-[#F26522]/10 lg:hidden"
@@ -107,7 +107,7 @@ export function Navbar() {
             <img src="/Logo_2.png" alt="GOBeyond" className="w-40 object-contain" />
             <button
               type="button"
-              aria-label="Close menu"
+              aria-label="Đóng menu"
               onClick={() => setOpen(false)}
               className="grid h-10 w-10 place-items-center rounded-full bg-[#F26522]/10 text-[#F26522]"
             >
@@ -117,7 +117,7 @@ export function Navbar() {
             </button>
           </div>
 
-          <nav className="mt-10 grid gap-2" aria-label="Mobile navigation">
+          <nav className="mt-10 grid gap-2" aria-label="Điều hướng di động">
             {menuItems.map((item) => (
               <a
                 key={item.href}
@@ -131,7 +131,7 @@ export function Navbar() {
           </nav>
 
           <div className="mt-auto rounded-3xl bg-[#F26522] p-5 text-white">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-white/80">Contact</p>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-white/80">Liên hệ</p>
             <a href="mailto:info@gobe.asia" className="mt-3 block text-sm font-bold">
               info@gobe.asia
             </a>

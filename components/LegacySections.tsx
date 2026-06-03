@@ -136,41 +136,41 @@ const operations = [
   },
   {
     index: "02",
-    title: "Creative",
-    body: "Product stories, visuals, angles, short-form content, and campaign assets.",
+    title: "Sáng tạo",
+    body: "Câu chuyện sản phẩm, hình ảnh, angle, nội dung ngắn và tài nguyên chiến dịch.",
   },
   {
     index: "03",
     title: "Fulfillment",
-    body: "Supply coordination, packing flow, shipping partners, and customer delivery.",
+    body: "Điều phối nguồn hàng, quy trình đóng gói, đối tác vận chuyển và giao hàng cho khách.",
   },
   {
     index: "04",
-    title: "Designer",
-    body: "Storefront experience, product presentation, brand systems, and conversion details.",
+    title: "Thiết kế",
+    body: "Trải nghiệm storefront, trình bày sản phẩm, hệ thống thương hiệu và chi tiết chuyển đổi.",
   },
   {
     index: "05",
-    title: "Operation",
-    body: "Daily operations, automation, internal tools, finance.",
+    title: "Vận hành",
+    body: "Vận hành hằng ngày, tự động hóa, công cụ nội bộ và tài chính.",
   },
 ];
 
 const scaleNodes = [
   {
-    title: "Strong core team.",
-    body: "Core team is strong with team leaders is creative and knowledgeable, open to take any challenge.",
-    chips: ["Creative leaders", "Knowledgeable", "Challenge ready"],
+    title: "Đội ngũ lõi vững mạnh.",
+    body: "Đội ngũ lõi có các leader sáng tạo, giàu kiến thức và sẵn sàng đón nhận thử thách.",
+    chips: ["Leader sáng tạo", "Giàu kiến thức", "Sẵn sàng thử thách"],
   },
   {
-    title: "Global supplier network.",
-    body: "Works with different suppliers across the world, connecting product sources, fulfillment partners, and store operations across markets.",
-    chips: ["Worldwide suppliers", "Storefronts", "Fulfillment"],
+    title: "Mạng lưới supplier toàn cầu.",
+    body: "Làm việc với nhiều supplier trên thế giới, kết nối nguồn sản phẩm, đối tác fulfillment và vận hành store ở nhiều thị trường.",
+    chips: ["Supplier toàn cầu", "Storefront", "Fulfillment"],
   },
   {
-    title: "AI and automation first initiative",
-    body: "AI and Automation is the 1st initiative, making it easier to scale a large number amount of orders, data workflows, creative production, and daily operations.",
-    chips: ["AI-first", "Automation", "Large order scale"],
+    title: "Ưu tiên AI và tự động hóa",
+    body: "AI và tự động hóa là ưu tiên trọng tâm, giúp mở rộng xử lý đơn hàng, workflow dữ liệu, sản xuất creative và vận hành hằng ngày.",
+    chips: ["Ưu tiên AI", "Tự động hóa", "Scale đơn hàng"],
   },
 ];
 
@@ -507,7 +507,7 @@ export function ContactCtaSection() {
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-28" aria-hidden="true" />
         <div data-scroll-reveal className="relative mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur-md md:p-12">
           <h2 className="text-[clamp(2.4rem,6vw,5.8rem)] font-black uppercase leading-[0.9] tracking-normal text-white">
-            Talk to the GoBe global team.
+            Liên hệ đội ngũ GoBe toàn cầu.
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/65">
             {"Li\u00ean h\u1ec7 GoBe v\u1ec1 s\u1ea3n ph\u1ea9m, h\u1ee3p t\u00e1c, tuy\u1ec3n d\u1ee5ng, truy\u1ec1n th\u00f4ng, ho\u1eb7c nh\u1eefng c\u01a1 h\u1ed9i li\u00ean quan \u0111\u1ebfn v\u1eadn h\u00e0nh th\u01b0\u01a1ng m\u1ea1i \u0111i\u1ec7n t\u1eed to\u00e0n c\u1ea7u."}
@@ -516,7 +516,7 @@ export function ContactCtaSection() {
             href="mailto:info@gobe.asia"
             className="magnetic mt-9 inline-flex min-h-12 items-center rounded-full bg-[#F26522] px-8 text-sm font-black uppercase tracking-[0.08em] text-white shadow-[0_18px_45px_rgba(242,101,34,0.28)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
           >
-            Open contact page
+            Gửi email liên hệ
           </a>
         </div>
       </div>
@@ -529,6 +529,7 @@ export function FooterSection() {
     { href: "/", label: "Trang chủ" },
     { href: "/ve-chung-toi", label: "Về chúng tôi" },
     { href: "/tuyen-dung", label: "Tuyển dụng" },
+    { href: "/hoat-dong", label: "Hoạt động" },
     { href: "/tin-tuc", label: "Tin tức" },
   ];
 
@@ -569,11 +570,10 @@ export function FooterSection() {
         <div>
           <img src="/Logo_2.png" alt="GOBeyond" className="w-64 max-w-full brightness-0 invert" />
           <p className="mt-8 max-w-[34rem] text-base font-semibold leading-8 text-white">
-            Gobe is a dynamic business growing with the Cross-border E-commerce industry, focusing on Print on Demand and
-            Drop-shipping
+            GoBe là doanh nghiệp phát triển cùng ngành thương mại điện tử xuyên biên giới, tập trung vào Print on Demand và Drop-shipping.
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-3" aria-label="GoBeyond social links">
+          <div className="mt-7 flex flex-wrap gap-3" aria-label="Liên kết mạng xã hội GoBeyond">
             {socialLinks.map((link) => (
               <a
                 key={link.label}
@@ -590,7 +590,7 @@ export function FooterSection() {
         </div>
 
         <div>
-          <h2 className="text-3xl font-black tracking-normal text-white">Contact</h2>
+          <h2 className="text-3xl font-black tracking-normal text-white">Liên hệ</h2>
           <div className="mt-7 space-y-4 text-base font-semibold leading-7 text-white">
             <p className="flex gap-3">
               <span className="mt-1 min-w-8 text-xs font-black uppercase tracking-[0.08em]" aria-hidden="true">pin</span>
@@ -611,8 +611,8 @@ export function FooterSection() {
           </div>
         </div>
 
-        <nav aria-label="Footer pages">
-          <h2 className="text-3xl font-black tracking-normal text-white">Pages</h2>
+        <nav aria-label="Các trang ở chân trang">
+          <h2 className="text-3xl font-black tracking-normal text-white">Trang</h2>
           <div className="mt-7 flex flex-col gap-4 text-base font-semibold text-white">
             {pageLinks.map((link) => (
               <a key={link.href} href={link.href} className="transition hover:translate-x-1 hover:text-white/72">
@@ -624,12 +624,12 @@ export function FooterSection() {
       </div>
 
       <div className="relative mx-auto mt-14 max-w-7xl border-t border-white/78 pt-7 text-center text-sm font-semibold text-white">
-        Copyright © 2024 - GoBeyond All Right Reserved.
+        Bản quyền © 2024 - GoBeyond. Đã đăng ký mọi quyền.
       </div>
 
       <button
         type="button"
-        aria-label="Back to top"
+        aria-label="Lên đầu trang"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className="absolute bottom-10 right-7 inline-flex size-14 items-center justify-center rounded-full bg-[#31b73e] text-white shadow-[0_18px_40px_rgba(49,183,62,0.34)] transition hover:-translate-y-1 hover:bg-[#28a733]"
       >

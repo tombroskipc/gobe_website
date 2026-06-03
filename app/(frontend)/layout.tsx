@@ -19,9 +19,9 @@ const body = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "GoBeyond LLC - Go Global or Go Home",
+  title: "GoBeyond LLC - Đi toàn cầu, không dừng lại",
   description:
-    "Premium immersive 3D global tech hub concept for Gobeyond LLC and gobe.asia.",
+    "Trải nghiệm thương hiệu GoBeyond LLC với đội ngũ thương mại điện tử toàn cầu, hoạt động, tin tức và tuyển dụng.",
 };
 
 export default function FrontendLayout({
@@ -30,11 +30,11 @@ export default function FrontendLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark mdl-js ${display.variable} ${body.variable}`} suppressHydrationWarning>
+    <html lang="vi" className={`dark mdl-js ${display.variable} ${body.variable}`} suppressHydrationWarning>
       <body className="text-[#18213d] antialiased">
         <SuppressDevWarnings />
         {children}
-        {/* Cinematic film grain — makes the gradients read as shot, not CSS-generated. */}
+        {/* Film grain nhẹ để nền gradient có chiều sâu hơn. */}
         <div className="grain-overlay" aria-hidden="true" />
       </body>
     </html>

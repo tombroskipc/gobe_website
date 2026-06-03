@@ -178,7 +178,7 @@ export interface Media {
   };
 }
 /**
- * Template-driven posts for GoBeyond news, announcements, editorials, and case studies.
+ * Template-driven posts for GoBeyond news, activities, announcements, editorials, and case studies.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "news".
@@ -192,9 +192,13 @@ export interface News {
   slug: string;
   status?: ('draft' | 'published') | null;
   /**
+   * Chọn Hoạt động để đăng bài lên các trang Hoạt động công khai.
+   */
+  tag: 'news' | 'activity';
+  /**
    * Seeds the starter content blocks when a post is created.
    */
-  template: 'standard' | 'editorial' | 'caseStudy' | 'companyUpdate';
+  template: 'standard' | 'editorial' | 'caseStudy' | 'companyUpdate' | 'activity';
   publishedAt?: string | null;
   excerpt: string;
   /**
@@ -540,6 +544,7 @@ export interface NewsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   status?: T;
+  tag?: T;
   template?: T;
   publishedAt?: T;
   excerpt?: T;
