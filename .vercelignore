@@ -1,1 +1,17 @@
+.next/
+node_modules/
+node_modules.bak/
+payload.db*
+public/media/
 public/models/gobeyond-operations-diorama*.web.glb
+media/
+.env.local
+.DS_Store
+.agent/
+.agents/
+.minimax/
+.omx/
+.claude/
+skills-lock.json
+tsconfig.tsbuildinfo
+next-dev-*.log
