@@ -2,6 +2,7 @@
 node_modules/
 payload.db*
 public/media/
+public/models/gobeyond-operations-diorama*.web.glb
 
 # Local media uploads
 media/
@@ -21,3 +22,4 @@ node_modules.bak/
 .omx/
 .claude/
 skills-lock.json
+.vercel

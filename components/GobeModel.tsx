@@ -6,7 +6,13 @@ import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as THREE from "three";
 
-const MODEL_PATH = "/models/gobeyond-operations-diorama-v3.web.glb";
+const EXTERNAL_MODEL_URL = process.env.NEXT_PUBLIC_GOBE_MODEL_URL;
+const LOCAL_MODEL_PATH = "/models/gobeyond-operations-diorama-v3.web.glb";
+const LOCAL_MODEL_CHUNKS = [
+  "/models/gobeyond-operations-diorama-v3.web.glb.part-00",
+  "/models/gobeyond-operations-diorama-v3.web.glb.part-01",
+  "/models/gobeyond-operations-diorama-v3.web.glb.part-02",
+];
 const CAMERA_POSITION = new THREE.Vector3(0, 1.2, 5.75);
 const CAMERA_TARGET = new THREE.Vector3(0, 0.08, 0);
 const CAMERA_FOV = 34;
@@ -26,6 +32,39 @@ interface GobeModelProps {
   scale?: number;
   autoRotate?: boolean;
   className?: string;
+}
+
+async function resolveModelSource(signal: AbortSignal) {
+  if (EXTERNAL_MODEL_URL) {
+    return { url: EXTERNAL_MODEL_URL };
+  }
+
+  try {
+    const responses = await Promise.all(
+      LOCAL_MODEL_CHUNKS.map((path) =>
+        fetch(path, {
+          cache: "force-cache",
+          signal,
+        })
+      )
+    );
+
+    if (responses.every((response) => response.ok)) {
+      const chunks = await Promise.all(responses.map((response) => response.arrayBuffer()));
+      const url = URL.createObjectURL(new Blob(chunks, { type: "model/gltf-binary" }));
+
+      return {
+        url,
+        revoke: () => URL.revokeObjectURL(url),
+      };
+    }
+  } catch (error) {
+    if (!signal.aborted) {
+      console.warn("Chunked 3D model load failed, falling back to local model path.", error);
+    }
+  }
+
+  return { url: LOCAL_MODEL_PATH };
 }
 
 function makeUpperGlobeTransparent(scene: THREE.Object3D) {
@@ -155,13 +194,31 @@ function ModelContent({
 
     let mounted = true;
     let retryTimer: number | undefined;
+    let currentModelUrlCleanup: (() => void) | undefined;
+    let abortController = new AbortController();
 
     const loadModel = () => {
       setIsLoading(true);
+      abortController.abort();
+      abortController = new AbortController();
 
-      loader.load(
-        MODEL_PATH,
-        (gltf) => {
+      resolveModelSource(abortController.signal)
+        .then(({ url, revoke }) => {
+          if (!mounted) {
+            revoke?.();
+            return;
+          }
+
+          currentModelUrlCleanup?.();
+          currentModelUrlCleanup = revoke;
+
+          loader.load(
+            url,
+            (gltf) => {
+              revoke?.();
+              if (currentModelUrlCleanup === revoke) {
+                currentModelUrlCleanup = undefined;
+              }
           if (!mounted || !groupRef.current) return;
 
           if (loadedRoot.current) {
@@ -263,15 +320,30 @@ function ModelContent({
           groupRef.current.add(stage);
           setLoaded(true);
           setIsLoading(false);
-        },
-        undefined,
-        (error) => {
-          console.error("Error loading GLTF. Retrying:", error);
+            },
+            undefined,
+            (error) => {
+              revoke?.();
+              if (currentModelUrlCleanup === revoke) {
+                currentModelUrlCleanup = undefined;
+              }
+              console.error("Error loading GLTF. Retrying:", error);
+              if (mounted) {
+                retryTimer = window.setTimeout(loadModel, 1600);
+              }
+            }
+          );
+        })
+        .catch((error) => {
+          if (abortController.signal.aborted) {
+            return;
+          }
+
+          console.error("Error resolving GLTF source. Retrying:", error);
           if (mounted) {
             retryTimer = window.setTimeout(loadModel, 1600);
           }
-        }
-      );
+        });
     };
 
     loadModel();
@@ -281,6 +353,8 @@ function ModelContent({
       if (retryTimer) {
         window.clearTimeout(retryTimer);
       }
+      abortController.abort();
+      currentModelUrlCleanup?.();
       if (loadedRoot.current && groupRef.current) {
         groupRef.current.remove(loadedRoot.current);
       }
