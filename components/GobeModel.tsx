@@ -2,23 +2,109 @@
 
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as THREE from "three";
 
-const MODEL_PATH = "/models/gobeyond3d2.web.glb";
-const BLENDER_CAMERA_FOV = THREE.MathUtils.radToDeg(0.7427104693450297);
-const FALLBACK_CAMERA_POSITION = new THREE.Vector3(3.067650079727173, 2.698859453201294, 3.5093698501586914);
-const FALLBACK_CAMERA_QUATERNION = new THREE.Quaternion(
-  -0.11975622177124023,
-  0.20744825899600983,
-  0.023914916440844536,
-  0.9705935120582581
-);
+const MODEL_PATH = "/models/gobe-globe-hq.web.glb";
+const CAMERA_POSITION = new THREE.Vector3(0, 0.18, 5.15);
+const CAMERA_TARGET = new THREE.Vector3(0, 0.08, 0);
+const CAMERA_FOV = 34;
+const MODEL_FIT_SIZE = 3.52;
+const AUTO_ROTATE_SPEED = 0.07;
+const GLASS_OPACITY = 0.16;
+const LOGO_ORANGE = "#F26522";
 
 interface GobeModelProps {
   scale?: number;
   autoRotate?: boolean;
   className?: string;
+}
+
+function makeUpperGlobeTransparent(scene: THREE.Object3D) {
+  scene.traverse((child) => {
+    if (!(child instanceof THREE.Mesh)) {
+      return;
+    }
+
+    const materialName = Array.isArray(child.material)
+      ? child.material.map((material) => material.name).join(" ")
+      : child.material?.name;
+    const isUpperGlass = child.name.toLowerCase().includes("sphere") || materialName?.toLowerCase().includes("glass");
+
+    if (!isUpperGlass) {
+      return;
+    }
+
+    const applyGlass = (material: THREE.Material) => {
+      const glass = material.clone();
+      glass.name = `${material.name || "Glass"} Transparent`;
+      glass.transparent = true;
+      glass.opacity = GLASS_OPACITY;
+      glass.depthWrite = false;
+      glass.side = THREE.DoubleSide;
+      glass.needsUpdate = true;
+
+      if (glass instanceof THREE.MeshStandardMaterial) {
+        glass.color = new THREE.Color("#edf5fb");
+        glass.metalness = 0.02;
+        glass.roughness = 0.3;
+        glass.envMapIntensity = 0.58;
+      }
+
+      return glass;
+    };
+
+    child.material = Array.isArray(child.material) ? child.material.map(applyGlass) : applyGlass(child.material);
+    child.renderOrder = 4;
+    child.castShadow = false;
+  });
+}
+
+function makeLogoOrange(scene: THREE.Object3D) {
+  scene.traverse((child) => {
+    if (!(child instanceof THREE.Mesh)) {
+      return;
+    }
+
+    const materials = Array.isArray(child.material) ? child.material : [child.material];
+    const materialNames = materials.map((material) => material.name).join(" ").toLowerCase();
+    const targetText = `${child.name} ${materialNames}`.toLowerCase();
+    const isLogo = targetText.includes("logo") || materialNames.includes("material_0.015");
+
+    if (!isLogo) {
+      return;
+    }
+
+    const applyLogoColor = (material: THREE.Material) => {
+      const logo = material.clone();
+      logo.name = `${material.name || "Logo"} Orange`;
+
+      if (logo instanceof THREE.MeshStandardMaterial) {
+        logo.color = new THREE.Color(LOGO_ORANGE);
+        logo.emissive = new THREE.Color(LOGO_ORANGE);
+        logo.emissiveIntensity = 0.16;
+        logo.metalness = 0.08;
+        logo.roughness = 0.34;
+        logo.map = null;
+        logo.emissiveMap = null;
+      } else if (
+        logo instanceof THREE.MeshBasicMaterial ||
+        logo instanceof THREE.MeshPhongMaterial ||
+        logo instanceof THREE.MeshLambertMaterial
+      ) {
+        logo.color = new THREE.Color(LOGO_ORANGE);
+      }
+
+      logo.needsUpdate = true;
+      return logo;
+    };
+
+    child.material = Array.isArray(child.material)
+      ? child.material.map(applyLogoColor)
+      : applyLogoColor(child.material);
+    child.renderOrder = 5;
+  });
 }
 
 function ModelContent({
@@ -33,16 +119,12 @@ function ModelContent({
   const { camera } = useThree();
   const [loaded, setLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const baseCameraPosition = useRef(FALLBACK_CAMERA_POSITION.clone());
-  const baseCameraQuaternion = useRef(FALLBACK_CAMERA_QUATERNION.clone());
-  const baseLookTarget = useRef(
-    FALLBACK_CAMERA_POSITION.clone().add(new THREE.Vector3(0, 0, -1).applyQuaternion(FALLBACK_CAMERA_QUATERNION).multiplyScalar(6))
-  );
-  const desiredCameraPosition = useRef(new THREE.Vector3());
-  const desiredLookTarget = useRef(new THREE.Vector3());
+  const loadedRoot = useRef<THREE.Group | null>(null);
 
   useEffect(() => {
     const loader = new GLTFLoader();
+    loader.setMeshoptDecoder(MeshoptDecoder);
+
     let mounted = true;
     let retryTimer: number | undefined;
 
@@ -54,41 +136,44 @@ function ModelContent({
         (gltf) => {
           if (!mounted || !groupRef.current) return;
 
+          if (loadedRoot.current) {
+            groupRef.current.remove(loadedRoot.current);
+          }
+
           const scene = gltf.scene;
+          makeUpperGlobeTransparent(scene);
+          makeLogoOrange(scene);
+
           gltf.scene.traverse((child) => {
             if (child instanceof THREE.Mesh) {
               child.castShadow = true;
               child.receiveShadow = true;
+              child.frustumCulled = true;
             }
           });
 
-          const sourceCamera = gltf.cameras[0] as THREE.PerspectiveCamera | undefined;
-          if (sourceCamera) {
-            sourceCamera.updateMatrixWorld(true);
-            sourceCamera.getWorldPosition(baseCameraPosition.current);
-            sourceCamera.getWorldQuaternion(baseCameraQuaternion.current);
+          const root = new THREE.Group();
+          root.add(scene);
 
-            const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(baseCameraQuaternion.current);
-            baseLookTarget.current.copy(baseCameraPosition.current).add(forward.multiplyScalar(6));
+          const box = new THREE.Box3().setFromObject(scene);
+          const center = box.getCenter(new THREE.Vector3());
+          const size = box.getSize(new THREE.Vector3());
+          const maxDimension = Math.max(size.x, size.y, size.z) || 1;
 
-            const perspective = camera as THREE.PerspectiveCamera;
-            perspective.position.copy(baseCameraPosition.current);
-            perspective.quaternion.copy(baseCameraQuaternion.current);
-            perspective.fov = sourceCamera.fov;
-            perspective.near = 0.01;
-            perspective.far = 220;
-            perspective.updateProjectionMatrix();
-          } else {
-            const perspective = camera as THREE.PerspectiveCamera;
-            perspective.position.copy(baseCameraPosition.current);
-            perspective.quaternion.copy(baseCameraQuaternion.current);
-            perspective.fov = BLENDER_CAMERA_FOV;
-            perspective.near = 0.01;
-            perspective.far = 220;
-            perspective.updateProjectionMatrix();
-          }
+          scene.position.sub(center);
+          root.scale.setScalar(MODEL_FIT_SIZE / maxDimension);
+          root.rotation.set(-0.08, -0.34, 0);
 
-          groupRef.current.add(scene);
+          const perspective = camera as THREE.PerspectiveCamera;
+          perspective.position.copy(CAMERA_POSITION);
+          perspective.fov = CAMERA_FOV;
+          perspective.near = 0.05;
+          perspective.far = 80;
+          perspective.lookAt(CAMERA_TARGET);
+          perspective.updateProjectionMatrix();
+
+          loadedRoot.current = root;
+          groupRef.current.add(root);
           setLoaded(true);
           setIsLoading(false);
         },
@@ -109,34 +194,18 @@ function ModelContent({
       if (retryTimer) {
         window.clearTimeout(retryTimer);
       }
+      if (loadedRoot.current && groupRef.current) {
+        groupRef.current.remove(loadedRoot.current);
+      }
     };
   }, [camera, groupRef]);
 
-  useFrame(({ clock, pointer }, delta) => {
+  useFrame((_, delta) => {
     if (!groupRef.current || !loaded) return;
 
-    const perspective = camera as THREE.PerspectiveCamera;
-    const parallaxX = pointer.x * 0.08;
-    const parallaxY = pointer.y * 0.045;
-
-    desiredCameraPosition.current.set(
-      baseCameraPosition.current.x + parallaxX,
-      baseCameraPosition.current.y + parallaxY,
-      baseCameraPosition.current.z + pointer.x * 0.03
-    );
-    desiredLookTarget.current.set(
-      baseLookTarget.current.x + pointer.x * 0.06,
-      baseLookTarget.current.y + pointer.y * 0.035,
-      baseLookTarget.current.z
-    );
-
     if (autoRotate) {
-      desiredCameraPosition.current.x += Math.sin(clock.elapsedTime * 0.3) * 0.08;
+      groupRef.current.rotation.y += delta * AUTO_ROTATE_SPEED;
     }
-
-    const blend = 1 - Math.exp(-delta * 8);
-    perspective.position.lerp(desiredCameraPosition.current, blend);
-    perspective.lookAt(desiredLookTarget.current);
   });
 
   return (
@@ -161,7 +230,7 @@ export function GobeModel({
   return (
     <div className={className} style={{ width: "100%", height: "100%" }}>
       <Canvas
-        camera={{ position: [3.067650079727173, 2.698859453201294, 3.5093698501586914], fov: BLENDER_CAMERA_FOV, near: 0.01, far: 220 }}
+        camera={{ position: CAMERA_POSITION.toArray(), fov: CAMERA_FOV, near: 0.05, far: 80 }}
         dpr={[0.8, 1.15]}
         gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
         style={{ background: "transparent" }}
