@@ -6,10 +6,9 @@ Current setup:
 
 - The original local model stays at `public/models/gobeyond-operations-diorama-v3.web.glb`.
 - That full file is ignored by Git and Vercel.
-- The deployable fallback uses three committed chunks:
+- The deployable fallback uses committed chunks:
   - `public/models/gobeyond-operations-diorama-v3.web.glb.part-00`
   - `public/models/gobeyond-operations-diorama-v3.web.glb.part-01`
-  - `public/models/gobeyond-operations-diorama-v3.web.glb.part-02`
 - `components/GobeModel.tsx` fetches the chunks, joins them into a browser `Blob`, and loads the original model from that Blob URL.
 
 Preferred CDN path:

@@ -11,7 +11,6 @@ const LOCAL_MODEL_PATH = "/models/gobeyond-operations-diorama-v3.web.glb";
 const LOCAL_MODEL_CHUNKS = [
   "/models/gobeyond-operations-diorama-v3.web.glb.part-00",
   "/models/gobeyond-operations-diorama-v3.web.glb.part-01",
-  "/models/gobeyond-operations-diorama-v3.web.glb.part-02",
 ];
 const CAMERA_POSITION = new THREE.Vector3(0, 1.2, 5.75);
 const CAMERA_TARGET = new THREE.Vector3(0, 0.08, 0);
@@ -76,7 +75,16 @@ function makeUpperGlobeTransparent(scene: THREE.Object3D) {
     const materialName = Array.isArray(child.material)
       ? child.material.map((material) => material.name).join(" ")
       : child.material?.name;
-    const isUpperGlass = child.name.toLowerCase().includes("sphere") || materialName?.toLowerCase().includes("glass");
+    const materials = Array.isArray(child.material) ? child.material : [child.material];
+    const hasGlassMaterial = materials.some(
+      (material) =>
+        material instanceof THREE.MeshPhysicalMaterial &&
+        ((material.transmission ?? 0) > 0 || (material.ior ?? 1) > 1)
+    );
+    const isUpperGlass =
+      child.name.toLowerCase().includes("sphere") ||
+      materialName?.toLowerCase().includes("glass") ||
+      hasGlassMaterial;
 
     if (!isUpperGlass) {
       return;
@@ -219,107 +227,108 @@ function ModelContent({
               if (currentModelUrlCleanup === revoke) {
                 currentModelUrlCleanup = undefined;
               }
-          if (!mounted || !groupRef.current) return;
 
-          if (loadedRoot.current) {
-            groupRef.current.remove(loadedRoot.current);
-          }
+              if (!mounted || !groupRef.current) return;
 
-          const scene = gltf.scene;
-          makeUpperGlobeTransparent(scene);
-          makeLogoOrange(scene);
-
-          gltf.scene.traverse((child) => {
-            if (child instanceof THREE.Mesh) {
-              child.castShadow = true;
-              child.receiveShadow = true;
-              child.frustumCulled = true;
-            }
-          });
-
-          const box = new THREE.Box3().setFromObject(scene);
-          const center = box.getCenter(new THREE.Vector3());
-          const size = box.getSize(new THREE.Vector3());
-          const maxDimension = Math.max(size.x, size.y, size.z) || 1;
-
-          scene.position.sub(center);
-
-          const stage = new THREE.Group();
-          const globeRoot = new THREE.Group();
-          const logoRoot = new THREE.Group();
-          const orangeRingRoot = new THREE.Group();
-          const orangeOrbitARoot = new THREE.Group();
-          const orangeOrbitBRoot = new THREE.Group();
-          const logos: THREE.Object3D[] = [];
-          const mainRingObjects: THREE.Object3D[] = [];
-          const orbitAObjects: THREE.Object3D[] = [];
-          const orbitBObjects: THREE.Object3D[] = [];
-
-          globeRoot.rotation.copy(MODEL_BASE_ROTATION);
-          globeRoot.add(scene);
-          stage.add(globeRoot);
-          stage.add(orangeRingRoot);
-          stage.add(orangeOrbitARoot);
-          stage.add(orangeOrbitBRoot);
-          stage.add(logoRoot);
-          stage.scale.setScalar(MODEL_FIT_SIZE / maxDimension);
-          stage.position.y = MODEL_VERTICAL_OFFSET;
-          scene.traverse((child) => {
-            if (isLogoObject(child)) {
-              logos.push(child);
-            }
-            if (isMainOrangeRing(child)) {
-              mainRingObjects.push(child);
-            }
-            if (isOrbitA(child)) {
-              orbitAObjects.push(child);
-            }
-            if (isOrbitB(child)) {
-              orbitBObjects.push(child);
-            }
-          });
-          stage.updateMatrixWorld(true);
-          mainRingObjects.forEach((object) => orangeRingRoot.attach(object));
-          orbitAObjects.forEach((object) => orangeOrbitARoot.attach(object));
-          orbitBObjects.forEach((object) => orangeOrbitBRoot.attach(object));
-          logoRoot.position.y = LOGO_VERTICAL_OFFSET;
-          logos.forEach((logo) => {
-            logoRoot.attach(logo);
-            logo.rotateY(LOGO_FRONT_ROTATION);
-            logo.scale.multiplyScalar(LOGO_SCALE);
-            logo.traverse((child) => {
-              if (!(child instanceof THREE.Mesh)) {
-                return;
+              if (loadedRoot.current) {
+                groupRef.current.remove(loadedRoot.current);
               }
 
-              const materials = Array.isArray(child.material) ? child.material : [child.material];
-              materials.forEach((material) => {
-                material.transparent = true;
-                material.opacity = 1;
-                material.depthTest = false;
-                material.depthWrite = false;
-                material.needsUpdate = true;
+              const scene = gltf.scene;
+              makeUpperGlobeTransparent(scene);
+              makeLogoOrange(scene);
+
+              gltf.scene.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                  child.castShadow = true;
+                  child.receiveShadow = true;
+                  child.frustumCulled = true;
+                }
               });
-              child.renderOrder = 20;
-            });
-          });
 
-          const perspective = camera as THREE.PerspectiveCamera;
-          perspective.position.copy(CAMERA_POSITION);
-          perspective.fov = CAMERA_FOV;
-          perspective.near = 0.05;
-          perspective.far = 80;
-          perspective.lookAt(CAMERA_TARGET);
-          perspective.updateProjectionMatrix();
+              const box = new THREE.Box3().setFromObject(scene);
+              const center = box.getCenter(new THREE.Vector3());
+              const size = box.getSize(new THREE.Vector3());
+              const maxDimension = Math.max(size.x, size.y, size.z) || 1;
 
-          loadedRoot.current = stage;
-          rotatingRoot.current = globeRoot;
-          mainRingRoot.current = orangeRingRoot;
-          orbitARoot.current = orangeOrbitARoot;
-          orbitBRoot.current = orangeOrbitBRoot;
-          groupRef.current.add(stage);
-          setLoaded(true);
-          setIsLoading(false);
+              scene.position.sub(center);
+
+              const stage = new THREE.Group();
+              const globeRoot = new THREE.Group();
+              const logoRoot = new THREE.Group();
+              const orangeRingRoot = new THREE.Group();
+              const orangeOrbitARoot = new THREE.Group();
+              const orangeOrbitBRoot = new THREE.Group();
+              const logos: THREE.Object3D[] = [];
+              const mainRingObjects: THREE.Object3D[] = [];
+              const orbitAObjects: THREE.Object3D[] = [];
+              const orbitBObjects: THREE.Object3D[] = [];
+
+              globeRoot.rotation.copy(MODEL_BASE_ROTATION);
+              globeRoot.add(scene);
+              stage.add(globeRoot);
+              stage.add(orangeRingRoot);
+              stage.add(orangeOrbitARoot);
+              stage.add(orangeOrbitBRoot);
+              stage.add(logoRoot);
+              stage.scale.setScalar(MODEL_FIT_SIZE / maxDimension);
+              stage.position.y = MODEL_VERTICAL_OFFSET;
+              scene.traverse((child) => {
+                if (isLogoObject(child)) {
+                  logos.push(child);
+                }
+                if (isMainOrangeRing(child)) {
+                  mainRingObjects.push(child);
+                }
+                if (isOrbitA(child)) {
+                  orbitAObjects.push(child);
+                }
+                if (isOrbitB(child)) {
+                  orbitBObjects.push(child);
+                }
+              });
+              stage.updateMatrixWorld(true);
+              mainRingObjects.forEach((object) => orangeRingRoot.attach(object));
+              orbitAObjects.forEach((object) => orangeOrbitARoot.attach(object));
+              orbitBObjects.forEach((object) => orangeOrbitBRoot.attach(object));
+              logoRoot.position.y = LOGO_VERTICAL_OFFSET;
+              logos.forEach((logo) => {
+                logoRoot.attach(logo);
+                logo.rotateY(LOGO_FRONT_ROTATION);
+                logo.scale.multiplyScalar(LOGO_SCALE);
+                logo.traverse((child) => {
+                  if (!(child instanceof THREE.Mesh)) {
+                    return;
+                  }
+
+                  const materials = Array.isArray(child.material) ? child.material : [child.material];
+                  materials.forEach((material) => {
+                    material.transparent = true;
+                    material.opacity = 1;
+                    material.depthTest = false;
+                    material.depthWrite = false;
+                    material.needsUpdate = true;
+                  });
+                  child.renderOrder = 20;
+                });
+              });
+
+              const perspective = camera as THREE.PerspectiveCamera;
+              perspective.position.copy(CAMERA_POSITION);
+              perspective.fov = CAMERA_FOV;
+              perspective.near = 0.05;
+              perspective.far = 80;
+              perspective.lookAt(CAMERA_TARGET);
+              perspective.updateProjectionMatrix();
+
+              loadedRoot.current = stage;
+              rotatingRoot.current = globeRoot;
+              mainRingRoot.current = orangeRingRoot;
+              orbitARoot.current = orangeOrbitARoot;
+              orbitBRoot.current = orangeOrbitBRoot;
+              groupRef.current.add(stage);
+              setLoaded(true);
+              setIsLoading(false);
             },
             undefined,
             (error) => {

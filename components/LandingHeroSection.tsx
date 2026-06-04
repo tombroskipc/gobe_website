@@ -89,7 +89,7 @@ export function LandingHeroSection() {
       data-reveal
       data-home-story-section
       data-scroll-section
-      className="relative z-10 min-h-screen overflow-hidden bg-[#000314] px-5 pt-24 text-white sm:px-6 lg:px-8 opacity-80"
+      className="relative z-10 min-h-svh overflow-hidden bg-[#000314] px-4 pt-20 text-white opacity-80 sm:px-6 sm:pt-[5.5rem] lg:min-h-screen lg:px-8 lg:pt-24"
       onMouseMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
         const x = (event.clientX - rect.left) / rect.width - 0.5;
@@ -99,7 +99,7 @@ export function LandingHeroSection() {
       onMouseLeave={() => setTilt({ x: 0, y: 0 })}
       style={{ "--mx": `${tilt.x}`, "--my": `${tilt.y}` } as HeroStyle}
     >
-      <div data-home-story-content className="relative min-h-screen overflow-hidden">
+      <div data-home-story-content className="relative min-h-svh overflow-hidden lg:min-h-screen">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(49,183,255,0.13),transparent_28%),radial-gradient(circle_at_60%_78%,rgba(242,101,34,0.16),transparent_34%),linear-gradient(180deg,#000314_0%,#060B26_52%,#000314_100%)]" />
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-30" aria-hidden="true" />
         <div
@@ -119,28 +119,28 @@ export function LandingHeroSection() {
           </div>
         ) : null}
 
-        <div className="relative z-[3] mx-auto grid min-h-[calc(100vh-6rem)] w-full max-w-7xl items-center gap-8 pb-[clamp(4rem,12vh,8rem)] lg:grid-cols-[minmax(0,0.82fr)_minmax(520px,1.08fr)]">
-          <div className="relative z-[3] flex w-full min-w-0 max-w-3xl flex-col text-left">
-            <h1 data-scroll-reveal className="max-w-full text-[clamp(2rem,9vw,6.8rem)] font-black leading-[0.9] tracking-normal text-white">
+        <div className="relative z-[3] mx-auto grid min-h-[calc(100svh-5rem)] w-full max-w-7xl grid-cols-1 content-center items-center gap-4 pb-8 sm:min-h-[calc(100svh-5.5rem)] sm:gap-6 sm:pb-10 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[minmax(0,0.82fr)_minmax(480px,1.08fr)] lg:gap-8 lg:pb-[clamp(4rem,12vh,8rem)] xl:grid-cols-[minmax(0,0.82fr)_minmax(540px,1.08fr)]">
+          <div className="relative z-[3] flex w-full min-w-0 max-w-[40rem] flex-col text-left">
+            <h1 data-scroll-reveal className="max-w-full text-4xl font-black leading-[0.9] tracking-normal text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
               GOBEYOND LLC
-              <span className="block text-[clamp(1rem,5vw,2.5rem)] font-medium italic leading-tight text-white/86">
+              <span className="mt-2 block text-lg font-medium italic leading-tight text-white/86 sm:text-xl md:text-2xl lg:text-3xl">
                 Đi toàn cầu, không dừng lại
               </span>
             </h1>
-            <p data-scroll-reveal className="mt-6 max-w-full text-base font-medium leading-8 text-white/70 md:max-w-2xl md:text-lg">
+            <p data-scroll-reveal className="mt-5 max-w-full text-sm font-medium leading-7 text-white/70 sm:text-base md:max-w-2xl md:text-lg md:leading-8">
               Xây dựng đội ngũ thương mại điện tử toàn cầu, vận hành sáng tạo và hệ thống có khả năng mở rộng từ Việt Nam ra thị trường quốc tế.
             </p>
             <a
               href="#contact"
               data-scroll-reveal
-              className="magnetic mt-8 inline-flex min-h-12 w-fit items-center rounded-full border border-white px-7 text-sm font-semibold text-white transition duration-300 hover:border-[#F26522] hover:bg-[#F26522] hover:shadow-[0_0_42px_rgba(242,101,34,0.38)]"
+              className="magnetic mt-6 inline-flex min-h-11 w-fit items-center rounded-full border border-white px-6 text-sm font-semibold text-white transition duration-300 hover:border-[#F26522] hover:bg-[#F26522] hover:shadow-[0_0_42px_rgba(242,101,34,0.38)] sm:mt-8 sm:min-h-12 sm:px-7"
             >
               Liên hệ
             </a>
           </div>
           <div
             data-hero-model
-            className="pointer-events-none relative z-[2] flex h-[clamp(360px,58vw,760px)] w-full max-w-full items-center justify-center justify-self-center overflow-visible sm:w-[min(112vw,760px)] sm:max-w-none lg:h-[clamp(500px,52vw,840px)] lg:w-[min(60vw,960px)] lg:translate-x-[clamp(0rem,2vw,2rem)] lg:justify-self-end"
+            className="pointer-events-none relative z-[2] flex h-[min(44svh,340px)] w-[min(100vw,520px)] max-w-none items-center justify-center justify-self-center overflow-visible sm:h-[min(50svh,450px)] sm:w-[min(100vw,680px)] md:h-[min(52svh,560px)] md:w-[min(92vw,760px)] lg:h-[clamp(480px,52vw,780px)] lg:w-[min(52vw,740px)] lg:translate-x-[clamp(0rem,1.2vw,1.25rem)] lg:justify-self-end xl:h-[clamp(540px,52vw,840px)] xl:w-[min(52vw,740px)]"
             aria-label="3D globe"
           >
             <div
@@ -148,7 +148,7 @@ export function LandingHeroSection() {
               aria-hidden="true"
             />
             <div
-              className="pointer-events-none absolute left-1/2 top-1/2 h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 bg-white/[0.025]"
+              className="pointer-events-none absolute left-1/2 top-1/2 h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full"
               aria-hidden="true"
             />
             <GobeModel
