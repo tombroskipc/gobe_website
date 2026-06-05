@@ -10,10 +10,20 @@ export function initScrollController() {
   const magneticCleanups: Array<() => void> = [];
 
   const ctx = gsap.context(() => {
-    gsap.set(".reveal-line > span", { yPercent: 110 });
+    const revealLines = gsap.utils.toArray<HTMLElement>(".reveal-line > span");
+
+    if (revealLines.length) {
+      gsap.set(revealLines, { yPercent: 110 });
+    }
 
     document.querySelectorAll("[data-reveal]").forEach((element) => {
-      gsap.to(element.querySelectorAll(".reveal-line > span"), {
+      const lineSpans = element.querySelectorAll<HTMLElement>(".reveal-line > span");
+
+      if (!lineSpans.length) {
+        return;
+      }
+
+      gsap.to(lineSpans, {
         yPercent: 0,
         duration: 1.08,
         ease: "power4.out",

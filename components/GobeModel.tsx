@@ -8,6 +8,8 @@ import * as THREE from "three";
 
 const EXTERNAL_MODEL_URL = process.env.NEXT_PUBLIC_GOBE_MODEL_URL;
 const LOCAL_MODEL_PATH = "/models/gobeyond-operations-diorama-v3.web.glb";
+const MODEL_BYTE_LENGTH = 81348012;
+const MODEL_CACHE_KEY = "20260604-v3-chunks-81348012";
 const LOCAL_MODEL_CHUNKS = [
   "/models/gobeyond-operations-diorama-v3.web.glb.part-00",
   "/models/gobeyond-operations-diorama-v3.web.glb.part-01",
@@ -17,9 +19,6 @@ const CAMERA_TARGET = new THREE.Vector3(0, 0.08, 0);
 const CAMERA_FOV = 34;
 const MODEL_FIT_SIZE = 3.72;
 const MODEL_VERTICAL_OFFSET = -0.06;
-const LOGO_VERTICAL_OFFSET = 0.1;
-const LOGO_FRONT_ROTATION = Math.PI;
-const LOGO_SCALE = 1;
 const AUTO_ROTATE_SPEED = 0.035;
 const MAIN_RING_ROTATE_SPEED = 0.05;
 const ORBIT_ROTATE_SPEED = 0.042;
@@ -33,6 +32,8 @@ interface GobeModelProps {
   className?: string;
 }
 
+type ModelStatus = "loading" | "ready" | "error";
+
 async function resolveModelSource(signal: AbortSignal) {
   if (EXTERNAL_MODEL_URL) {
     return { url: EXTERNAL_MODEL_URL };
@@ -41,7 +42,7 @@ async function resolveModelSource(signal: AbortSignal) {
   try {
     const responses = await Promise.all(
       LOCAL_MODEL_CHUNKS.map((path) =>
-        fetch(path, {
+        fetch(`${path}?v=${MODEL_CACHE_KEY}`, {
           cache: "force-cache",
           signal,
         })
@@ -50,6 +51,12 @@ async function resolveModelSource(signal: AbortSignal) {
 
     if (responses.every((response) => response.ok)) {
       const chunks = await Promise.all(responses.map((response) => response.arrayBuffer()));
+      const byteLength = chunks.reduce((total, chunk) => total + chunk.byteLength, 0);
+
+      if (byteLength !== MODEL_BYTE_LENGTH) {
+        throw new Error(`Chunked 3D model byte length mismatch: ${byteLength}`);
+      }
+
       const url = URL.createObjectURL(new Blob(chunks, { type: "model/gltf-binary" }));
 
       return {
@@ -63,7 +70,7 @@ async function resolveModelSource(signal: AbortSignal) {
     }
   }
 
-  return { url: LOCAL_MODEL_PATH };
+  return { url: `${LOCAL_MODEL_PATH}?v=${MODEL_CACHE_KEY}` };
 }
 
 function makeUpperGlobeTransparent(scene: THREE.Object3D) {
@@ -178,18 +185,70 @@ function makeLogoOrange(scene: THREE.Object3D) {
   });
 }
 
+function sharpenOceanSurface(scene: THREE.Object3D) {
+  scene.traverse((child) => {
+    if (!(child instanceof THREE.Mesh)) {
+      return;
+    }
+
+    const materialName = Array.isArray(child.material)
+      ? child.material.map((material) => material.name).join(" ")
+      : child.material?.name;
+    const targetText = `${child.name} ${materialName ?? ""}`.toLowerCase();
+    const isOceanSurface =
+      targetText.includes("ocean") ||
+      targetText.includes("water") ||
+      targetText.includes("sea") ||
+      targetText.includes("cylinder_ocean_surface");
+
+    if (!isOceanSurface) {
+      return;
+    }
+
+    const applyOcean = (material: THREE.Material) => {
+      const ocean = material.clone();
+      ocean.name = `${material.name || "Ocean"} Sharpened`;
+
+      if (ocean instanceof THREE.MeshStandardMaterial) {
+        ocean.color = new THREE.Color("#35B9F0");
+        ocean.emissive = new THREE.Color("#0A5C8D");
+        ocean.emissiveIntensity = 0.12;
+        ocean.metalness = 0.24;
+        ocean.roughness = 0.08;
+        ocean.envMapIntensity = 1.55;
+
+        if (ocean.normalMap) {
+          ocean.normalScale.set(1.8, 1.8);
+        }
+      }
+
+      if (ocean instanceof THREE.MeshPhysicalMaterial) {
+        ocean.clearcoat = 0.75;
+        ocean.clearcoatRoughness = 0.12;
+      }
+
+      ocean.transparent = false;
+      ocean.depthWrite = true;
+      ocean.needsUpdate = true;
+      return ocean;
+    };
+
+    child.material = Array.isArray(child.material) ? child.material.map(applyOcean) : applyOcean(child.material);
+    child.renderOrder = 3;
+  });
+}
+
 function ModelContent({
-  scale,
   autoRotate,
   groupRef,
+  onStatusChange,
 }: {
-  scale: number;
   autoRotate: boolean;
   groupRef: RefObject<THREE.Group | null>;
+  onStatusChange: (status: ModelStatus) => void;
 }) {
   const { camera } = useThree();
   const [loaded, setLoaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const loadedRoot = useRef<THREE.Group | null>(null);
   const rotatingRoot = useRef<THREE.Group | null>(null);
   const mainRingRoot = useRef<THREE.Group | null>(null);
@@ -206,7 +265,7 @@ function ModelContent({
     let abortController = new AbortController();
 
     const loadModel = () => {
-      setIsLoading(true);
+      onStatusChange("loading");
       abortController.abort();
       abortController = new AbortController();
 
@@ -237,6 +296,7 @@ function ModelContent({
               const scene = gltf.scene;
               makeUpperGlobeTransparent(scene);
               makeLogoOrange(scene);
+              sharpenOceanSurface(scene);
 
               gltf.scene.traverse((child) => {
                 if (child instanceof THREE.Mesh) {
@@ -255,11 +315,9 @@ function ModelContent({
 
               const stage = new THREE.Group();
               const globeRoot = new THREE.Group();
-              const logoRoot = new THREE.Group();
               const orangeRingRoot = new THREE.Group();
               const orangeOrbitARoot = new THREE.Group();
               const orangeOrbitBRoot = new THREE.Group();
-              const logos: THREE.Object3D[] = [];
               const mainRingObjects: THREE.Object3D[] = [];
               const orbitAObjects: THREE.Object3D[] = [];
               const orbitBObjects: THREE.Object3D[] = [];
@@ -270,13 +328,9 @@ function ModelContent({
               stage.add(orangeRingRoot);
               stage.add(orangeOrbitARoot);
               stage.add(orangeOrbitBRoot);
-              stage.add(logoRoot);
               stage.scale.setScalar(MODEL_FIT_SIZE / maxDimension);
               stage.position.y = MODEL_VERTICAL_OFFSET;
               scene.traverse((child) => {
-                if (isLogoObject(child)) {
-                  logos.push(child);
-                }
                 if (isMainOrangeRing(child)) {
                   mainRingObjects.push(child);
                 }
@@ -291,27 +345,6 @@ function ModelContent({
               mainRingObjects.forEach((object) => orangeRingRoot.attach(object));
               orbitAObjects.forEach((object) => orangeOrbitARoot.attach(object));
               orbitBObjects.forEach((object) => orangeOrbitBRoot.attach(object));
-              logoRoot.position.y = LOGO_VERTICAL_OFFSET;
-              logos.forEach((logo) => {
-                logoRoot.attach(logo);
-                logo.rotateY(LOGO_FRONT_ROTATION);
-                logo.scale.multiplyScalar(LOGO_SCALE);
-                logo.traverse((child) => {
-                  if (!(child instanceof THREE.Mesh)) {
-                    return;
-                  }
-
-                  const materials = Array.isArray(child.material) ? child.material : [child.material];
-                  materials.forEach((material) => {
-                    material.transparent = true;
-                    material.opacity = 1;
-                    material.depthTest = false;
-                    material.depthWrite = false;
-                    material.needsUpdate = true;
-                  });
-                  child.renderOrder = 20;
-                });
-              });
 
               const perspective = camera as THREE.PerspectiveCamera;
               perspective.position.copy(CAMERA_POSITION);
@@ -328,7 +361,7 @@ function ModelContent({
               orbitBRoot.current = orangeOrbitBRoot;
               groupRef.current.add(stage);
               setLoaded(true);
-              setIsLoading(false);
+              onStatusChange("ready");
             },
             undefined,
             (error) => {
@@ -338,6 +371,7 @@ function ModelContent({
               }
               console.error("Error loading GLTF. Retrying:", error);
               if (mounted) {
+                onStatusChange("error");
                 retryTimer = window.setTimeout(loadModel, 1600);
               }
             }
@@ -350,6 +384,7 @@ function ModelContent({
 
           console.error("Error resolving GLTF source. Retrying:", error);
           if (mounted) {
+            onStatusChange("error");
             retryTimer = window.setTimeout(loadModel, 1600);
           }
         });
@@ -372,7 +407,7 @@ function ModelContent({
       orbitARoot.current = null;
       orbitBRoot.current = null;
     };
-  }, [camera, groupRef]);
+  }, [camera, groupRef, onStatusChange]);
 
   useFrame((_, delta) => {
     if (!loaded) return;
@@ -393,16 +428,7 @@ function ModelContent({
     }
   });
 
-  return (
-    <>
-      {!loaded && isLoading && (
-        <mesh scale={scale}>
-          <sphereGeometry args={[0.3, 16, 16]} />
-          <meshBasicMaterial color="#F26522" wireframe />
-        </mesh>
-      )}
-    </>
-  );
+  return null;
 }
 
 export function GobeModel({
@@ -411,14 +437,21 @@ export function GobeModel({
   className,
 }: GobeModelProps) {
   const groupRef = useRef<THREE.Group>(null);
+  const [status, setStatus] = useState<ModelStatus>("loading");
 
   return (
-    <div className={className} style={{ width: "100%", height: "100%" }}>
+    <div
+      className={`${className ?? ""} [&_canvas]:!h-full [&_canvas]:!w-full`}
+      data-gobe-canvas-wrap
+      data-gobe-model-status={status}
+      style={{ width: "100%", height: "100%", minWidth: 0, minHeight: 0 }}
+    >
       <Canvas
+        className="h-full w-full"
         camera={{ position: CAMERA_POSITION.toArray(), fov: CAMERA_FOV, near: 0.05, far: 80 }}
-        dpr={[0.8, 1.15]}
-        gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
-        style={{ background: "transparent" }}
+        dpr={[1, 1.45]}
+        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
+        style={{ width: "100%", height: "100%", background: "transparent" }}
       >
         <ambientLight intensity={0.86} />
         <hemisphereLight args={["#ffffff", "#29385a", 0.92]} />
@@ -427,9 +460,9 @@ export function GobeModel({
         <pointLight position={[0, 4, 5]} intensity={1.08} color="#ffffff" />
         <group ref={groupRef} scale={scale}>
           <ModelContent
-            scale={scale}
             autoRotate={autoRotate}
             groupRef={groupRef}
+            onStatusChange={setStatus}
           />
         </group>
       </Canvas>

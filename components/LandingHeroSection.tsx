@@ -119,7 +119,7 @@ export function LandingHeroSection() {
           </div>
         ) : null}
 
-        <div className="relative z-[3] mx-auto grid min-h-[calc(100svh-5rem)] w-full max-w-7xl grid-cols-1 content-center items-center gap-4 pb-8 sm:min-h-[calc(100svh-5.5rem)] sm:gap-6 sm:pb-10 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[minmax(0,0.82fr)_minmax(480px,1.08fr)] lg:gap-8 lg:pb-[clamp(4rem,12vh,8rem)] xl:grid-cols-[minmax(0,0.82fr)_minmax(540px,1.08fr)]">
+        <div className="relative z-[3] mx-auto grid min-h-[calc(100svh-5rem)] w-full max-w-7xl grid-cols-1 content-center items-center gap-4 pb-8 sm:min-h-[calc(100svh-5.5rem)] sm:gap-6 sm:pb-10 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[minmax(0,0.82fr)_minmax(480px,1.08fr)] lg:gap-8 lg:pb-[clamp(4rem,12vh,8rem)] xl:min-h-[calc(100vh-7rem)] xl:grid-cols-[minmax(0,0.82fr)_minmax(540px,1.08fr)]">
           <div className="relative z-[3] flex w-full min-w-0 max-w-[40rem] flex-col text-left">
             <h1 data-scroll-reveal className="max-w-full text-4xl font-black leading-[0.9] tracking-normal text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
               GOBEYOND LLC
@@ -140,7 +140,7 @@ export function LandingHeroSection() {
           </div>
           <div
             data-hero-model
-            className="pointer-events-none relative z-[2] flex h-[min(44svh,340px)] w-[min(100vw,520px)] max-w-none items-center justify-center justify-self-center overflow-visible sm:h-[min(50svh,450px)] sm:w-[min(100vw,680px)] md:h-[min(52svh,560px)] md:w-[min(92vw,760px)] lg:h-[clamp(480px,52vw,780px)] lg:w-[min(52vw,740px)] lg:translate-x-[clamp(0rem,1.2vw,1.25rem)] lg:justify-self-end xl:h-[clamp(540px,52vw,840px)] xl:w-[min(52vw,740px)]"
+            className="pointer-events-none relative z-[2] flex h-[min(44svh,340px)] w-[min(100vw,520px)] max-w-none items-center justify-center justify-self-center overflow-visible sm:h-[min(50svh,450px)] sm:w-[min(100vw,680px)] md:h-[min(52svh,560px)] md:w-[min(92vw,760px)] lg:h-[clamp(500px,52vw,780px)] lg:w-[min(53vw,760px)] lg:translate-x-[clamp(0.75rem,1.6vw,1.5rem)] lg:justify-self-end xl:h-[clamp(540px,51vw,820px)] xl:w-[min(51vw,760px)] xl:-translate-y-1"
             aria-label="3D globe"
           >
             <div
@@ -153,7 +153,7 @@ export function LandingHeroSection() {
             />
             <GobeModel
               className="relative z-[2] h-full w-full"
-              scale={1}
+              scale={1.23}
               autoRotate
             />
           </div>
