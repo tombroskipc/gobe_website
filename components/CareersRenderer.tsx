@@ -28,7 +28,7 @@ const tagColors: Record<string, string> = {
   internship: "#8A7CFF",
 };
 
-function PageShell({ children }: { children: ReactNode }) {
+function PageShell({ children, showFooter = true }: { children: ReactNode; showFooter?: boolean }) {
   useEffect(() => initScrollController(), []);
 
   return (
@@ -36,7 +36,7 @@ function PageShell({ children }: { children: ReactNode }) {
       <CustomCursor />
       <Navbar />
       {children}
-      <FooterSection />
+      {showFooter ? <FooterSection /> : null}
     </main>
   );
 }
@@ -114,92 +114,47 @@ function JobCard({ job, index }: { job: CareerItem; index: number }) {
 
 export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[]; listingSourceUrl: string }) {
   return (
-    <PageShell>
-      <section id="careers" data-scroll-section className="relative z-10 min-h-screen overflow-hidden bg-[#000314] px-5 pt-24 text-white sm:px-8 lg:px-12">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_16%,rgba(242,101,34,0.20),transparent_28%),radial-gradient(circle_at_20%_34%,rgba(90,162,232,0.18),transparent_30%),linear-gradient(135deg,#000314_0%,#071026_52%,#02030b_100%)]" />
-        <div className="grid-mask pointer-events-none absolute inset-0 opacity-24" aria-hidden="true" />
-
-        <div className="relative mx-auto grid min-h-[calc(100vh-6rem)] max-w-7xl items-center gap-10 py-10 lg:grid-cols-[minmax(0,0.48fr)_minmax(0,0.52fr)]">
-          <div>
-            <div data-scroll-reveal>
-              <SectionMark current="01" label="" />
-            </div>
-            <h1 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.86] tracking-normal sm:text-6xl lg:text-7xl xl:text-8xl">
-              Gia nhập
-              <span className="block text-[#ff7648]">GoBeyond</span>
-            </h1>
-            <p data-scroll-reveal className="mt-7 max-w-2xl text-base font-medium leading-8 text-white/70 md:text-lg">
-              Các vị trí đang mở cho đội ngũ thương mại điện tử toàn cầu: marketing, sáng tạo, fulfillment, chăm sóc khách hàng và vận hành.
-            </p>
-            <div data-scroll-reveal className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="#open-roles"
-                className="magnetic inline-flex min-h-12 items-center rounded-full bg-[#F26522] px-7 text-sm font-black uppercase tracking-[0.1em] text-white shadow-[0_18px_45px_rgba(242,101,34,0.28)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
-              >
-                Xem vị trí
-              </a>
-              <a
-                href={listingSourceUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="magnetic inline-flex min-h-12 items-center rounded-full border border-white/18 px-7 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-white hover:text-white"
-              >
-                Danh sách Lark
-              </a>
-            </div>
-          </div>
-
-          <figure data-scroll-media className="relative">
-            <div className="absolute -inset-5 border border-[#F26522]/28 bg-[#F26522]/8 shadow-[0_34px_120px_rgba(242,101,34,0.14)]" />
-            <img
-              src="/careers/legacy-careers-list.png"
-              alt="Bản xem trước danh sách tuyển dụng GoBeyond"
-              className="relative aspect-[4/3] w-full object-cover object-top"
-            />
-          </figure>
-        </div>
-      </section>
-
-      <section id="open-roles" data-scroll-section className="relative z-10 overflow-hidden bg-[#030711] px-5 py-24 text-white sm:px-8 lg:px-12">
+    <PageShell showFooter={false}>
+      <section id="careers" data-scroll-section className="relative z-10 min-h-screen overflow-hidden bg-[#030711] px-5 pb-8 pt-24 text-white sm:px-8 lg:px-12">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(242,101,34,0.16),transparent_28%),linear-gradient(135deg,#030711,#071026_48%,#02030b)]" />
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-20" aria-hidden="true" />
 
-        <div className="relative mx-auto max-w-7xl">
+        <div className="relative mx-auto flex min-h-[calc(100vh-8rem)] max-w-7xl flex-col justify-center">
           <div className="grid items-end gap-6 lg:grid-cols-[minmax(0,0.5fr)_minmax(0,0.5fr)]">
             <div>
               <div data-scroll-reveal>
-                <SectionMark current="02" label="" />
+                <SectionMark current="01" label="" />
               </div>
-              <h2 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] sm:text-5xl lg:text-7xl">
+              <h1 data-scroll-reveal className="mt-5 text-4xl font-black uppercase leading-[0.9] sm:text-5xl lg:text-6xl xl:text-7xl">
                 Tất cả vị trí
                 <span className="block text-[#ff7648]">đang tuyển</span>
-              </h2>
+              </h1>
             </div>
-            <p data-scroll-reveal className="max-w-2xl text-base font-medium leading-8 text-white/68 md:text-lg">
-              Mỗi vai trò đều là một mảnh ghép trong hệ thống vận hành toàn cầu của GoBeyond. Nội dung có thể chỉnh sửa trong Payload CMS.
+            <p data-scroll-reveal className="max-w-2xl text-base font-medium leading-7 text-white/68 md:text-lg">
+              Mỗi vai trò đều là một mảnh ghép trong hệ thống vận hành toàn cầu của GoBeyond.
             </p>
           </div>
 
           {jobs.length > 0 ? (
-            <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {jobs.map((job, index) => (
                 <JobCard key={job.slug} job={job} index={index} />
               ))}
             </div>
           ) : (
-            <div data-scroll-card className="mt-10 border border-white/12 bg-[#101520]/82 p-8 text-white shadow-[0_28px_82px_rgba(0,0,0,0.26)] backdrop-blur-md md:p-10">
+            <div data-scroll-card className="mt-7 border border-white/12 bg-[#101520]/82 p-6 text-white shadow-[0_28px_82px_rgba(0,0,0,0.26)] backdrop-blur-md md:p-8">
               <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Tuyển dụng</p>
-              <h3 className="mt-4 text-3xl font-black uppercase tracking-normal text-white md:text-5xl">
+              <h2 className="mt-3 text-3xl font-black uppercase tracking-normal text-white md:text-4xl">
                 Chưa có tin tuyển dụng
-              </h3>
-              <p className="mt-5 max-w-2xl text-base font-medium leading-8 text-white/68">
-                Hiện tại GoBeyond chưa mở vị trí tuyển dụng công khai. Khi team đăng JD mới trong Payload CMS, danh sách sẽ tự động hiển thị tại đây.
+              </h2>
+              <p className="mt-4 max-w-2xl text-base font-medium leading-7 text-white/68">
+                Hiện tại GoBeyond chưa mở vị trí tuyển dụng công khai. Các cơ hội mới sẽ được cập nhật tại đây khi sẵn sàng.
               </p>
               <a
                 href={listingSourceUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-7 inline-flex min-h-12 items-center rounded-full border border-white/18 px-6 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-[#F26522] hover:text-white"
+                className="mt-6 inline-flex min-h-12 items-center rounded-full border border-white/18 px-6 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-[#F26522] hover:text-white"
               >
                 Xem danh sách Lark
               </a>

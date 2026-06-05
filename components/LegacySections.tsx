@@ -305,10 +305,10 @@ export function CoreValuesSection() {
         const y = (event.clientY - rect.top) / rect.height - 0.5;
         element.style.setProperty("--mx", x.toFixed(3));
         element.style.setProperty("--my", y.toFixed(3));
-        element.style.setProperty("--panel-shift-x", `${(-x * 38).toFixed(1)}px`);
-        element.style.setProperty("--panel-shift-y", `${(-y * 28).toFixed(1)}px`);
-        element.style.setProperty("--panel-rotate-x", `${(-y * 5).toFixed(2)}deg`);
-        element.style.setProperty("--panel-rotate-y", `${(x * 7).toFixed(2)}deg`);
+        element.style.setProperty("--panel-shift-x", `${(-x * 22).toFixed(1)}px`);
+        element.style.setProperty("--panel-shift-y", `${(-y * 16).toFixed(1)}px`);
+        element.style.setProperty("--panel-rotate-x", `${(-y * 2).toFixed(2)}deg`);
+        element.style.setProperty("--panel-rotate-y", `${(x * 2.8).toFixed(2)}deg`);
       }}
     >
       <div data-home-story-content className="relative min-h-screen overflow-hidden">
@@ -354,7 +354,7 @@ export function CoreValuesSection() {
             </div>
           </div>
 
-          <div className="values-intro pointer-events-none relative z-[5] flex min-h-screen w-full max-w-[45rem] flex-col justify-center px-5 py-24 text-left sm:px-8 lg:px-[clamp(2.5rem,4.6vw,5rem)]">
+          <div className="values-intro pointer-events-none relative z-[5] flex min-h-screen w-full max-w-[45rem] flex-col justify-end px-5 pb-[clamp(2rem,8vh,6rem)] pt-24 text-left sm:px-8 lg:px-[clamp(2.5rem,4.6vw,5rem)]">
             <p data-scroll-reveal className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">CORE VALUES</p>
 
             <h3
@@ -529,7 +529,6 @@ export function FooterSection() {
     { href: "/", label: "Trang chủ" },
     { href: "/ve-chung-toi", label: "Về chúng tôi" },
     { href: "/tuyen-dung", label: "Tuyển dụng" },
-    { href: "/hoat-dong", label: "Hoạt động" },
     { href: "/tin-tuc", label: "Tin tức" },
   ];
 

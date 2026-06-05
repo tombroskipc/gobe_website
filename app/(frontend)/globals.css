@@ -249,6 +249,76 @@ body::before {
   mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
 }
 
+.about-media-card {
+  filter: drop-shadow(0 34px 90px rgba(0, 0, 0, .42));
+  isolation: isolate;
+}
+
+.about-media-card::before,
+.about-media-card::after {
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 3;
+}
+
+.about-media-card::before {
+  background:
+    linear-gradient(115deg, rgba(0, 3, 20, .58) 0%, rgba(0, 3, 20, .18) 42%, rgba(242, 101, 34, .24) 100%),
+    radial-gradient(circle at 14% 18%, rgba(49, 183, 255, .16), transparent 28%),
+    radial-gradient(circle at 80% 76%, rgba(242, 101, 34, .30), transparent 34%);
+  mix-blend-mode: multiply;
+}
+
+.about-media-card::after {
+  background:
+    linear-gradient(90deg, rgba(242, 101, 34, .34), transparent 22%, transparent 78%, rgba(49, 183, 255, .18)),
+    linear-gradient(180deg, rgba(255, 255, 255, .16), transparent 18%, rgba(0, 3, 20, .52));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .18),
+    inset 0 -80px 120px rgba(0, 3, 20, .50),
+    0 0 80px rgba(242, 101, 34, .16);
+}
+
+.about-media-frame {
+  animation: about-media-pulse 5.6s ease-in-out infinite;
+}
+
+.about-media-image {
+  filter: brightness(.78) contrast(1.16) saturate(.72) sepia(.18);
+}
+
+@media (min-width: 1024px) {
+  .about-media-card {
+    animation: about-media-float 7.5s ease-in-out infinite;
+  }
+}
+
+@keyframes about-media-float {
+  0%,
+  100% {
+    transform: translate3d(-50%, -50%, 0);
+  }
+
+  50% {
+    transform: translate3d(-50%, calc(-50% - 10px), 0);
+  }
+}
+
+@keyframes about-media-pulse {
+  0%,
+  100% {
+    border-color: rgba(242, 101, 34, .24);
+    opacity: .86;
+  }
+
+  50% {
+    border-color: rgba(242, 101, 34, .48);
+    opacity: 1;
+  }
+}
+
 html.value-card-open {
   overflow: hidden;
 }
@@ -1224,37 +1294,88 @@ html.hero-model-open body {
 
 /* Final desktop composition tuning for the requested full-screen sections. */
 @media (min-width: 1024px) {
+  .values-showcase .values-panel-stage {
+    perspective-origin: 50% 34%;
+  }
+
   .values-showcase .value-card {
-    height: clamp(316px, 45vh, 468px);
-    width: clamp(164px, 12vw, 236px);
+    height: clamp(300px, 40vh, 390px);
+    left: var(--card-left);
+    padding: clamp(1rem, 1.45vw, 1.35rem) !important;
+    top: clamp(5rem, 14vh, 8rem);
+    transform:
+      rotateY(-3deg)
+      rotateX(1deg)
+      rotateZ(var(--card-r))
+      scale(var(--card-s));
+    width: clamp(158px, 10.5vw, 205px);
   }
 
   .values-showcase .value-card:nth-child(1) {
-    --card-x: clamp(-108px, -5.2vw, -62px);
+    --card-left: 34vw;
+    --card-r: -4deg;
+    --card-s: .98;
   }
 
   .values-showcase .value-card:nth-child(2) {
-    --card-x: clamp(-4px, 1.8vw, 46px);
+    --card-left: 44vw;
+    --card-r: -2.5deg;
+    --card-s: .99;
   }
 
   .values-showcase .value-card:nth-child(3) {
-    --card-x: clamp(120px, 8.7vw, 172px);
+    --card-left: 54vw;
+    --card-r: -1deg;
+    --card-s: 1;
   }
 
   .values-showcase .value-card:nth-child(4) {
-    --card-x: clamp(242px, 15.5vw, 300px);
+    --card-left: 64vw;
+    --card-r: 1deg;
+    --card-s: 1.01;
   }
 
   .values-showcase .value-card:nth-child(5) {
-    --card-x: clamp(356px, 21.6vw, 424px);
+    --card-left: 74vw;
+    --card-r: 2.5deg;
+    --card-s: 1.02;
   }
 
   .values-showcase .value-card:nth-child(6) {
-    --card-x: clamp(462px, 27.2vw, 538px);
+    --card-left: 84vw;
+    --card-r: 4deg;
+    --card-s: 1.03;
   }
 
   .values-showcase .value-body {
-    padding-top: clamp(56px, 8vh, 88px);
+    padding-top: clamp(46px, 6vh, 64px);
+  }
+
+  .values-showcase .value-card .value-body h3 {
+    font-size: clamp(.78rem, .72vw, 1rem);
+    line-height: 1.08;
+    max-width: 16ch;
+    overflow-wrap: anywhere;
+  }
+
+  .values-showcase .value-card .value-body p {
+    font-size: clamp(.68rem, .62vw, .8rem);
+    line-height: 1.36;
+    max-width: 100%;
+  }
+
+  .values-showcase .value-card::after {
+    font-size: clamp(5.6rem, 8.7vw, 10.5rem);
+    right: -16%;
+  }
+
+  .values-showcase .value-card:hover {
+    transform:
+      translate3d(0, -14px, 70px)
+      rotateY(-1deg)
+      rotateX(1deg)
+      rotateZ(var(--card-r))
+      scale(calc(var(--card-s) + .035));
   }
 
   .operation-showcase .relative.mx-auto.grid,

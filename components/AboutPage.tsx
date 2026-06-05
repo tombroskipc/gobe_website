@@ -127,8 +127,8 @@ export function AboutPage() {
       </nav>
 
       <SectionFrame id="about-gobeyond">
-        <div className="relative mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center gap-8 py-5 lg:grid-cols-[minmax(0,0.52fr)_minmax(0,0.48fr)]">
-          <div className="min-w-0">
+        <div className="relative mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl gap-10 py-5 lg:block">
+          <div className="relative z-[3] min-w-0 self-end pb-[clamp(2rem,8vh,6rem)] pt-[clamp(12rem,24vh,18rem)] lg:absolute lg:bottom-0 lg:left-0 lg:max-w-2xl">
             <div data-scroll-reveal>
               <SectionMark current="01" label="" />
             </div>
@@ -158,15 +158,15 @@ export function AboutPage() {
             </div>
           </div>
 
-          <figure data-scroll-media className="relative mx-auto w-full max-w-[500px] xl:max-w-[580px]">
+          <figure data-scroll-media className="about-media-card relative z-[2] mx-auto w-full max-w-[500px] lg:absolute lg:left-1/2 lg:top-1/2 lg:max-w-[610px] xl:max-w-[660px]">
             <div
-              className="absolute -inset-4 border border-[#F26522]/28 bg-[#F26522]/8 shadow-[0_34px_110px_rgba(242,101,34,0.12)]"
+              className="about-media-frame absolute -inset-4 border border-[#F26522]/28 bg-[#F26522]/8 shadow-[0_34px_110px_rgba(242,101,34,0.12)]"
               aria-hidden="true"
             />
             <img
               src="/about/ly-anh-post-website-7.png"
               alt="GoBeyond meeting and brand message"
-              className="relative aspect-[16/10] w-full object-cover"
+              className="about-media-image relative aspect-[16/10] w-full object-cover"
             />
           </figure>
         </div>

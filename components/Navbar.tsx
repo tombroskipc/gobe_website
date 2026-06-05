@@ -8,7 +8,6 @@ const menuItems = [
   { label: "TRANG CH\u1ee6", href: "/", match: "/" },
   { label: "V\u1ec0 CH\u00daNG T\u00d4I", href: "/ve-chung-toi", match: "/ve-chung-toi" },
   { label: "TUY\u1ec2N D\u1ee4NG", href: "/tuyen-dung", match: "/tuyen-dung" },
-  { label: "HO\u1ea0T \u0110\u1ed8NG", href: "/hoat-dong", match: "/hoat-dong" },
   { label: "TIN T\u1ee8C", href: "/tin-tuc", match: "/tin-tuc" },
 ];
 

@@ -119,28 +119,21 @@ export function LandingHeroSection() {
           </div>
         ) : null}
 
-        <div className="relative z-[3] mx-auto grid min-h-[calc(100vh-6rem)] w-full max-w-7xl items-center gap-8 pb-[clamp(4rem,12vh,8rem)] lg:grid-cols-[minmax(0,0.82fr)_minmax(520px,1.08fr)]">
-          <div className="relative z-[3] flex w-full min-w-0 max-w-3xl flex-col text-left">
+        <div className="relative z-[3] min-h-[calc(100vh-6rem)] w-full">
+          <div className="absolute bottom-[clamp(2rem,8vh,6rem)] left-0 z-[3] flex w-full min-w-0 max-w-3xl flex-col text-left">
             <h1 data-scroll-reveal className="max-w-full text-[clamp(2rem,9vw,6.8rem)] font-black leading-[0.9] tracking-normal text-white">
               GOBEYOND LLC
               <span className="block text-[clamp(1rem,5vw,2.5rem)] font-medium italic leading-tight text-white/86">
-                Đi toàn cầu, không dừng lại
+                Go global or go home
               </span>
             </h1>
             <p data-scroll-reveal className="mt-6 max-w-full text-base font-medium leading-8 text-white/70 md:max-w-2xl md:text-lg">
               Xây dựng đội ngũ thương mại điện tử toàn cầu, vận hành sáng tạo và hệ thống có khả năng mở rộng từ Việt Nam ra thị trường quốc tế.
             </p>
-            <a
-              href="#contact"
-              data-scroll-reveal
-              className="magnetic mt-8 inline-flex min-h-12 w-fit items-center rounded-full border border-white px-7 text-sm font-semibold text-white transition duration-300 hover:border-[#F26522] hover:bg-[#F26522] hover:shadow-[0_0_42px_rgba(242,101,34,0.38)]"
-            >
-              Liên hệ
-            </a>
           </div>
           <div
             data-hero-model
-            className="pointer-events-none relative z-[2] flex h-[clamp(360px,58vw,760px)] w-full max-w-full items-center justify-center justify-self-center overflow-visible sm:w-[min(112vw,760px)] sm:max-w-none lg:h-[clamp(500px,52vw,840px)] lg:w-[min(60vw,960px)] lg:translate-x-[clamp(0rem,2vw,2rem)] lg:justify-self-end"
+            className="pointer-events-none absolute left-[53%] top-[42%] z-[2] flex h-[clamp(420px,66vw,860px)] w-[min(118vw,1040px)] -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-visible lg:left-[54%] lg:top-[43%] lg:h-[clamp(620px,58vw,920px)] lg:w-[min(76vw,1160px)]"
             aria-label="3D globe"
           >
             <div
@@ -153,7 +146,7 @@ export function LandingHeroSection() {
             />
             <GobeModel
               className="relative z-[2] h-full w-full"
-              scale={1}
+              scale={1.08}
               autoRotate
             />
           </div>

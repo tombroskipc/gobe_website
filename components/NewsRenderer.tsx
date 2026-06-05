@@ -2,30 +2,17 @@ import Link from "next/link";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 import type { SerializedEditorState } from "@payloadcms/richtext-lexical/lexical";
 import type { NewsBlock, NewsPost } from "@/lib/news";
+import { Navbar } from "./Navbar";
 
-type NewsSurface = "news" | "activity";
-
-const surfaceCopy = {
-  news: {
-    backHref: "/tin-tuc",
-    backLabel: "Tin tức",
-    eyebrow: "Tin tức GoBeyond",
-    heading: "Câu chuyện, cập nhật và góc nhìn vận hành.",
-    emptyHeading: "Chưa có tin tức",
-    emptyBody: "Khi team đăng bài Tin tức trong Payload CMS, danh sách sẽ tự động hiển thị tại đây.",
-    readLabel: "Đọc bài viết",
-  },
-  activity: {
-    backHref: "/hoat-dong",
-    backLabel: "Hoạt động",
-    eyebrow: "Hoạt động GoBeyond",
-    heading: "Những hoạt động, sự kiện và khoảnh khắc của đội ngũ GoBeyond.",
-    emptyHeading: "Chưa có hoạt động",
-    emptyBody:
-      "Tạo bài trong Payload CMS, chọn tag Hoạt động, đặt trạng thái Đã xuất bản, nội dung hoạt động sẽ tự động hiển thị tại đây.",
-    readLabel: "Xem hoạt động",
-  },
-} satisfies Record<NewsSurface, Record<string, string>>;
+const newsCopy = {
+  backHref: "/tin-tuc",
+  backLabel: "Tin tức",
+  eyebrow: "Tin tức GoBeyond",
+  heading: "Câu chuyện, cập nhật và góc nhìn vận hành.",
+  emptyHeading: "Chưa có tin tức",
+  emptyBody: "Các cập nhật mới của GoBeyond sẽ được đăng tại đây khi sẵn sàng.",
+  readLabel: "Đọc bài viết",
+};
 
 function isLexical(value: unknown): value is SerializedEditorState {
   return Boolean(value && typeof value === "object" && "root" in (value as Record<string, unknown>));
@@ -152,81 +139,76 @@ function renderBlock(block: NewsBlock, index: number) {
   }
 }
 
-export function NewsArticle({ post, surface = "news" }: { post: NewsPost; surface?: NewsSurface }) {
-  const copy = surfaceCopy[surface];
+export function NewsArticle({ post }: { post: NewsPost }) {
   const published = post.publishedAt
     ? new Intl.DateTimeFormat("vi-VN", { dateStyle: "medium" }).format(new Date(post.publishedAt))
     : "Bản nháp";
 
   return (
-    <main className="min-h-screen bg-[#0c1018] px-5 py-24 text-white md:px-10">
-      <article className="mx-auto max-w-5xl">
-        <Link href={copy.backHref} className="text-sm font-black uppercase tracking-[0.18em] text-[#F26522]">
-          {copy.backLabel}
-        </Link>
-        <header className="mt-8 border-b border-white/12 pb-12">
-          <p className="text-sm uppercase tracking-[0.18em] text-white/46">{published}</p>
-          <h1 className="mt-4 max-w-4xl text-5xl font-black leading-none tracking-tight md:text-7xl">{post.title}</h1>
-          <p className="mt-6 max-w-3xl text-xl leading-8 text-white/68">{post.excerpt}</p>
-        </header>
-        <div className="mt-12 grid gap-12">{(post.layout || []).map(renderBlock)}</div>
-      </article>
-    </main>
+    <>
+      <Navbar />
+      <main className="min-h-screen bg-[#0c1018] px-5 py-28 text-white md:px-10">
+        <article className="mx-auto max-w-5xl">
+          <Link href={newsCopy.backHref} className="text-sm font-black uppercase tracking-[0.18em] text-[#F26522]">
+            {newsCopy.backLabel}
+          </Link>
+          <header className="mt-8 border-b border-white/12 pb-12">
+            <p className="text-sm uppercase tracking-[0.18em] text-white/46">{published}</p>
+            <h1 className="mt-4 max-w-4xl text-5xl font-black leading-none tracking-tight md:text-7xl">{post.title}</h1>
+            <p className="mt-6 max-w-3xl text-xl leading-8 text-white/68">{post.excerpt}</p>
+          </header>
+          <div className="mt-12 grid gap-12">{(post.layout || []).map(renderBlock)}</div>
+        </article>
+      </main>
+    </>
   );
 }
 
-export function NewsListing({ posts, surface = "news" }: { posts: NewsPost[]; surface?: NewsSurface }) {
-  const copy = surfaceCopy[surface];
-
+export function NewsListing({ posts }: { posts: NewsPost[] }) {
   return (
-    <main className="min-h-screen bg-[#0c1018] px-5 py-24 text-white md:px-10">
-      <section className="mx-auto max-w-6xl">
-        <p className="text-sm font-black uppercase tracking-[0.22em] text-[#F26522]">{copy.eyebrow}</p>
-        <h1 className="mt-5 max-w-4xl text-5xl font-black leading-none tracking-tight md:text-7xl">{copy.heading}</h1>
-        {posts.length > 0 ? (
-          <div className="mt-14 grid gap-px overflow-hidden border border-white/12 bg-white/12 md:grid-cols-3">
-            {posts.map((post) => {
-              const heroUrl = getMediaUrl(post.heroImage);
+    <>
+      <Navbar />
+      <main className="min-h-screen bg-[#0c1018] px-5 py-28 text-white md:px-10">
+        <section className="mx-auto max-w-6xl">
+          <p className="text-sm font-black uppercase tracking-[0.22em] text-[#F26522]">{newsCopy.eyebrow}</p>
+          <h1 className="mt-5 max-w-4xl text-5xl font-black leading-none tracking-tight md:text-7xl">{newsCopy.heading}</h1>
+          {posts.length > 0 ? (
+            <div className="mt-14 grid gap-px overflow-hidden border border-white/12 bg-white/12 md:grid-cols-3">
+              {posts.map((post) => {
+                const heroUrl = getMediaUrl(post.heroImage);
 
-              return (
-                <Link
-                  key={post.slug}
-                  href={`${copy.backHref}/${post.slug}`}
-                  className="group bg-[#101722] transition hover:bg-[#151f2e]"
-                >
-                  {heroUrl ? (
-                    <img src={heroUrl} alt={post.title} className="aspect-[16/10] w-full object-cover opacity-90 transition group-hover:opacity-100" />
-                  ) : null}
-                  <div className="p-6">
-                    <p className="text-xs font-black uppercase tracking-[0.18em] text-[#F26522]">
-                      {surface === "activity" ? "Hoạt động" : "Tin tức"}
-                    </p>
-                    <h2 className="mt-5 text-2xl font-black leading-tight text-white">{post.title}</h2>
-                    <p className="mt-4 line-clamp-4 text-sm leading-6 text-white/62">{post.excerpt}</p>
-                    <span className="mt-8 inline-block text-sm font-black uppercase tracking-[0.16em] text-white/70 group-hover:text-[#F26522]">
-                      {copy.readLabel}
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="mt-14 border border-white/12 bg-[#101722] p-8 md:p-10">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">{copy.backLabel}</p>
-            <h2 className="mt-4 text-3xl font-black uppercase text-white md:text-5xl">{copy.emptyHeading}</h2>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-white/66">{copy.emptyBody}</p>
-          </div>
-        )}
-      </section>
-    </main>
+                return (
+                  <Link
+                    key={post.slug}
+                    href={`${newsCopy.backHref}/${post.slug}`}
+                    className="group bg-[#101722] transition hover:bg-[#151f2e]"
+                  >
+                    {heroUrl ? (
+                      <img src={heroUrl} alt={post.title} className="aspect-[16/10] w-full object-cover opacity-90 transition group-hover:opacity-100" />
+                    ) : null}
+                    <div className="p-6">
+                      <p className="text-xs font-black uppercase tracking-[0.18em] text-[#F26522]">
+                        Tin tức
+                      </p>
+                      <h2 className="mt-5 text-2xl font-black leading-tight text-white">{post.title}</h2>
+                      <p className="mt-4 line-clamp-4 text-sm leading-6 text-white/62">{post.excerpt}</p>
+                      <span className="mt-8 inline-block text-sm font-black uppercase tracking-[0.16em] text-white/70 group-hover:text-[#F26522]">
+                        {newsCopy.readLabel}
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="mt-14 border border-white/12 bg-[#101722] p-8 md:p-10">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">{newsCopy.backLabel}</p>
+              <h2 className="mt-4 text-3xl font-black uppercase text-white md:text-5xl">{newsCopy.emptyHeading}</h2>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-white/66">{newsCopy.emptyBody}</p>
+            </div>
+          )}
+        </section>
+      </main>
+    </>
   );
-}
-
-export function ActivityListing({ posts }: { posts: NewsPost[] }) {
-  return <NewsListing posts={posts} surface="activity" />;
-}
-
-export function ActivityArticle({ post }: { post: NewsPost }) {
-  return <NewsArticle post={post} surface="activity" />;
 }

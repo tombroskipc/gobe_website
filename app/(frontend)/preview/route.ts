@@ -22,9 +22,5 @@ export async function GET(req: NextRequest) {
     redirect(`/tuyen-dung/${slug || ""}`);
   }
 
-  if (type === "activity") {
-    redirect(`/hoat-dong/${slug || ""}`);
-  }
-
   redirect(`/tin-tuc/${slug || ""}`);
 }
