@@ -9,6 +9,7 @@ gsap.registerPlugin(Observer);
 
 const SECTION_SELECTOR = "[data-home-story-section]";
 const CONTENT_SELECTOR = "[data-home-story-content]";
+const SCROLL_EDGE_TOLERANCE = 6;
 
 function isStoryInteractionPaused() {
   return (
@@ -72,10 +73,15 @@ export function HomeSectionStoryController() {
         const previousIndex = currentIndex;
         const directionFactor = direction === -1 ? -1 : 1;
         const panel = panels[index];
-        const revealTargets = panel.content.querySelectorAll<HTMLElement>("[data-scroll-reveal], [data-scroll-card]");
+        const revealSelector = panel.section.classList.contains("values-showcase") || panel.section.classList.contains("operation-showcase")
+          ? "[data-scroll-reveal]"
+          : "[data-scroll-reveal], [data-scroll-card]";
+        const revealTargets = panel.content.querySelectorAll<HTMLElement>(revealSelector);
 
         html.classList.remove("home-story-released");
         released = false;
+        panel.section.scrollTop =
+          direction === -1 ? Math.max(0, panel.section.scrollHeight - panel.section.clientHeight) : 0;
 
         gsap.set(panel.section, {
           autoAlpha: 1,
@@ -134,6 +140,43 @@ export function HomeSectionStoryController() {
           );
       };
 
+      const canScrollActiveSection = (direction: StoryDirection) => {
+        if (released || currentIndex < 0) {
+          return false;
+        }
+
+        const section = panels[currentIndex]?.section;
+
+        if (!section) {
+          return false;
+        }
+
+        const maxScroll = section.scrollHeight - section.clientHeight;
+
+        if (maxScroll <= SCROLL_EDGE_TOLERANCE) {
+          return false;
+        }
+
+        if (direction === 1) {
+          return section.scrollTop < maxScroll - SCROLL_EDGE_TOLERANCE;
+        }
+
+        return section.scrollTop > SCROLL_EDGE_TOLERANCE;
+      };
+
+      const scrollActiveSection = (direction: StoryDirection, amount = Math.round(window.innerHeight * 0.82)) => {
+        const section = currentIndex >= 0 ? panels[currentIndex]?.section : null;
+
+        if (!section) {
+          return;
+        }
+
+        section.scrollBy({
+          behavior: "smooth",
+          top: amount * direction,
+        });
+      };
+
       const releaseToFooter = () => {
         if (animating || released) {
           return;
@@ -162,6 +205,10 @@ export function HomeSectionStoryController() {
 
       const handleGesture = (direction: StoryDirection) => {
         if (animating || isStoryInteractionPaused()) {
+          return;
+        }
+
+        if (canScrollActiveSection(direction)) {
           return;
         }
 
@@ -234,13 +281,25 @@ export function HomeSectionStoryController() {
           return;
         }
 
-        if (["ArrowDown", "PageDown", " "].includes(event.key)) {
+        if (["ArrowDown", "PageDown", " "].includes(event.key) && !event.shiftKey) {
           event.preventDefault();
+
+          if (canScrollActiveSection(1)) {
+            scrollActiveSection(1, event.key === "ArrowDown" ? 96 : Math.round(window.innerHeight * 0.82));
+            return;
+          }
+
           handleGesture(1);
         }
 
-        if (["ArrowUp", "PageUp"].includes(event.key)) {
+        if (["ArrowUp", "PageUp"].includes(event.key) || (event.key === " " && event.shiftKey)) {
           event.preventDefault();
+
+          if (canScrollActiveSection(-1)) {
+            scrollActiveSection(-1, event.key === "ArrowUp" ? 96 : Math.round(window.innerHeight * 0.82));
+            return;
+          }
+
           handleGesture(-1);
         }
       };

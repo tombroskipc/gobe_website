@@ -1,0 +1,122 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - link "Trang chủ GoBe" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "GOBeyond - đi toàn cầu" [ref=e6]
+        - button "Mở menu" [ref=e7] [cursor=pointer]
+      - complementary [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]:
+            - img [ref=e15]
+            - button [ref=e16] [cursor=pointer]:
+              - img [ref=e17]
+          - navigation [ref=e19]:
+            - link [ref=e20] [cursor=pointer]:
+              - /url: /
+              - text: TRANG CHỦ
+            - link [ref=e21] [cursor=pointer]:
+              - /url: /ve-chung-toi
+              - text: VỀ CHÚNG TÔI
+            - link [ref=e22] [cursor=pointer]:
+              - /url: /tuyen-dung
+              - text: TUYỂN DỤNG
+            - link [ref=e23] [cursor=pointer]:
+              - /url: /hoat-dong
+              - text: HOẠT ĐỘNG
+            - link [ref=e24] [cursor=pointer]:
+              - /url: /tin-tuc
+              - text: TIN TỨC
+          - generic [ref=e25]:
+            - paragraph [ref=e26]: Liên hệ
+            - link [ref=e27] [cursor=pointer]:
+              - /url: mailto:info@gobe.asia
+              - text: info@gobe.asia
+            - link [ref=e28] [cursor=pointer]:
+              - /url: tel:0786541658
+              - text: Hotline 078.654.1658
+    - generic [ref=e30]:
+      - link "Back to careers" [ref=e31] [cursor=pointer]:
+        - /url: /tuyen-dung
+      - complementary [ref=e33]:
+        - paragraph [ref=e34]: Job overview
+        - generic [ref=e35]:
+          - generic [ref=e36]:
+            - term [ref=e37]: Department
+            - definition [ref=e38]: Thương mại điện tử
+          - generic [ref=e39]:
+            - term [ref=e40]: Employment type
+            - definition [ref=e41]: Toàn thời gian
+          - generic [ref=e42]:
+            - term [ref=e43]: Quantity
+            - definition [ref=e44]: "01"
+          - generic [ref=e45]:
+            - term [ref=e46]: Location
+            - definition [ref=e47]: St Moritz, 1014 Đường Phạm Văn Đồng, TP. Hồ Chí Minh
+          - generic [ref=e48]:
+            - term [ref=e49]: Published
+            - definition [ref=e50]: "2026"
+        - link "Apply now" [ref=e52] [cursor=pointer]:
+          - /url: "#career-application"
+        - paragraph [ref=e53]:
+          - text: "Gửi CV tới tuyendung@gobe.asia với tiêu đề:"
+          - generic [ref=e54]: "[GOBEYOND - TUYỂN DỤNG MARKETING GOOGLE ADS FULL-TIME] Họ và tên"
+    - article [ref=e58]
+    - generic [ref=e60]:
+      - img
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - img "GOBeyond" [ref=e63]
+          - paragraph [ref=e64]: GoBe là doanh nghiệp phát triển cùng ngành thương mại điện tử xuyên biên giới, tập trung vào Print on Demand và Drop-shipping.
+          - generic "Liên kết mạng xã hội GoBeyond" [ref=e65]:
+            - link "Facebook" [ref=e66] [cursor=pointer]:
+              - /url: https://www.facebook.com/gobeyond.asia
+              - text: f
+            - link "TikTok" [ref=e67] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@gobeyond.asia
+              - text: tt
+            - link "Email" [ref=e68] [cursor=pointer]:
+              - /url: mailto:info@gobe.asia
+              - text: "@"
+            - link "Phone" [ref=e69] [cursor=pointer]:
+              - /url: tel:0786541658
+              - text: tel
+            - link "LinkedIn" [ref=e70] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/gobeyond-asia
+              - text: in
+        - generic [ref=e71]:
+          - heading "Liên hệ" [level=2] [ref=e72]
+          - generic [ref=e73]:
+            - paragraph [ref=e74]:
+              - generic [ref=e75]: pin
+              - generic [ref=e76]: St Moritz, 1014 Đường Phạm Văn Đồng, Phường Thủ Đức, Thành phố Hồ Chí Minh
+            - paragraph [ref=e77]:
+              - generic [ref=e78]: tel
+              - link "078.654.1658" [ref=e79] [cursor=pointer]:
+                - /url: tel:0786541658
+            - paragraph [ref=e80]:
+              - generic [ref=e81]: "@"
+              - generic [ref=e82]:
+                - link "info@gobe.asia" [ref=e83] [cursor=pointer]:
+                  - /url: mailto:info@gobe.asia
+                - text: "|"
+                - link "tuyendung@gobe.asia" [ref=e84] [cursor=pointer]:
+                  - /url: mailto:tuyendung@gobe.asia
+        - navigation "Các trang ở chân trang" [ref=e85]:
+          - heading "Trang" [level=2] [ref=e86]
+          - generic [ref=e87]:
+            - link "Trang chủ" [ref=e88] [cursor=pointer]:
+              - /url: /
+            - link "Về chúng tôi" [ref=e89] [cursor=pointer]:
+              - /url: /ve-chung-toi
+            - link "Tuyển dụng" [ref=e90] [cursor=pointer]:
+              - /url: /tuyen-dung
+            - link "Hoạt động" [ref=e91] [cursor=pointer]:
+              - /url: /hoat-dong
+            - link "Tin tức" [ref=e92] [cursor=pointer]:
+              - /url: /tin-tuc
+      - generic [ref=e93]: Bản quyền © 2024 - GoBeyond. Đã đăng ký mọi quyền.
+      - button "Lên đầu trang" [ref=e94] [cursor=pointer]:
+        - img [ref=e95]
+  - alert [ref=e97]

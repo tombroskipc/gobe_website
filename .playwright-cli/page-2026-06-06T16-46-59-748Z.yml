@@ -1,0 +1,104 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic: idle
+    - generic [ref=e4]:
+      - link "Trang chủ GoBe" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "GOBeyond - đi toàn cầu" [ref=e6]
+      - navigation "Điều hướng chính" [ref=e7]:
+        - link "TRANG CHỦ" [ref=e8] [cursor=pointer]:
+          - /url: /
+        - link "VỀ CHÚNG TÔI" [ref=e9] [cursor=pointer]:
+          - /url: /ve-chung-toi
+        - link "TUYỂN DỤNG" [ref=e10] [cursor=pointer]:
+          - /url: /tuyen-dung
+        - link "HOẠT ĐỘNG" [ref=e11] [cursor=pointer]:
+          - /url: /hoat-dong
+        - link "TIN TỨC" [ref=e12] [cursor=pointer]:
+          - /url: /tin-tuc
+        - link "Ứng tuyển" [ref=e13] [cursor=pointer]:
+          - /url: /tuyen-dung
+    - generic [ref=e15]:
+      - link "Back to careers" [ref=e16] [cursor=pointer]:
+        - /url: /tuyen-dung
+      - complementary [ref=e18]:
+        - paragraph [ref=e19]: Job overview
+        - generic [ref=e20]:
+          - generic [ref=e21]:
+            - term [ref=e22]: Department
+            - definition [ref=e23]: Thương mại điện tử
+          - generic [ref=e24]:
+            - term [ref=e25]: Employment type
+            - definition [ref=e26]: Toàn thời gian
+          - generic [ref=e27]:
+            - term [ref=e28]: Quantity
+            - definition [ref=e29]: "01"
+          - generic [ref=e30]:
+            - term [ref=e31]: Location
+            - definition [ref=e32]: St Moritz, 1014 Đường Phạm Văn Đồng, TP. Hồ Chí Minh
+          - generic [ref=e33]:
+            - term [ref=e34]: Published
+            - definition [ref=e35]: "2026"
+        - link "Apply now" [ref=e37] [cursor=pointer]:
+          - /url: "#career-application"
+        - paragraph [ref=e38]:
+          - text: "Gửi CV tới tuyendung@gobe.asia với tiêu đề:"
+          - generic [ref=e39]: "[GOBEYOND - TUYỂN DỤNG MARKETING GOOGLE ADS FULL-TIME] Họ và tên"
+    - article [ref=e43]
+    - generic [ref=e45]:
+      - img
+      - generic [ref=e46]:
+        - generic [ref=e47]:
+          - img "GOBeyond" [ref=e48]
+          - paragraph [ref=e49]: GoBe là doanh nghiệp phát triển cùng ngành thương mại điện tử xuyên biên giới, tập trung vào Print on Demand và Drop-shipping.
+          - generic "Liên kết mạng xã hội GoBeyond" [ref=e50]:
+            - link "Facebook" [ref=e51] [cursor=pointer]:
+              - /url: https://www.facebook.com/gobeyond.asia
+              - text: f
+            - link "TikTok" [ref=e52] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@gobeyond.asia
+              - text: tt
+            - link "Email" [ref=e53] [cursor=pointer]:
+              - /url: mailto:info@gobe.asia
+              - text: "@"
+            - link "Phone" [ref=e54] [cursor=pointer]:
+              - /url: tel:0786541658
+              - text: tel
+            - link "LinkedIn" [ref=e55] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/gobeyond-asia
+              - text: in
+        - generic [ref=e56]:
+          - heading "Liên hệ" [level=2] [ref=e57]
+          - generic [ref=e58]:
+            - paragraph [ref=e59]:
+              - generic [ref=e60]: pin
+              - generic [ref=e61]: St Moritz, 1014 Đường Phạm Văn Đồng, Phường Thủ Đức, Thành phố Hồ Chí Minh
+            - paragraph [ref=e62]:
+              - generic [ref=e63]: tel
+              - link "078.654.1658" [ref=e64] [cursor=pointer]:
+                - /url: tel:0786541658
+            - paragraph [ref=e65]:
+              - generic [ref=e66]: "@"
+              - generic [ref=e67]:
+                - link "info@gobe.asia" [ref=e68] [cursor=pointer]:
+                  - /url: mailto:info@gobe.asia
+                - text: "|"
+                - link "tuyendung@gobe.asia" [ref=e69] [cursor=pointer]:
+                  - /url: mailto:tuyendung@gobe.asia
+        - navigation "Các trang ở chân trang" [ref=e70]:
+          - heading "Trang" [level=2] [ref=e71]
+          - generic [ref=e72]:
+            - link "Trang chủ" [ref=e73] [cursor=pointer]:
+              - /url: /
+            - link "Về chúng tôi" [ref=e74] [cursor=pointer]:
+              - /url: /ve-chung-toi
+            - link "Tuyển dụng" [ref=e75] [cursor=pointer]:
+              - /url: /tuyen-dung
+            - link "Hoạt động" [ref=e76] [cursor=pointer]:
+              - /url: /hoat-dong
+            - link "Tin tức" [ref=e77] [cursor=pointer]:
+              - /url: /tin-tuc
+      - generic [ref=e78]: Bản quyền © 2024 - GoBeyond. Đã đăng ký mọi quyền.
+      - button "Lên đầu trang" [ref=e79] [cursor=pointer]:
+        - img [ref=e80]
+  - alert [ref=e82]

@@ -34,10 +34,11 @@ export const BodyCopyBlock: Block = {
   fields: [
     {
       name: "content",
-      type: "richText",
+      type: "textarea",
       required: true,
       admin: {
-        description: "Rich text: headings, lists, links, bold/italic, quotes — like a WordPress editor.",
+        rows: 10,
+        description: "Plain text body copy. Separate paragraphs with blank lines.",
       },
     },
   ],

@@ -19,9 +19,19 @@ const body = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "GoBeyond LLC - Đi toàn cầu, không dừng lại",
+  title: "GoBeyond - Go Big Or Go Home",
   description:
-    "Trải nghiệm thương hiệu GoBeyond LLC với đội ngũ thương mại điện tử toàn cầu, hoạt động, tin tức và tuyển dụng.",
+    "From Vietnam to the world. GoBeyond is building a global e-commerce powerhouse — 5 million orders by 2030.",
+  icons: {
+    icon: [
+      {
+        url: "/favicon.png",
+        type: "image/png",
+        sizes: "32x32",
+      },
+    ],
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function FrontendLayout({

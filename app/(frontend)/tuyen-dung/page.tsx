@@ -7,8 +7,6 @@ export const metadata: Metadata = {
   description: "Danh sách vị trí tuyển dụng đang mở tại GoBeyond.",
 };
 
-export const dynamic = "force-dynamic";
-
 export default async function CareersRoute() {
   const jobs = await getPublishedCareers();
 

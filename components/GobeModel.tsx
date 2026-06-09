@@ -7,30 +7,25 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as THREE from "three";
 
 const EXTERNAL_MODEL_URL = process.env.NEXT_PUBLIC_GOBE_MODEL_URL;
-const LOCAL_MODEL_PATH = "/models/gobeyond-operations-diorama-v3.web.glb";
-const LOCAL_MODEL_CHUNKS = [
-  "/models/gobeyond-operations-diorama-v3.web.glb.part-00",
-  "/models/gobeyond-operations-diorama-v3.web.glb.part-01",
-];
-const CAMERA_POSITION = new THREE.Vector3(0, 1.2, 5.75);
+const LOCAL_MODEL_PATH = "/models/gobe-3d-globe.web.glb?v=original-22mb-20260607";
+const LOCAL_MODEL_CHUNKS: string[] = [];
+const CAMERA_POSITION = new THREE.Vector3(0, 1.2, 7.7);
 const CAMERA_TARGET = new THREE.Vector3(0, 0.08, 0);
-const CAMERA_FOV = 34;
+const CAMERA_FOV = 36;
 const MODEL_FIT_SIZE = 3.72;
 const MODEL_VERTICAL_OFFSET = -0.06;
-const LOGO_VERTICAL_OFFSET = 0.1;
-const LOGO_FRONT_ROTATION = Math.PI;
-const LOGO_SCALE = 1;
 const AUTO_ROTATE_SPEED = 0.035;
 const MAIN_RING_ROTATE_SPEED = 0.05;
 const ORBIT_ROTATE_SPEED = 0.042;
 const GLASS_OPACITY = 0.16;
-const LOGO_ORANGE = "#F26522";
 const MODEL_BASE_ROTATION = new THREE.Euler(-0.04, -0.82, 0);
 
 interface GobeModelProps {
   scale?: number;
   autoRotate?: boolean;
   className?: string;
+  modelOffsetX?: number;
+  modelOffsetY?: number;
 }
 
 async function resolveModelSource(signal: AbortSignal) {
@@ -38,28 +33,30 @@ async function resolveModelSource(signal: AbortSignal) {
     return { url: EXTERNAL_MODEL_URL };
   }
 
-  try {
-    const responses = await Promise.all(
-      LOCAL_MODEL_CHUNKS.map((path) =>
-        fetch(path, {
-          cache: "force-cache",
-          signal,
-        })
-      )
-    );
+  if (LOCAL_MODEL_CHUNKS.length > 0) {
+    try {
+      const responses = await Promise.all(
+        LOCAL_MODEL_CHUNKS.map((path) =>
+          fetch(path, {
+            cache: "force-cache",
+            signal,
+          })
+        )
+      );
 
-    if (responses.every((response) => response.ok)) {
-      const chunks = await Promise.all(responses.map((response) => response.arrayBuffer()));
-      const url = URL.createObjectURL(new Blob(chunks, { type: "model/gltf-binary" }));
+      if (responses.every((response) => response.ok)) {
+        const chunks = await Promise.all(responses.map((response) => response.arrayBuffer()));
+        const url = URL.createObjectURL(new Blob(chunks, { type: "model/gltf-binary" }));
 
-      return {
-        url,
-        revoke: () => URL.revokeObjectURL(url),
-      };
-    }
-  } catch (error) {
-    if (!signal.aborted) {
-      console.warn("Chunked 3D model load failed, falling back to local model path.", error);
+        return {
+          url,
+          revoke: () => URL.revokeObjectURL(url),
+        };
+      }
+    } catch (error) {
+      if (!signal.aborted) {
+        console.warn("Chunked 3D model load failed, falling back to local model path.", error);
+      }
     }
   }
 
@@ -115,18 +112,6 @@ function makeUpperGlobeTransparent(scene: THREE.Object3D) {
   });
 }
 
-function isLogoObject(child: THREE.Object3D): child is THREE.Mesh {
-  if (!(child instanceof THREE.Mesh)) {
-    return false;
-  }
-
-  const materials = Array.isArray(child.material) ? child.material : [child.material];
-  const materialNames = materials.map((material) => material.name).join(" ").toLowerCase();
-  const targetText = `${child.name} ${materialNames}`.toLowerCase();
-
-  return targetText.includes("logo") || materialNames.includes("material_0.015");
-}
-
 function isMainOrangeRing(child: THREE.Object3D) {
   const name = child.name.toLowerCase();
 
@@ -141,51 +126,18 @@ function isOrbitB(child: THREE.Object3D) {
   return child.name.toLowerCase().includes("orange_globe_ring_tilted_orbit_b");
 }
 
-function makeLogoOrange(scene: THREE.Object3D) {
-  scene.traverse((child) => {
-    if (!isLogoObject(child)) {
-      return;
-    }
-
-    const applyLogoColor = (material: THREE.Material) => {
-      const logo = material.clone();
-      logo.name = `${material.name || "Logo"} Orange`;
-
-      if (logo instanceof THREE.MeshStandardMaterial) {
-        logo.color = new THREE.Color(LOGO_ORANGE);
-        logo.emissive = new THREE.Color(LOGO_ORANGE);
-        logo.emissiveIntensity = 0.16;
-        logo.metalness = 0.08;
-        logo.roughness = 0.34;
-        logo.map = null;
-        logo.emissiveMap = null;
-      } else if (
-        logo instanceof THREE.MeshBasicMaterial ||
-        logo instanceof THREE.MeshPhongMaterial ||
-        logo instanceof THREE.MeshLambertMaterial
-      ) {
-        logo.color = new THREE.Color(LOGO_ORANGE);
-      }
-
-      logo.needsUpdate = true;
-      return logo;
-    };
-
-    child.material = Array.isArray(child.material)
-      ? child.material.map(applyLogoColor)
-      : applyLogoColor(child.material);
-    child.renderOrder = 5;
-  });
-}
-
 function ModelContent({
   scale,
   autoRotate,
   groupRef,
+  modelOffsetX,
+  modelOffsetY,
 }: {
   scale: number;
   autoRotate: boolean;
   groupRef: RefObject<THREE.Group | null>;
+  modelOffsetX: number;
+  modelOffsetY: number;
 }) {
   const { camera } = useThree();
   const [loaded, setLoaded] = useState(false);
@@ -236,7 +188,6 @@ function ModelContent({
 
               const scene = gltf.scene;
               makeUpperGlobeTransparent(scene);
-              makeLogoOrange(scene);
 
               gltf.scene.traverse((child) => {
                 if (child instanceof THREE.Mesh) {
@@ -255,11 +206,9 @@ function ModelContent({
 
               const stage = new THREE.Group();
               const globeRoot = new THREE.Group();
-              const logoRoot = new THREE.Group();
               const orangeRingRoot = new THREE.Group();
               const orangeOrbitARoot = new THREE.Group();
               const orangeOrbitBRoot = new THREE.Group();
-              const logos: THREE.Object3D[] = [];
               const mainRingObjects: THREE.Object3D[] = [];
               const orbitAObjects: THREE.Object3D[] = [];
               const orbitBObjects: THREE.Object3D[] = [];
@@ -270,13 +219,11 @@ function ModelContent({
               stage.add(orangeRingRoot);
               stage.add(orangeOrbitARoot);
               stage.add(orangeOrbitBRoot);
-              stage.add(logoRoot);
               stage.scale.setScalar(MODEL_FIT_SIZE / maxDimension);
+              stage.position.x = modelOffsetX;
               stage.position.y = MODEL_VERTICAL_OFFSET;
+              stage.position.y += modelOffsetY;
               scene.traverse((child) => {
-                if (isLogoObject(child)) {
-                  logos.push(child);
-                }
                 if (isMainOrangeRing(child)) {
                   mainRingObjects.push(child);
                 }
@@ -291,27 +238,6 @@ function ModelContent({
               mainRingObjects.forEach((object) => orangeRingRoot.attach(object));
               orbitAObjects.forEach((object) => orangeOrbitARoot.attach(object));
               orbitBObjects.forEach((object) => orangeOrbitBRoot.attach(object));
-              logoRoot.position.y = LOGO_VERTICAL_OFFSET;
-              logos.forEach((logo) => {
-                logoRoot.attach(logo);
-                logo.rotateY(LOGO_FRONT_ROTATION);
-                logo.scale.multiplyScalar(LOGO_SCALE);
-                logo.traverse((child) => {
-                  if (!(child instanceof THREE.Mesh)) {
-                    return;
-                  }
-
-                  const materials = Array.isArray(child.material) ? child.material : [child.material];
-                  materials.forEach((material) => {
-                    material.transparent = true;
-                    material.opacity = 1;
-                    material.depthTest = false;
-                    material.depthWrite = false;
-                    material.needsUpdate = true;
-                  });
-                  child.renderOrder = 20;
-                });
-              });
 
               const perspective = camera as THREE.PerspectiveCamera;
               perspective.position.copy(CAMERA_POSITION);
@@ -374,6 +300,15 @@ function ModelContent({
     };
   }, [camera, groupRef]);
 
+  useEffect(() => {
+    if (!loadedRoot.current) {
+      return;
+    }
+
+    loadedRoot.current.position.x = modelOffsetX;
+    loadedRoot.current.position.y = MODEL_VERTICAL_OFFSET + modelOffsetY;
+  }, [modelOffsetX, modelOffsetY]);
+
   useFrame((_, delta) => {
     if (!loaded) return;
 
@@ -409,16 +344,18 @@ export function GobeModel({
   scale = 1,
   autoRotate = false,
   className,
+  modelOffsetX = 0,
+  modelOffsetY = 0,
 }: GobeModelProps) {
   const groupRef = useRef<THREE.Group>(null);
 
   return (
-    <div className={className} style={{ width: "100%", height: "100%" }}>
+    <div className={["gobe-model-canvas", className].filter(Boolean).join(" ")} style={{ width: "100%", height: "100%" }}>
       <Canvas
         camera={{ position: CAMERA_POSITION.toArray(), fov: CAMERA_FOV, near: 0.05, far: 80 }}
         dpr={[0.8, 1.15]}
         gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
-        style={{ background: "transparent" }}
+        style={{ background: "transparent", display: "block", height: "100%", width: "100%" }}
       >
         <ambientLight intensity={0.86} />
         <hemisphereLight args={["#ffffff", "#29385a", 0.92]} />
@@ -430,6 +367,8 @@ export function GobeModel({
             scale={scale}
             autoRotate={autoRotate}
             groupRef={groupRef}
+            modelOffsetX={modelOffsetX}
+            modelOffsetY={modelOffsetY}
           />
         </group>
       </Canvas>

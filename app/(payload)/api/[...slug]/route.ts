@@ -1,9 +1,32 @@
 import config from "@payload-config";
-import { REST_DELETE, REST_GET, REST_OPTIONS, REST_PATCH, REST_POST, REST_PUT } from "@payloadcms/next/routes";
+import { handleEndpoints } from "payload";
+import { formatAdminURL } from "payload/shared";
 
-export const GET = REST_GET(config);
-export const POST = REST_POST(config);
-export const DELETE = REST_DELETE(config);
-export const PATCH = REST_PATCH(config);
-export const PUT = REST_PUT(config);
-export const OPTIONS = REST_OPTIONS(config);
+type RouteArgs = {
+  params: Promise<{
+    slug?: string[];
+  }>;
+};
+
+const REST = async (request: Request, args: RouteArgs) => {
+  const awaitedConfig = await config;
+  const awaitedParams = await args.params;
+
+  return handleEndpoints({
+    config,
+    path: formatAdminURL({
+      apiRoute: awaitedConfig.routes.api,
+      path: awaitedParams?.slug
+        ? `/${awaitedParams.slug.map((segment) => encodeURIComponent(segment)).join("/")}`
+        : undefined,
+    }),
+    request,
+  });
+};
+
+export const GET = REST;
+export const POST = REST;
+export const DELETE = REST;
+export const PATCH = REST;
+export const PUT = REST;
+export const OPTIONS = REST;

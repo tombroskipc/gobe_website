@@ -1,4 +1,2 @@
-import config from "@payload-config";
-import { GRAPHQL_POST } from "@payloadcms/next/routes";
-
-export const POST = GRAPHQL_POST(config);
+export const POST = () =>
+  Response.json({ error: "GraphQL is disabled." }, { status: 404 });

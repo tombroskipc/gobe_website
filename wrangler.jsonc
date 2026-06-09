@@ -1,0 +1,41 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "gobe-immersive-3d",
+  "compatibility_date": "2026-06-05",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "gobe-immersive-3d"
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  },
+  "r2_buckets": [
+    {
+      "binding": "PAYLOAD_MEDIA",
+      "bucket_name": "gobe-payload-media"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "PAYLOAD_DB",
+      "database_name": "gobe-website-admin-d1",
+      "database_id": "3b859ee8-2186-4478-b933-b7f50c5cf087"
+    }
+  ],
+  "vars": {
+    "NEXT_PUBLIC_SERVER_URL": "https://gobe-immersive-3d.joe-378.workers.dev"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".cloudflare/static-worker.js",
+  "name": "gobe-immersive-3d-static",
+  "compatibility_date": "2026-06-05",
+  "assets": {
+    "directory": "dist-static",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

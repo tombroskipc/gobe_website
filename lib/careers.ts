@@ -75,6 +75,7 @@ export const fallbackCareers: CareerItem[] = [
     employmentType: "Toàn thời gian",
     quantity: "01",
     excerpt: "Sản xuất video ngắn, visual angle và nội dung sáng tạo phục vụ chiến dịch e-commerce.",
+    larkUrl: "https://gobe.asia/tuyen-dung-creative-video-full-time/",
     applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20CREATIVE%20VIDEO%5D%20Ho%20va%20ten",
   },
   {
@@ -87,6 +88,7 @@ export const fallbackCareers: CareerItem[] = [
     employmentType: "Toàn thời gian",
     quantity: "01",
     excerpt: "Chăm sóc khách hàng, xử lý phản hồi và phối hợp vận hành để trải nghiệm mua hàng mượt mà.",
+    larkUrl: "https://gobe.asia/tuyen-dung-customer-service-full-time/",
     applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20CUSTOMER%20SERVICE%5D%20Ho%20va%20ten",
   },
   {
@@ -99,6 +101,7 @@ export const fallbackCareers: CareerItem[] = [
     employmentType: "Toàn thời gian",
     quantity: "01",
     excerpt: "Tuyển dụng, phát triển con người và xây dựng văn hóa vận hành chủ động trong đội ngũ.",
+    larkUrl: "https://gobe.asia/tuyen-dung-human-resource/",
     applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20HUMAN%20RESOURCE%5D%20Ho%20va%20ten",
   },
   {
@@ -111,6 +114,7 @@ export const fallbackCareers: CareerItem[] = [
     employmentType: "Toàn thời gian",
     quantity: "02",
     excerpt: "Quản lý đơn hàng, điều phối supplier, logistics và theo dõi vận hành từ lúc nhận đơn đến khi giao thành công.",
+    larkUrl: "https://gobe.asia/tuyen-dung-fulfillment-full-time-3/",
     applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20FULFILLMENT%20FULL-TIME%5D%20Ho%20va%20ten",
     description:
       "GoBeyond đang tìm kiếm nhân viên Fulfillment tài năng và nhiệt huyết để gia nhập đội ngũ vận hành e-commerce toàn cầu.",
@@ -141,9 +145,18 @@ export const fallbackCareers: CareerItem[] = [
     employmentType: "Thực tập",
     quantity: "01",
     excerpt: "Thực tập vận hành sàn Etsy, hỗ trợ listing, tracking và quy trình xử lý dữ liệu sản phẩm.",
+    larkUrl: "https://gobe.asia/3250-2/",
     applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20ETSY%20OPERATIONS%20INTERN%5D%20Ho%20va%20ten",
   },
 ];
+
+function mergeWithFallback(docs: CareerItem[], fallback: CareerItem[]) {
+  if (docs.length === 0) {
+    return fallback;
+  }
+
+  return docs;
+}
 
 export async function getPublishedCareers(): Promise<CareerItem[]> {
   try {
@@ -160,10 +173,10 @@ export async function getPublishedCareers(): Promise<CareerItem[]> {
       },
     });
 
-    return result.docs as CareerItem[];
+    return mergeWithFallback(result.docs as CareerItem[], fallbackCareers);
   } catch (error) {
-    console.warn("Payload careers query failed.", error);
-    return [];
+    console.warn("Payload careers query failed, using fallback content.", error);
+    return fallbackCareers;
   }
 }
 
@@ -212,9 +225,9 @@ export async function getPublishedCareerBySlug(slug: string): Promise<CareerItem
       },
     });
 
-    return (result.docs[0] as CareerItem | undefined) || null;
+    return (result.docs[0] as CareerItem | undefined) || fallbackCareers.find((career) => career.slug === slug) || null;
   } catch (error) {
-    console.warn("Payload career detail query failed.", error);
-    return null;
+    console.warn("Payload career detail query failed, using fallback content.", error);
+    return fallbackCareers.find((career) => career.slug === slug) || null;
   }
 }

@@ -166,16 +166,6 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
 }
 /**
  * Template-driven posts for GoBeyond news, activities, announcements, editorials, and case studies.
@@ -219,23 +209,9 @@ export interface News {
       }
     | {
         /**
-         * Rich text: headings, lists, links, bold/italic, quotes — like a WordPress editor.
+         * Plain text body copy. Separate paragraphs with blank lines.
          */
-        content: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        };
+        content: string;
         id?: string | null;
         blockName?: string | null;
         blockType: 'bodyCopy';
@@ -301,14 +277,6 @@ export interface News {
    * Internal editor notes. Not rendered publicly.
    */
   notes?: string | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -521,20 +489,6 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
-  sizes?:
-    | T
-    | {
-        thumbnail?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -629,13 +583,6 @@ export interface NewsSelect<T extends boolean = true> {
             };
       };
   notes?: T;
-  meta?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        image?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

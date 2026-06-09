@@ -1,9 +1,7 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import * as THREE from "three";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
 
 type ValueCardStyle = CSSProperties &
   Partial<
@@ -131,140 +129,74 @@ type CoreValue = (typeof coreValues)[number];
 const operations = [
   {
     index: "01",
-    title: "Ads",
-    body: "Demand signals, channels, testing rhythm, and market feedback.",
+    title: "Creative",
+    body: "Creativity is our DNA. We use AI to optimize every concept and turn ideas into market-winning content.",
+    fullBody:
+      "Creativity is the core DNA driving GoBeyond's growth. By harnessing AI and relentlessly optimizing every concept, we turn ideas into market-winning content — defining our role and standing out in a crowded global market.",
   },
   {
     index: "02",
-    title: "Sáng tạo",
-    body: "Câu chuyện sản phẩm, hình ảnh, angle, nội dung ngắn và tài nguyên chiến dịch.",
+    title: "Ads Performance",
+    body: "Performance is our edge. New strategies, constantly tested — powering $50K–$150K in daily ad spend.",
+    fullBody:
+      "Performance marketing is our built-in strength. We constantly test, learn, and deploy cutting-edge strategies that let us scale confidently at $50K–$150K in daily ad spend, turning demand signals into real results.",
   },
   {
     index: "03",
     title: "Fulfillment",
-    body: "Điều phối nguồn hàng, quy trình đóng gói, đối tác vận chuyển và giao hàng cho khách.",
+    body: "The backbone of stable scaling. Optimized, automated processes from sourcing to delivery.",
+    fullBody:
+      "The backbone of stable scaling. Our fulfillment engine continuously optimizes sourcing, packaging, and delivery through streamlined, automated processes — so we grow fast without breaking under pressure.",
   },
   {
     index: "04",
-    title: "Thiết kế",
-    body: "Trải nghiệm storefront, trình bày sản phẩm, hệ thống thương hiệu và chi tiết chuyển đổi.",
+    title: "AI",
+    body: "The force behind everything. Constant AI innovation fuels our non-stop growth.",
+    fullBody:
+      "AI is the force multiplier behind everything we do. By constantly exploring and innovating with AI, we unlock new capabilities and keep pushing forward — growth that never stops.",
   },
   {
     index: "05",
-    title: "Vận hành",
-    body: "Vận hành hằng ngày, tự động hóa, công cụ nội bộ và tài chính.",
+    title: "Operation",
+    body: "The back-end that holds it together — smooth operations, strong culture, clear communication.",
+    fullBody:
+      "The back-end that holds it all together. Our operations team ensures the company runs smoothly day to day, while building a strong internal culture and clear communication across the team.",
   },
 ];
+
+type OperationItem = (typeof operations)[number];
 
 const scaleNodes = [
   {
-    title: "Đội ngũ lõi vững mạnh.",
-    body: "Đội ngũ lõi có các leader sáng tạo, giàu kiến thức và sẵn sàng đón nhận thử thách.",
-    chips: ["Leader sáng tạo", "Giàu kiến thức", "Sẵn sàng thử thách"],
+    title: "Why this is where you belong.",
+    body: "We don't scale with numbers — we scale with people who dare to go beyond.",
+    chips: ["GoBeyond Culture", "Bold Mission", "Pushing Boundaries"],
   },
   {
-    title: "Mạng lưới supplier toàn cầu.",
-    body: "Làm việc với nhiều supplier trên thế giới, kết nối nguồn sản phẩm, đối tác fulfillment và vận hành store ở nhiều thị trường.",
-    chips: ["Supplier toàn cầu", "Storefront", "Fulfillment"],
+    title: "A Strong Core Team.",
+    body: "Here, you don't work for leaders — you become one. We build our team with creative, knowledgeable people who are ready for any challenge. You're empowered to decide and lead from day one.",
+    chips: ["Creative Leadership", "Knowledge-Driven", "Ready for Challenges"],
   },
   {
-    title: "Ưu tiên AI và tự động hóa",
-    body: "AI và tự động hóa là ưu tiên trọng tâm, giúp mở rộng xử lý đơn hàng, workflow dữ liệu, sản xuất creative và vận hành hằng ngày.",
-    chips: ["Ưu tiên AI", "Tự động hóa", "Scale đơn hàng"],
+    title: "A Global Supplier Network.",
+    body: "Join GoBeyond and step onto a global stage — connecting product sources, fulfillment partners, and storefronts across markets. Your vision won't be limited by borders.",
+    chips: ["Global Suppliers", "Optimized Storefronts", "International Fulfillment"],
+  },
+  {
+    title: "AI & Automation First.",
+    body: "Machines handle the repetitive; people create. AI frees you from busywork so you can focus on what matters — strategy, ideas, and impact. Work smart, not just hard.",
+    chips: ["AI-First Mindset", "Workflow Automation", "Peak Performance"],
   },
 ];
 
-const packageDrops = Array.from({ length: 18 }, (_, index) => ({
-  color: index % 3 === 0 ? "#fff7ed" : "#F26522",
-  initialY: 3.25 + (index % 6) * 0.52,
-  position: [((index * 1.73) % 9.6) - 4.8, 0, -1.5 - (index % 5) * 0.42] as [number, number, number],
-  rotation: [index * 0.47, index * 0.72, index * 0.31] as [number, number, number],
-  scale: 0.16 + (index % 4) * 0.035,
-  speed: 0.34 + (index % 5) * 0.065,
-  spin: 0.18 + (index % 4) * 0.08,
-}));
-
-type PackageDrop = (typeof packageDrops)[number];
-
-function FallingPackage({ drop }: { drop: PackageDrop }) {
-  const ref = useRef<THREE.Group>(null);
-  const source = useLoader(OBJLoader, "/package-asset/base.obj");
-
-  const model = useMemo(() => {
-    const clone = source.clone(true);
-    const box = new THREE.Box3().setFromObject(clone);
-    const size = new THREE.Vector3();
-    const center = new THREE.Vector3();
-
-    box.getSize(size);
-    box.getCenter(center);
-    clone.position.sub(center);
-
-    const maxDimension = Math.max(size.x, size.y, size.z) || 1;
-    clone.scale.multiplyScalar(1.55 / maxDimension);
-
-    clone.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-        mesh.material = new THREE.MeshStandardMaterial({
-          color: drop.color,
-          emissive: drop.color === "#F26522" ? "#4a1606" : "#3b2b20",
-          emissiveIntensity: drop.color === "#F26522" ? 0.18 : 0.05,
-          metalness: 0.08,
-          roughness: 0.48,
-        });
-      }
-    });
-
-    return clone;
-  }, [drop.color, source]);
-
-  useFrame(({ clock }) => {
-    const group = ref.current;
-    if (!group) {
-      return;
-    }
-
-    const cycle = 6.9;
-    const elapsed = clock.elapsedTime * drop.speed;
-    group.position.y = THREE.MathUtils.euclideanModulo(drop.initialY - elapsed + 3.4, cycle) - 3.4;
-    group.rotation.x = drop.rotation[0] + clock.elapsedTime * drop.spin;
-    group.rotation.y = drop.rotation[1] + clock.elapsedTime * drop.spin * 1.25;
-    group.rotation.z = drop.rotation[2] + clock.elapsedTime * drop.spin * 0.72;
-  });
-
-  return (
-    <group ref={ref} position={drop.position} scale={drop.scale} rotation={drop.rotation}>
-      <primitive object={model} />
-    </group>
-  );
-}
-
-function PackageRain3D() {
-  return (
-    <Canvas
-      className="absolute inset-0"
-      camera={{ position: [0, 0.8, 6.5], fov: 45 }}
-      dpr={[1, 1.5]}
-      gl={{ alpha: true, antialias: true }}
-    >
-      <ambientLight intensity={1.05} />
-      <directionalLight position={[4, 6, 5]} intensity={1.8} />
-      <directionalLight position={[-4, -2, 3]} color="#F26522" intensity={0.9} />
-      <Suspense fallback={null}>
-        {packageDrops.map((drop, index) => (
-          <FallingPackage key={`${drop.position.join("-")}-${index}`} drop={drop} />
-        ))}
-      </Suspense>
-    </Canvas>
-  );
-}
-
 export function CoreValuesSection() {
   const [activeValue, setActiveValue] = useState<CoreValue | null>(null);
+  const [mounted, setMounted] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("value-card-open", Boolean(activeValue));
@@ -295,6 +227,10 @@ export function CoreValuesSection() {
       data-scroll-section
       className="values-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90"
       onPointerMove={(event) => {
+        if (!window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1024px)").matches) {
+          return;
+        }
+
         const element = sectionRef.current;
         if (!element) {
           return;
@@ -369,7 +305,8 @@ export function CoreValuesSection() {
         </div>
       </div>
 
-      {activeValue ? (
+      {activeValue && mounted
+        ? createPortal(
         <div
           className="value-focus-overlay is-open"
           role="dialog"
@@ -402,15 +339,45 @@ export function CoreValuesSection() {
               [<span className="acronym-hit">{activeValue.code}</span>]{activeValue.title.slice(1)}
             </h3>
             <p className="value-focus-copy">{activeValue.body}</p>
-            <span className="value-focus-note">Nhan ESC hoac click ra ngoai de dong</span>
+            {/* <span className="value-focus-note">Nhan ESC hoac click ra ngoai de dong</span> */}
           </article>
-        </div>
-      ) : null}
+        </div>,
+            document.body,
+          )
+        : null}
     </section>
   );
 }
 
 export function OperationsSection() {
+  const [activeOperation, setActiveOperation] = useState<OperationItem | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("operation-card-open", Boolean(activeOperation));
+
+    if (!activeOperation) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setActiveOperation(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.documentElement.classList.remove("operation-card-open");
+    };
+  }, [activeOperation]);
+
   return (
     <section id="operations" data-home-story-section data-scroll-section className="operation-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90">
       <div data-home-story-content className="relative min-h-screen overflow-hidden">
@@ -420,8 +387,8 @@ export function OperationsSection() {
         />
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-24" aria-hidden="true" />
 
-        <div className="relative mx-auto grid min-h-screen max-w-[92rem] items-center gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[0.34fr_0.18fr_0.48fr] lg:px-12">
-          <div data-scroll-reveal className="relative z-[3]">
+        <div className="operation-content relative mx-auto grid min-h-screen max-w-[92rem] items-center gap-10 px-5 py-20 sm:px-8 lg:px-12">
+          <div data-scroll-reveal className="operation-copy relative z-[3]">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">COMPANY OPERATION</p>
             <h2 className="mt-7 text-[clamp(4.2rem,7vw,8rem)] font-black leading-[0.9] tracking-normal text-white">
               How Gobe Operate
@@ -437,22 +404,59 @@ export function OperationsSection() {
 
           <div className="operation-list relative z-[3] grid gap-5">
             {operations.map((item) => (
-              <article
+              <button
                 key={item.title}
+                type="button"
                 data-scroll-card
-                className="operation-card relative grid gap-4 border border-white/12 bg-[#101520]/72 p-5 shadow-[0_28px_80px_rgba(0,0,0,0.38)] backdrop-blur-md sm:grid-cols-[72px_1fr_120px] sm:items-center"
+                className="operation-card relative grid gap-4 border border-white/12 bg-[#101520]/72 p-5 text-left text-white shadow-[0_28px_80px_rgba(0,0,0,0.38)] backdrop-blur-md sm:grid-cols-[72px_1fr_120px] sm:items-center"
+                aria-label={`View details for ${item.title}`}
+                onClick={() => setActiveOperation(item)}
               >
                 <span className="operation-index">{item.index}</span>
                 <span>
                   <h3 className="text-[clamp(2rem,3vw,3rem)] font-black leading-none text-white">{item.title}</h3>
                   <p className="mt-2 text-base font-medium leading-6 text-white/68">{item.body}</p>
+                  <p className="operation-expanded-copy">{item.fullBody}</p>
                 </span>
                 <span className="hidden h-[3px] w-full bg-[linear-gradient(90deg,#F26522,transparent)] opacity-75 sm:block" aria-hidden="true" />
-              </article>
+              </button>
             ))}
           </div>
         </div>
       </div>
+
+      {activeOperation && mounted
+        ? createPortal(
+            <div
+              className="operation-focus-overlay"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="operation-focus-title"
+              onMouseDown={(event) => {
+                if (event.target === event.currentTarget) {
+                  setActiveOperation(null);
+                }
+              }}
+            >
+              <article className="operation-focus-card">
+                <button
+                  className="operation-focus-close"
+                  type="button"
+                  aria-label="Close operation detail"
+                  onClick={() => setActiveOperation(null)}
+                >
+                  x
+                </button>
+                <p className="operation-focus-kicker">{activeOperation.index} — GoBeyond scale engine</p>
+                <h3 id="operation-focus-title" className="operation-focus-title">
+                  {activeOperation.title}
+                </h3>
+                <p className="operation-focus-copy">{activeOperation.fullBody}</p>
+              </article>
+            </div>,
+            document.body,
+          )
+        : null}
     </section>
   );
 }
@@ -466,14 +470,11 @@ export function ScaleSection() {
           aria-hidden="true"
         />
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-24" aria-hidden="true" />
-        <div className="pointer-events-none absolute inset-0 z-[1] opacity-80" aria-hidden="true">
-          <PackageRain3D />
-        </div>
 
-        <div className="relative z-[2] mx-auto grid min-h-screen max-w-[94rem] items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[0.44fr_0.56fr] lg:px-12">
-          <div data-scroll-reveal>
+        <div className="scale-content relative z-[2] mx-auto grid min-h-screen max-w-[94rem] items-center gap-12 px-5 py-24 sm:px-8 lg:px-12">
+          <div data-scroll-reveal className="scale-copy">
             <p className="text-xs font-black uppercase tracking-[0.36em] text-white/62">Company scale</p>
-            <h2 className="mt-7 text-[clamp(4.4rem,7.4vw,8.5rem)] font-black leading-[0.88] tracking-normal text-white">
+            <h2 className="mt-7 text-[clamp(3.4rem,9vw,8.5rem)] font-black leading-[0.88] tracking-normal text-white">
               How GoBe Scale
             </h2>
           </div>
