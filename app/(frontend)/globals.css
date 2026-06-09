@@ -2239,3 +2239,179 @@ html.home-story-active #contact [data-home-story-content] {
     max-width: none;
   }
 }
+
+/* Responsive readability guard for the operation/scale story panels.
+   Large viewports keep the original composition; tighter viewports switch to a
+   scrollable grid and never clamp the content into ellipses. */
+.operation-card p,
+.scale-card p {
+  display: block !important;
+  -webkit-box-orient: initial !important;
+  -webkit-line-clamp: initial !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+.operation-summary,
+.operation-expanded-copy,
+.scale-card p {
+  text-wrap: pretty;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .operation-card:hover .operation-expanded-copy,
+  .operation-card:focus-visible .operation-expanded-copy {
+    max-height: 30rem;
+  }
+}
+
+@media (max-width: 1439px), (max-height: 860px) {
+  html.home-story-active .operation-showcase,
+  html.home-story-active .scale-showcase {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  html.home-story-active .operation-showcase [data-home-story-content],
+  html.home-story-active .scale-showcase [data-home-story-content] {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  html.home-story-active .operation-showcase .operation-content,
+  html.home-story-active .scale-showcase .scale-content {
+    align-items: start;
+    display: grid;
+    gap: clamp(1rem, 2.8vh, 1.8rem);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    height: auto;
+    min-height: 100dvh;
+    padding: clamp(5.4rem, 9vh, 6.8rem) clamp(1rem, 3vw, 2rem) clamp(2rem, 5vh, 3.5rem);
+  }
+
+  html.home-story-active .operation-copy,
+  html.home-story-active .scale-copy {
+    max-width: min(100%, 58rem);
+  }
+
+  html.home-story-active .operation-copy h2,
+  html.home-story-active .scale-copy h2 {
+    font-size: clamp(2.8rem, 6vw, 5.6rem);
+  }
+
+  html.home-story-active .operation-list,
+  html.home-story-active .scale-card-stack {
+    align-content: start;
+    display: grid;
+    gap: clamp(.9rem, 2vw, 1.25rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+    grid-template-rows: none;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    width: 100%;
+  }
+
+  html.home-story-active .scale-card-stack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  html.home-story-active .operation-card,
+  html.home-story-active .operation-card:hover,
+  html.home-story-active .operation-card:focus-visible,
+  html.home-story-active .operation-card:nth-child(1),
+  html.home-story-active .operation-card:nth-child(2),
+  html.home-story-active .operation-card:nth-child(3),
+  html.home-story-active .operation-card:nth-child(4),
+  html.home-story-active .operation-card:nth-child(5) {
+    align-items: start;
+    border-radius: clamp(1.15rem, 1.8vw, 1.7rem);
+    grid-column: auto;
+    grid-template-columns: auto minmax(0, 1fr);
+    min-height: 0;
+    padding: clamp(1rem, 1.5vw, 1.35rem) !important;
+    transform: none;
+  }
+
+  html.home-story-active .operation-card::before {
+    display: block;
+  }
+
+  html.home-story-active .operation-summary {
+    display: none !important;
+  }
+
+  html.home-story-active .operation-expanded-copy {
+    display: block !important;
+    margin-top: .72rem;
+    max-height: none !important;
+    opacity: 1;
+    overflow: visible;
+    transform: none;
+  }
+
+  html.home-story-active .operation-index {
+    font-size: .72rem;
+    height: clamp(40px, 4.5vw, 52px);
+    width: clamp(40px, 4.5vw, 52px);
+  }
+
+  html.home-story-active .operation-card h3,
+  html.home-story-active .scale-card h3 {
+    font-size: clamp(1.4rem, 2.4vw, 2.2rem);
+    line-height: 1.02;
+  }
+
+  html.home-story-active .operation-card p,
+  html.home-story-active .scale-card p {
+    display: block !important;
+    -webkit-box-orient: initial !important;
+    -webkit-line-clamp: initial !important;
+    font-size: clamp(.88rem, 1.35vw, 1.02rem);
+    line-height: 1.58;
+    overflow: visible !important;
+  }
+
+  html.home-story-active .operation-card .operation-summary {
+    display: none !important;
+  }
+
+  html.home-story-active .scale-card,
+  html.home-story-active .scale-card:nth-child(1),
+  html.home-story-active .scale-card:nth-child(2),
+  html.home-story-active .scale-card:nth-child(3),
+  html.home-story-active .scale-card:nth-child(4) {
+    border-radius: clamp(1.15rem, 1.8vw, 1.7rem);
+    display: block;
+    margin-left: 0;
+    max-width: none;
+    padding: clamp(1.1rem, 1.8vw, 1.55rem) !important;
+  }
+
+  html.home-story-active .scale-card div {
+    gap: .45rem;
+    margin-top: 1rem;
+  }
+
+  html.home-story-active .scale-card span {
+    font-size: clamp(.58rem, .9vw, .68rem);
+    line-height: 1.25;
+    padding: .42rem .62rem;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 720px) {
+  html.home-story-active .operation-list,
+  html.home-story-active .scale-card-stack {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html.home-story-active .operation-card,
+  html.home-story-active .operation-card:hover,
+  html.home-story-active .operation-card:focus-visible {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

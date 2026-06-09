@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
-import type { CareerItem } from "@/lib/careers";
+import type { CareerItem, CareerRichText, CareerRichTextNode } from "@/lib/careers";
 import { fetchPayloadDocs } from "@/lib/cmsClient";
 import { CustomCursor } from "./CustomCursor";
 import { FooterSection } from "./LegacySections";
@@ -29,6 +29,17 @@ const tagColors: Record<string, string> = {
   internship: "#8A7CFF",
 };
 
+type RichTextSegment = {
+  format?: number | string;
+  text: string;
+};
+
+type DetailContentBlock = {
+  kind: "heading" | "item" | "paragraph";
+  key: string;
+  segments: RichTextSegment[];
+};
+
 function PageShell({ children }: { children: ReactNode }) {
   useEffect(() => initScrollController(), []);
 
@@ -52,8 +63,156 @@ function SectionMark({ current, label }: { current: string; label: string }) {
   );
 }
 
-function listItems(items?: { text?: string }[]) {
-  return Array.isArray(items) ? items.map((item) => item.text).filter((item): item is string => Boolean(item)) : [];
+function splitPastedListText(value: string) {
+  return value
+    .replace(/\r\n/g, "\n")
+    .replace(/((?:Kỹ năng\/\s*Chuyên môn|Thái độ\/Giá trị|Thu nhập|Phúc lợi khác|[A-ZÀ-Ỹ][^:\n]{1,70}):?)\s+-\s+/g, "$1\n- ")
+    .replace(/\s+(?=(?:Kỹ năng\/\s*Chuyên môn|Thái độ\/Giá trị|Thu nhập:?|Phúc lợi khác:?)\s*(?:\n|-))/g, "\n")
+    .split(/\n+|\s{2,}(?=[A-ZÀ-Ỹ][^:]{1,70}:\s*)|\s+-\s+(?=\S)/g)
+    .map((item) => item.replace(/^[-•]\s*/, "").trim())
+    .filter(Boolean);
+}
+
+function isHeadingLikeLine(text: string) {
+  return (
+    /^(Kỹ năng\/\s*Chuyên môn|Thái độ\/Giá trị|Thu nhập:?|Phúc lợi khác:?|Điểm cộng:)$/i.test(text.trim()) ||
+    (text.trim().endsWith(":") && text.trim().length <= 48)
+  );
+}
+
+function normalizeSegments(segments: RichTextSegment[]) {
+  const firstTextIndex = segments.findIndex((segment) => segment.text.trim().length > 0);
+  let lastTextIndex = -1;
+
+  for (let index = segments.length - 1; index >= 0; index -= 1) {
+    if (segments[index].text.trim().length > 0) {
+      lastTextIndex = index;
+      break;
+    }
+  }
+
+  if (firstTextIndex === -1 || lastTextIndex === -1) {
+    return [];
+  }
+
+  return segments.slice(firstTextIndex, lastTextIndex + 1).map((segment, index, sliced) => {
+    let text = segment.text;
+
+    if (index === 0) {
+      text = text.trimStart();
+    }
+
+    if (index === sliced.length - 1) {
+      text = text.trimEnd();
+    }
+
+    return { ...segment, text };
+  });
+}
+
+function getInlineSegments(node: CareerRichTextNode): RichTextSegment[] {
+  if (typeof node.text === "string") {
+    return [{ format: node.format, text: node.text }];
+  }
+
+  if (!Array.isArray(node.children)) {
+    return [];
+  }
+
+  return node.children.filter((child) => child.type !== "list").flatMap(getInlineSegments);
+}
+
+function textToBlocks(text: string, keyPrefix: string, kind: DetailContentBlock["kind"] = "item") {
+  return splitPastedListText(text).map<DetailContentBlock>((line, index) => ({
+    key: `${keyPrefix}-text-${index}`,
+    kind: isHeadingLikeLine(line) ? "heading" : kind,
+    segments: [{ text: line }],
+  }));
+}
+
+function addNodeBlock(blocks: DetailContentBlock[], node: CareerRichTextNode, kind: DetailContentBlock["kind"], key: string) {
+  const segments = normalizeSegments(getInlineSegments(node));
+
+  if (segments.length === 0) {
+    return;
+  }
+
+  const plainText = segments.map((segment) => segment.text).join("");
+  const splitLines = splitPastedListText(plainText);
+
+  if (splitLines.length > 1 && segments.length === 1) {
+    blocks.push(
+      ...splitLines.map((line, index) => ({
+        key: `${key}-split-${index}`,
+        kind: isHeadingLikeLine(line) ? "heading" : index === 0 ? kind : "item",
+        segments: [{ format: segments[0].format, text: line }],
+      })),
+    );
+    return;
+  }
+
+  blocks.push({ key, kind, segments });
+}
+
+function extractRichTextBlocks(value?: CareerRichText, keyPrefix = "rich-text"): DetailContentBlock[] {
+  if (!value) {
+    return [];
+  }
+
+  if (typeof value === "string") {
+    return textToBlocks(value, keyPrefix);
+  }
+
+  const children = value.root?.children;
+
+  if (!Array.isArray(children)) {
+    return [];
+  }
+
+  const blocks: DetailContentBlock[] = [];
+
+  const visit = (node: CareerRichTextNode, key: string) => {
+    if (node.type === "list" && Array.isArray(node.children)) {
+      node.children.forEach((child, index) => visit(child, `${key}-list-${index}`));
+      return;
+    }
+
+    if (node.type === "listitem") {
+      addNodeBlock(blocks, node, "item", key);
+      node.children?.filter((child) => child.type === "list").forEach((child, index) => visit(child, `${key}-nested-${index}`));
+      return;
+    }
+
+    if (node.type === "heading") {
+      addNodeBlock(blocks, node, "heading", key);
+      return;
+    }
+
+    if (node.type === "paragraph") {
+      addNodeBlock(blocks, node, "paragraph", key);
+      return;
+    }
+
+    if (Array.isArray(node.children)) {
+      node.children.forEach((child, index) => visit(child, `${key}-child-${index}`));
+      return;
+    }
+
+    if (typeof node.text === "string") {
+      blocks.push(...textToBlocks(node.text, key));
+    }
+  };
+
+  children.forEach((child, index) => visit(child, `${keyPrefix}-${index}`));
+  return blocks;
+}
+
+function detailBlocks(items?: { text?: CareerRichText }[]) {
+  return Array.isArray(items) ? items.flatMap((item, index) => extractRichTextBlocks(item.text, `item-${index}`)) : [];
+}
+
+function fallbackBlocks(items: string[], keyPrefix: string) {
+  return items.flatMap((item, index) => textToBlocks(item, `${keyPrefix}-${index}`));
 }
 
 function JobCard({ job, index }: { job: CareerItem; index: number }) {
@@ -266,16 +425,58 @@ function DetailSection({
   );
 }
 
-function BulletList({ items }: { items: string[] }) {
+function hasTextFormat(format: RichTextSegment["format"], flag: number, name: string) {
+  if (typeof format === "number") {
+    return (format & flag) !== 0;
+  }
+
+  if (typeof format === "string") {
+    return format.split(/\s+/).includes(name);
+  }
+
+  return false;
+}
+
+function renderRichTextSegment(segment: RichTextSegment, index: number) {
+  const classes = [
+    hasTextFormat(segment.format, 1, "bold") ? "font-black text-white" : "",
+    hasTextFormat(segment.format, 2, "italic") ? "italic" : "",
+    hasTextFormat(segment.format, 4, "strikethrough") ? "line-through" : "",
+    hasTextFormat(segment.format, 8, "underline") ? "underline underline-offset-4" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <ul className="grid gap-4">
-      {items.map((item) => (
-        <li key={item} className="flex gap-3">
-          <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F26522]" />
-          <span>{item}</span>
-        </li>
+    <span key={`${segment.text}-${index}`} className={classes || undefined}>
+      {segment.text}
+    </span>
+  );
+}
+
+function DetailContentList({ blocks }: { blocks: DetailContentBlock[] }) {
+  return (
+    <div className="grid gap-6 md:gap-7">
+      {blocks.map((block, index) => (
+        <div key={`${block.key}-${index}`} className="grid grid-cols-[10px_minmax(0,1fr)] gap-5">
+          <span
+            className={`mt-[0.72em] h-2 w-2 shrink-0 rounded-full bg-[#F26522] shadow-[0_0_18px_rgba(242,101,34,0.36)] ${
+              block.kind === "heading" ? "md:mt-[0.82em]" : ""
+            }`}
+            aria-hidden="true"
+          />
+          <div
+            className={
+              block.kind === "heading"
+                ? "min-w-0 text-xl font-black leading-snug text-white md:text-2xl"
+                : "min-w-0 text-lg font-extrabold leading-9 text-white/88 md:text-[22px] md:leading-[1.75]"
+            }
+          >
+            {block.segments.map(renderRichTextSegment)}
+          </div>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }
 
@@ -455,12 +656,13 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
 }
 
 export function CareerDetail({ job }: { job: CareerItem }) {
-  const responsibilities = listItems(job.responsibilities);
-  const requirements = listItems(job.requirements);
-  const benefits = listItems(job.benefits);
-  const displayedResponsibilities = responsibilities.length > 0 ? responsibilities : getFallbackResponsibilities(job);
-  const displayedRequirements = requirements.length > 0 ? requirements : getFallbackRequirements(job);
-  const displayedBenefits = benefits.length > 0 ? benefits : getFallbackBenefits();
+  const responsibilities = detailBlocks(job.responsibilities);
+  const requirements = detailBlocks(job.requirements);
+  const benefits = detailBlocks(job.benefits);
+  const displayedResponsibilities =
+    responsibilities.length > 0 ? responsibilities : fallbackBlocks(getFallbackResponsibilities(job), "fallback-responsibility");
+  const displayedRequirements = requirements.length > 0 ? requirements : fallbackBlocks(getFallbackRequirements(job), "fallback-requirement");
+  const displayedBenefits = benefits.length > 0 ? benefits : fallbackBlocks(getFallbackBenefits(), "fallback-benefit");
   const tag = job.tag || "hiring";
   const applyUrl = getApplyUrl(job);
   const larkUrl = isActionUrl(job.larkUrl) ? job.larkUrl : null;
@@ -554,13 +756,13 @@ export function CareerDetail({ job }: { job: CareerItem }) {
               <p>{description}</p>
             </DetailSection>
             <DetailSection eyebrow="WHAT YOU WILL DO" title="What you will do">
-              <BulletList items={displayedResponsibilities} />
+              <DetailContentList blocks={displayedResponsibilities} />
             </DetailSection>
             <DetailSection eyebrow="WHAT WE ARE LOOKING FOR" title="What we are looking for">
-              <BulletList items={displayedRequirements} />
+              <DetailContentList blocks={displayedRequirements} />
             </DetailSection>
             <DetailSection eyebrow="WHAT YOU CAN EXPECT" title="What you can expect">
-              <BulletList items={displayedBenefits} />
+              <DetailContentList blocks={displayedBenefits} />
             </DetailSection>
             <DetailSection eyebrow="WORKING TIME" title="Working time">
               <p>{job.workingTime || "Thông tin sẽ được trao đổi cụ thể trong quá trình phỏng vấn."}</p>

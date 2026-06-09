@@ -102,8 +102,12 @@ function fitTextElement(element: HTMLElement, pretext: PretextModule) {
   }
 }
 
-export function usePretextHomeTextFit() {
+export function usePretextHomeTextFit(enabled = true) {
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     let cancelled = false;
     let resizeObserver: ResizeObserver | null = null;
     let raf = 0;
@@ -155,5 +159,5 @@ export function usePretextHomeTextFit() {
       resizeObserver?.disconnect();
       removeResizeListener?.();
     };
-  }, []);
+  }, [enabled]);
 }

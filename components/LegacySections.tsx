@@ -170,27 +170,22 @@ const scaleNodes = [
   {
     title: "Why this is where you belong.",
     body: "We don't scale with numbers — we scale with people who dare to go beyond.",
-    chips: [],
-    // chips: ["GoBeyond Culture", "Bold Mission", "Pushing Boundaries"],
+    chips: ["GoBeyond Culture", "Bold Mission", "Pushing Boundaries"],
   },
   {
     title: "A Strong Core Team.",
     body: "Here, you don't work for leaders — you become one. We build our team with creative, knowledgeable people who are ready for any challenge. You're empowered to decide and lead from day one.",
-    // chips: ["Creative Leadership", "Knowledge-Driven", "Ready for Challenges"],
-        chips: [],
-
+    chips: ["Creative Leadership", "Knowledge-Driven", "Ready for Challenges"],
   },
   {
     title: "A Global Supplier Network.",
     body: "Join GoBeyond and step onto a global stage — connecting product sources, fulfillment partners, and storefronts across markets. Your vision won't be limited by borders.",
-    // chips: ["Global Suppliers", "Optimized Storefronts", "International Fulfillment"],
-    chips: [],
+    chips: ["Global Suppliers", "Optimized Storefronts", "International Fulfillment"],
   },
   {
     title: "AI & Automation First.",
     body: "Machines handle the repetitive; people create. AI frees you from busywork so you can focus on what matters — strategy, ideas, and impact. Work smart, not just hard.",
-    // chips: ["AI-First Mindset", "Workflow Automation", "Peak Performance"],
-    chips: [],
+    chips: ["AI-First Mindset", "Workflow Automation", "Peak Performance"],
   },
 ];
 
@@ -395,7 +390,7 @@ export function OperationsSection() {
         <div className="operation-content relative mx-auto grid min-h-screen max-w-[92rem] items-center gap-10 px-5 py-20 sm:px-8 lg:px-12">
           <div data-scroll-reveal className="operation-copy relative z-[3]">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">COMPANY OPERATION</p>
-            <h2 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(4.2rem,7vw,8rem)] font-black leading-[0.9] tracking-normal text-white">
+            <h2 data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(4.2rem,7vw,8rem)] font-black leading-[0.9] tracking-normal text-white">
               How Gobe Operate
             </h2>
           </div>
@@ -419,8 +414,8 @@ export function OperationsSection() {
               >
                 <span className="operation-index">{item.index}</span>
                 <span>
-                  <h3 data-pretext-fit data-pretext-max-lines="1" data-pretext-min-scale="0.82" className="text-[clamp(2rem,3vw,3rem)] font-black leading-none text-white">{item.title}</h3>
-                  <p data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.9" className="mt-2 text-base font-medium leading-6 text-white/68">{item.body}</p>
+                  <h3 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="text-[clamp(2rem,3vw,3rem)] font-black leading-none text-white">{item.title}</h3>
+                  <p className="operation-summary mt-2 text-base font-medium leading-6 text-white/68">{item.body}</p>
                   <p className="operation-expanded-copy">{item.fullBody}</p>
                 </span>
                 <span className="hidden h-[3px] w-full bg-[linear-gradient(90deg,#F26522,transparent)] opacity-75 sm:block" aria-hidden="true" />
@@ -488,7 +483,7 @@ export function ScaleSection() {
             {scaleNodes.map((node) => (
               <article key={node.title} data-scroll-card className="scale-card border border-white/12 bg-[#111622]/76 p-7 shadow-[0_28px_82px_rgba(0,0,0,0.32)] backdrop-blur-md">
                 <h3 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="text-[clamp(1.9rem,2.4vw,3rem)] font-black leading-tight text-white">{node.title}</h3>
-                <p data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.9" className="mt-4 text-lg font-medium leading-8 text-white/66">{node.body}</p>
+                <p className="mt-4 text-lg font-medium leading-8 text-white/66">{node.body}</p>
                 <div className="mt-6 flex flex-wrap gap-2">
                   {node.chips.map((chip) => (
                     <span key={chip} className="rounded-full border border-white/12 bg-white/[0.035] px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-white/78">

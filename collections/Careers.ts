@@ -1,4 +1,4 @@
-import type { CollectionBeforeValidateHook, CollectionConfig } from "payload";
+import type { CollectionAfterReadHook, CollectionBeforeValidateHook, CollectionConfig } from "payload";
 
 const isAuthenticated = ({ req }: { req: { user?: unknown } }) => Boolean(req.user);
 
@@ -15,6 +15,8 @@ const seedCareer: CollectionBeforeValidateHook = ({ data }) => {
     return data;
   }
 
+  normalizeCareerDetailFields(data);
+
   if (!data.slug && data.title) {
     data.slug = slugify(String(data.title));
   }
@@ -25,6 +27,68 @@ const seedCareer: CollectionBeforeValidateHook = ({ data }) => {
 
   return data;
 };
+
+const textToLexicalRichText = (value: string) => ({
+  root: {
+    type: "root",
+    format: "",
+    indent: 0,
+    version: 1,
+    direction: null,
+    children: value.trim()
+      ? [
+          {
+            type: "paragraph",
+            format: "",
+            indent: 0,
+            version: 1,
+            direction: null,
+            children: [
+              {
+                type: "text",
+                text: value,
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                version: 1,
+              },
+            ],
+          },
+        ]
+      : [],
+  },
+});
+
+const normalizeCareerDetailFields = (data: Record<string, unknown>) => {
+  for (const field of ["responsibilities", "requirements", "benefits"]) {
+    const rows = data[field];
+
+    if (!Array.isArray(rows)) {
+      continue;
+    }
+
+    for (const row of rows) {
+      if (row && typeof row === "object" && typeof (row as { text?: unknown }).text === "string") {
+        (row as { text: unknown }).text = textToLexicalRichText((row as { text: string }).text);
+      }
+    }
+  }
+};
+
+const normalizeCareerDetailsAfterRead: CollectionAfterReadHook = ({ doc }) => {
+  normalizeCareerDetailFields(doc as Record<string, unknown>);
+  return doc;
+};
+
+const careerDetailRichTextField = () => ({
+  name: "text",
+  type: "richText" as const,
+  required: true,
+  admin: {
+    description: "Có thể paste nhiều dòng hoặc dùng bullet list.",
+  },
+});
 
 export const Careers: CollectionConfig = {
   slug: "careers",
@@ -58,6 +122,7 @@ export const Careers: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [seedCareer],
+    afterRead: [normalizeCareerDetailsAfterRead],
   },
   versions: {
     drafts: {
@@ -180,35 +245,17 @@ export const Careers: CollectionConfig = {
     {
       name: "responsibilities",
       type: "array",
-      fields: [
-        {
-          name: "text",
-          type: "text",
-          required: true,
-        },
-      ],
+      fields: [careerDetailRichTextField()],
     },
     {
       name: "requirements",
       type: "array",
-      fields: [
-        {
-          name: "text",
-          type: "text",
-          required: true,
-        },
-      ],
+      fields: [careerDetailRichTextField()],
     },
     {
       name: "benefits",
       type: "array",
-      fields: [
-        {
-          name: "text",
-          type: "text",
-          required: true,
-        },
-      ],
+      fields: [careerDetailRichTextField()],
     },
     {
       name: "workingTime",

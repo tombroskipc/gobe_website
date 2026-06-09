@@ -12,6 +12,22 @@ export type CareerTag =
   | "humanResource"
   | "internship";
 
+export type CareerRichTextNode = {
+  type?: string;
+  text?: string;
+  format?: number | string;
+  tag?: string;
+  children?: CareerRichTextNode[];
+};
+
+export type CareerRichText =
+  | string
+  | {
+      root?: {
+        children?: CareerRichTextNode[];
+      };
+    };
+
 export type CareerItem = {
   id?: string | number;
   title: string;
@@ -27,9 +43,9 @@ export type CareerItem = {
   larkUrl?: string;
   applyUrl?: string;
   description?: string;
-  responsibilities?: { text?: string }[];
-  requirements?: { text?: string }[];
-  benefits?: { text?: string }[];
+  responsibilities?: { text?: CareerRichText }[];
+  requirements?: { text?: CareerRichText }[];
+  benefits?: { text?: CareerRichText }[];
   workingTime?: string;
   publishedAt?: string;
 };

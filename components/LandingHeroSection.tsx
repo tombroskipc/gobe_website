@@ -1,6 +1,5 @@
 "use client";
 
-import gsap from "gsap";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
@@ -19,10 +18,7 @@ export function LandingHeroSection() {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [shouldLoadInlineModel, setShouldLoadInlineModel] = useState(false);
-  const modalBackdropRef = useRef<HTMLButtonElement>(null);
   const modelStageRef = useRef<HTMLDivElement>(null);
-  const modalModelRef = useRef<HTMLDivElement>(null);
-  const modelOpenOriginRef = useRef<DOMRect | null>(null);
 
   useEffect(() => {
     if (shouldLoadInlineModel) {
@@ -79,35 +75,8 @@ export function LandingHeroSection() {
     document.addEventListener("keydown", onKeyDown);
     window.requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
     const resizeTimer = window.setTimeout(() => window.dispatchEvent(new Event("resize")), 260);
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const ctx = gsap.context(() => {
-      const stage = modalModelRef.current;
-      const origin = modelOpenOriginRef.current;
-
-      if (reduceMotion || !stage || !origin) {
-        gsap.set(modalBackdropRef.current, { opacity: 1 });
-        gsap.set(stage, { opacity: 1, x: 0, y: 0, scale: 1 });
-        return;
-      }
-
-      const current = stage.getBoundingClientRect();
-      const fromX = origin.left + origin.width / 2 - (current.left + current.width / 2);
-      const fromY = origin.top + origin.height / 2 - (current.top + current.height / 2);
-      const fromScale = Math.max(
-        0.32,
-        Math.min(origin.width / current.width, origin.height / current.height),
-      );
-
-      gsap.fromTo(modalBackdropRef.current, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" });
-      gsap.fromTo(
-        stage,
-        { opacity: 0.96, x: fromX, y: fromY, scale: fromScale },
-        { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.82, ease: "power4.out" },
-      );
-    });
 
     return () => {
-      ctx.revert();
       window.clearTimeout(resizeTimer);
       document.removeEventListener("keydown", onKeyDown);
       document.documentElement.classList.remove("hero-model-open");
@@ -115,41 +84,13 @@ export function LandingHeroSection() {
   }, [isModelOpen]);
 
   const openModel = () => {
-    modelOpenOriginRef.current = modelStageRef.current?.getBoundingClientRect() ?? null;
     setShouldLoadInlineModel(true);
     setIsModelOpen(true);
   };
 
   const closeModel = () => {
-    if (!isModelOpen) {
-      return;
-    }
-
-    const stage = modalModelRef.current;
-    const origin = modelOpenOriginRef.current;
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const current = stage?.getBoundingClientRect();
-    const toX = origin && current
-      ? origin.left + origin.width / 2 - (current.left + current.width / 2)
-      : 0;
-    const toY = origin && current
-      ? origin.top + origin.height / 2 - (current.top + current.height / 2)
-      : 0;
-    const toScale = origin && current
-      ? Math.max(0.32, Math.min(origin.width / current.width, origin.height / current.height))
-      : 0.55;
-
-    gsap
-      .timeline({
-        defaults: { ease: "power2.inOut" },
-        onComplete: () => {
-          document.documentElement.classList.remove("hero-model-open");
-          gsap.set(stage, { clearProps: "opacity,transform" });
-          setIsModelOpen(false);
-        },
-      })
-      .to(stage, reduceMotion ? { opacity: 1, duration: 0 } : { opacity: 0.96, x: toX, y: toY, scale: toScale, duration: 0.34 }, 0)
-      .to(modalBackdropRef.current, { opacity: 0, duration: reduceMotion ? 0 : 0.3 }, 0.04);
+    document.documentElement.classList.remove("hero-model-open");
+    setIsModelOpen(false);
   };
 
   return (
@@ -227,15 +168,13 @@ export function LandingHeroSection() {
       {isModelOpen ? (
         <>
           <button
-            ref={modalBackdropRef}
             type="button"
-            className="fixed inset-0 z-[190] cursor-zoom-out bg-[#02040c]/78 opacity-0 backdrop-blur-2xl"
+            className="fixed inset-0 z-[190] cursor-zoom-out bg-[#02040c]/78 opacity-100 backdrop-blur-2xl transition-opacity duration-300"
             aria-label="Đóng mô hình quả địa cầu"
             onClick={closeModel}
           />
           <div
-            ref={modalModelRef}
-            className="pointer-events-none fixed inset-0 z-[200] flex h-[100dvh] w-screen origin-center items-center justify-center overflow-visible opacity-0"
+            className="pointer-events-none fixed inset-0 z-[200] flex h-[100dvh] w-screen origin-center items-center justify-center overflow-visible opacity-100 transition-[opacity,transform] duration-500 ease-out"
             aria-hidden="true"
           >
             <div className="relative h-full w-full">

@@ -8,6 +8,10 @@ export function CustomCursor() {
   const [state, setState] = useState("idle");
 
   useEffect(() => {
+    if (!window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 768px)").matches) {
+      return;
+    }
+
     let x = window.innerWidth / 2;
     let y = window.innerHeight / 2;
     let tx = x;
@@ -38,7 +42,7 @@ export function CustomCursor() {
       frame = requestAnimationFrame(tick);
     }
 
-    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("gobe-cursor", onCursor);
     frame = requestAnimationFrame(tick);
 

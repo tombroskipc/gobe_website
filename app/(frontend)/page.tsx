@@ -1,5 +1,5 @@
-import { ClientExperience } from "@/components/ClientPages";
+import { Experience } from "@/components/Experience";
 
 export default function Home() {
-  return <ClientExperience />;
+  return <Experience />;
 }
