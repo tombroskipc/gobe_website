@@ -53,48 +53,52 @@ export function initScrollController() {
     });
 
     gsap.utils.toArray<HTMLElement>("[data-scroll-section]").forEach((section) => {
-      const revealTargets = section.querySelectorAll<HTMLElement>("[data-scroll-reveal]");
-      if (revealTargets.length) {
-        gsap.fromTo(
-          revealTargets,
-          { autoAlpha: 0, y: 72, rotateX: -5, scale: 0.98 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            rotateX: 0,
-            scale: 1,
-            duration: 1,
-            ease: "power4.out",
-            stagger: 0.08,
-            scrollTrigger: {
-              trigger: section,
-              start: "top 74%",
-              end: "top 30%",
-              toggleActions: "play none none reverse",
-            },
-          },
-        );
-      }
+      const isHomeStoryPanel = section.hasAttribute("data-home-story-section");
 
-      const cards = section.querySelectorAll<HTMLElement>("[data-scroll-card]");
-      if (cards.length) {
-        gsap.fromTo(
-          cards,
-          { autoAlpha: 0, clipPath: "inset(18% 0% 0% 0%)", filter: "blur(10px)" },
-          {
-            autoAlpha: 1,
-            clipPath: "inset(0% 0% 0% 0%)",
-            filter: "blur(0px)",
-            duration: 0.95,
-            ease: "power3.out",
-            stagger: 0.055,
-            scrollTrigger: {
-              trigger: section,
-              start: "top 70%",
-              toggleActions: "play none none reverse",
+      if (!isHomeStoryPanel) {
+        const revealTargets = section.querySelectorAll<HTMLElement>("[data-scroll-reveal]");
+        if (revealTargets.length) {
+          gsap.fromTo(
+            revealTargets,
+            { autoAlpha: 0, y: 72, rotateX: -5, scale: 0.98 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              rotateX: 0,
+              scale: 1,
+              duration: 1,
+              ease: "power4.out",
+              stagger: 0.08,
+              scrollTrigger: {
+                trigger: section,
+                start: "top 74%",
+                end: "top 30%",
+                toggleActions: "play none none reverse",
+              },
             },
-          },
-        );
+          );
+        }
+
+        const cards = section.querySelectorAll<HTMLElement>("[data-scroll-card]");
+        if (cards.length) {
+          gsap.fromTo(
+            cards,
+            { autoAlpha: 0, clipPath: "inset(18% 0% 0% 0%)", filter: "blur(10px)" },
+            {
+              autoAlpha: 1,
+              clipPath: "inset(0% 0% 0% 0%)",
+              filter: "blur(0px)",
+              duration: 0.95,
+              ease: "power3.out",
+              stagger: 0.055,
+              scrollTrigger: {
+                trigger: section,
+                start: "top 70%",
+                toggleActions: "play none none reverse",
+              },
+            },
+          );
+        }
       }
 
       const media = section.querySelectorAll<HTMLElement>("[data-scroll-media]");

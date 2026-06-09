@@ -15,6 +15,7 @@ const seedCareer: CollectionBeforeValidateHook = ({ data }) => {
     return data;
   }
 
+  normalizeCareerRichTextDescription(data);
   normalizeCareerDetailFields(data);
 
   if (!data.slug && data.title) {
@@ -76,7 +77,14 @@ const normalizeCareerDetailFields = (data: Record<string, unknown>) => {
   }
 };
 
+const normalizeCareerRichTextDescription = (data: Record<string, unknown>) => {
+  if (typeof data.description === "string") {
+    data.description = textToLexicalRichText(data.description);
+  }
+};
+
 const normalizeCareerDetailsAfterRead: CollectionAfterReadHook = ({ doc }) => {
+  normalizeCareerRichTextDescription(doc as Record<string, unknown>);
   normalizeCareerDetailFields(doc as Record<string, unknown>);
   return doc;
 };
@@ -89,6 +97,11 @@ const careerDetailRichTextField = () => ({
     description: "Có thể paste nhiều dòng hoặc dùng bullet list.",
   },
 });
+
+const legacyAdminConfig = {
+  condition: () => false,
+  description: "Legacy field kept for old data fallback. Use JD Content for new roles.",
+};
 
 export const Careers: CollectionConfig = {
   slug: "careers",
@@ -237,24 +250,29 @@ export const Careers: CollectionConfig = {
     },
     {
       name: "description",
-      type: "textarea",
+      label: "JD Content",
+      type: "richText",
       admin: {
-        rows: 5,
+        description:
+          "Nhập toàn bộ JD ở đây: mô tả công việc, yêu cầu công việc, quyền lợi. Có thể paste heading và bullet list.",
       },
     },
     {
       name: "responsibilities",
       type: "array",
+      admin: legacyAdminConfig,
       fields: [careerDetailRichTextField()],
     },
     {
       name: "requirements",
       type: "array",
+      admin: legacyAdminConfig,
       fields: [careerDetailRichTextField()],
     },
     {
       name: "benefits",
       type: "array",
+      admin: legacyAdminConfig,
       fields: [careerDetailRichTextField()],
     },
     {

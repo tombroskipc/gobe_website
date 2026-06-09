@@ -74,9 +74,12 @@ function splitPastedListText(value: string) {
 }
 
 function isHeadingLikeLine(text: string) {
+  const trimmed = text.trim();
+
   return (
-    /^(Kỹ năng\/\s*Chuyên môn|Thái độ\/Giá trị|Thu nhập:?|Phúc lợi khác:?|Điểm cộng:)$/i.test(text.trim()) ||
-    (text.trim().endsWith(":") && text.trim().length <= 48)
+    /^(?:[IVX]+\/\s*)?(?:Mô tả công việc|Yêu cầu công việc|Quyền lợi|Kỹ năng\/\s*Chuyên môn|Thái độ\/Giá trị|Thu nhập:?|Phúc lợi khác:?|Điểm cộng:)$/i.test(trimmed) ||
+    /^[IVX]+\/\s+\S/.test(trimmed) ||
+    (trimmed.endsWith(":") && trimmed.length <= 48)
   );
 }
 
@@ -456,26 +459,39 @@ function renderRichTextSegment(segment: RichTextSegment, index: number) {
 
 function DetailContentList({ blocks }: { blocks: DetailContentBlock[] }) {
   return (
-    <div className="grid gap-6 md:gap-7">
-      {blocks.map((block, index) => (
-        <div key={`${block.key}-${index}`} className="grid grid-cols-[10px_minmax(0,1fr)] gap-5">
-          <span
-            className={`mt-[0.72em] h-2 w-2 shrink-0 rounded-full bg-[#F26522] shadow-[0_0_18px_rgba(242,101,34,0.36)] ${
-              block.kind === "heading" ? "md:mt-[0.82em]" : ""
-            }`}
-            aria-hidden="true"
-          />
-          <div
-            className={
-              block.kind === "heading"
-                ? "min-w-0 text-xl font-black leading-snug text-white md:text-2xl"
-                : "min-w-0 text-lg font-extrabold leading-9 text-white/88 md:text-[22px] md:leading-[1.75]"
-            }
-          >
-            {block.segments.map(renderRichTextSegment)}
+    <div className="grid gap-5 md:gap-6">
+      {blocks.map((block, index) => {
+        const key = `${block.key}-${index}`;
+
+        if (block.kind === "heading") {
+          return (
+            <h3 key={key} className="pt-3 text-xl font-black uppercase leading-snug text-white md:text-2xl">
+              <span className="mr-3 text-[#F26522]">/</span>
+              {block.segments.map(renderRichTextSegment)}
+            </h3>
+          );
+        }
+
+        if (block.kind === "paragraph") {
+          return (
+            <p key={key} className="text-base font-semibold leading-8 text-white/72 md:text-[18px] md:leading-9">
+              {block.segments.map(renderRichTextSegment)}
+            </p>
+          );
+        }
+
+        return (
+          <div key={key} className="grid grid-cols-[10px_minmax(0,1fr)] gap-5">
+            <span
+              className="mt-[0.72em] h-2 w-2 shrink-0 rounded-full bg-[#F26522] shadow-[0_0_18px_rgba(242,101,34,0.36)]"
+              aria-hidden="true"
+            />
+            <div className="min-w-0 text-lg font-extrabold leading-9 text-white/88 md:text-[22px] md:leading-[1.75]">
+              {block.segments.map(renderRichTextSegment)}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -656,9 +672,11 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
 }
 
 export function CareerDetail({ job }: { job: CareerItem }) {
+  const jdContent = typeof job.description === "string" ? [] : extractRichTextBlocks(job.description, "jd-content");
   const responsibilities = detailBlocks(job.responsibilities);
   const requirements = detailBlocks(job.requirements);
   const benefits = detailBlocks(job.benefits);
+  const hasJdContent = jdContent.length > 0;
   const displayedResponsibilities =
     responsibilities.length > 0 ? responsibilities : fallbackBlocks(getFallbackResponsibilities(job), "fallback-responsibility");
   const displayedRequirements = requirements.length > 0 ? requirements : fallbackBlocks(getFallbackRequirements(job), "fallback-requirement");
@@ -667,7 +685,7 @@ export function CareerDetail({ job }: { job: CareerItem }) {
   const applyUrl = getApplyUrl(job);
   const larkUrl = isActionUrl(job.larkUrl) ? job.larkUrl : null;
   const description =
-    job.description ||
+    (typeof job.description === "string" ? job.description : "") ||
     job.excerpt ||
     "GoBeyond đang tìm kiếm những đồng đội sẵn sàng đi xa hơn trong hành trình xây dựng hệ thống thương mại điện tử toàn cầu.";
   const displayDate = getDisplayDate(job);
@@ -755,15 +773,23 @@ export function CareerDetail({ job }: { job: CareerItem }) {
             <DetailSection eyebrow="ABOUT THE ROLE" title="About the role">
               <p>{description}</p>
             </DetailSection>
-            <DetailSection eyebrow="WHAT YOU WILL DO" title="What you will do">
-              <DetailContentList blocks={displayedResponsibilities} />
-            </DetailSection>
-            <DetailSection eyebrow="WHAT WE ARE LOOKING FOR" title="What we are looking for">
-              <DetailContentList blocks={displayedRequirements} />
-            </DetailSection>
-            <DetailSection eyebrow="WHAT YOU CAN EXPECT" title="What you can expect">
-              <DetailContentList blocks={displayedBenefits} />
-            </DetailSection>
+            {hasJdContent ? (
+              <DetailSection eyebrow="JOB DESCRIPTION" title="Chi tiết JD">
+                <DetailContentList blocks={jdContent} />
+              </DetailSection>
+            ) : (
+              <>
+                <DetailSection eyebrow="WHAT YOU WILL DO" title="What you will do">
+                  <DetailContentList blocks={displayedResponsibilities} />
+                </DetailSection>
+                <DetailSection eyebrow="WHAT WE ARE LOOKING FOR" title="What we are looking for">
+                  <DetailContentList blocks={displayedRequirements} />
+                </DetailSection>
+                <DetailSection eyebrow="WHAT YOU CAN EXPECT" title="What you can expect">
+                  <DetailContentList blocks={displayedBenefits} />
+                </DetailSection>
+              </>
+            )}
             <DetailSection eyebrow="WORKING TIME" title="Working time">
               <p>{job.workingTime || "Thông tin sẽ được trao đổi cụ thể trong quá trình phỏng vấn."}</p>
             </DetailSection>

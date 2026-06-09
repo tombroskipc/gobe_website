@@ -336,7 +336,27 @@ export interface Career {
    * Application link or mailto URL.
    */
   applyUrl?: string | null;
-  description?: string | null;
+  /**
+   * Nhập toàn bộ JD ở đây: mô tả công việc, yêu cầu công việc, quyền lợi. Có thể paste heading và bullet list.
+   */
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Legacy field kept for old data fallback. Use JD Content for new roles.
+   */
   responsibilities?:
     | {
         /**
@@ -360,6 +380,9 @@ export interface Career {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Legacy field kept for old data fallback. Use JD Content for new roles.
+   */
   requirements?:
     | {
         /**
@@ -383,6 +406,9 @@ export interface Career {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Legacy field kept for old data fallback. Use JD Content for new roles.
+   */
   benefits?:
     | {
         /**

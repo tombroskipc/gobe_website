@@ -166,12 +166,12 @@ const operations = [
 
 type OperationItem = (typeof operations)[number];
 
+const scaleIntro = {
+  title: "Why this is where you belong.",
+  body: "We don't scale with numbers — we scale with people who dare to go beyond.",
+};
+
 const scaleNodes = [
-  {
-    title: "Why this is where you belong.",
-    body: "We don't scale with numbers — we scale with people who dare to go beyond.",
-    chips: ["GoBeyond Culture", "Bold Mission", "Pushing Boundaries"],
-  },
   {
     title: "A Strong Core Team.",
     body: "Here, you don't work for leaders — you become one. We build our team with creative, knowledgeable people who are ready for any challenge. You're empowered to decide and lead from day one.",
@@ -477,6 +477,10 @@ export function ScaleSection() {
             <h2 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(3.4rem,9vw,8.5rem)] font-black leading-[0.88] tracking-normal text-white">
               How GoBe Scale
             </h2>
+            <div className="scale-intro-copy">
+              <h3 className="scale-intro-title">{scaleIntro.title}</h3>
+              <p className="scale-intro-body">{scaleIntro.body}</p>
+            </div>
           </div>
 
           <div className="scale-card-stack grid gap-6">

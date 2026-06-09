@@ -42,7 +42,7 @@ export type CareerItem = {
   excerpt?: string;
   larkUrl?: string;
   applyUrl?: string;
-  description?: string;
+  description?: string | CareerRichText;
   responsibilities?: { text?: CareerRichText }[];
   requirements?: { text?: CareerRichText }[];
   benefits?: { text?: CareerRichText }[];

@@ -126,6 +126,54 @@ function isOrbitB(child: THREE.Object3D) {
   return child.name.toLowerCase().includes("orange_globe_ring_tilted_orbit_b");
 }
 
+function isCenterLogo(child: THREE.Object3D) {
+  return child.name.toLowerCase().includes("logomesh");
+}
+
+function moveRootToObjectCenter(root: THREE.Group, objects: THREE.Object3D[], stage: THREE.Group) {
+  if (objects.length === 0) return;
+
+  const box = new THREE.Box3();
+  objects.forEach((object) => box.expandByObject(object));
+  if (box.isEmpty()) return;
+
+  const center = box.getCenter(new THREE.Vector3());
+  root.position.copy(stage.worldToLocal(center));
+  root.updateMatrixWorld(true);
+}
+
+function faceLogoRootToCamera(root: THREE.Group, logo: THREE.Object3D, camera: THREE.Camera) {
+  root.updateMatrixWorld(true);
+  logo.updateMatrixWorld(true);
+
+  const logoCenter = root.getWorldPosition(new THREE.Vector3());
+  const cameraPosition = camera.getWorldPosition(new THREE.Vector3());
+  const cameraQuaternion = camera.getWorldQuaternion(new THREE.Quaternion());
+  const front = cameraPosition.sub(logoCenter).normalize();
+  const up = new THREE.Vector3(0, 1, 0).applyQuaternion(cameraQuaternion).projectOnPlane(front);
+
+  if (up.lengthSq() < 0.0001) {
+    up.set(0, 1, 0).projectOnPlane(front);
+  }
+
+  up.normalize();
+
+  const right = new THREE.Vector3().crossVectors(up, front).normalize();
+  const correctedUp = new THREE.Vector3().crossVectors(front, right).normalize();
+  const logoFront = front.clone().negate();
+  const logoUp = correctedUp.clone().negate();
+  const desiredLogoWorldQuaternion = new THREE.Quaternion().setFromRotationMatrix(
+    new THREE.Matrix4().makeBasis(right, logoUp, logoFront),
+  );
+  const currentLogoWorldQuaternion = logo.getWorldQuaternion(new THREE.Quaternion());
+  const worldDelta = desiredLogoWorldQuaternion.multiply(currentLogoWorldQuaternion.invert());
+  const parentWorldQuaternion = root.parent?.getWorldQuaternion(new THREE.Quaternion()) ?? new THREE.Quaternion();
+  const localDelta = parentWorldQuaternion.clone().invert().multiply(worldDelta).multiply(parentWorldQuaternion);
+
+  root.quaternion.copy(localDelta);
+  root.updateMatrixWorld(true);
+}
+
 function ModelContent({
   scale,
   autoRotate,
@@ -206,9 +254,11 @@ function ModelContent({
 
               const stage = new THREE.Group();
               const globeRoot = new THREE.Group();
+              const stationaryLogoRoot = new THREE.Group();
               const orangeRingRoot = new THREE.Group();
               const orangeOrbitARoot = new THREE.Group();
               const orangeOrbitBRoot = new THREE.Group();
+              const centerLogoObjects: THREE.Object3D[] = [];
               const mainRingObjects: THREE.Object3D[] = [];
               const orbitAObjects: THREE.Object3D[] = [];
               const orbitBObjects: THREE.Object3D[] = [];
@@ -216,6 +266,7 @@ function ModelContent({
               globeRoot.rotation.copy(MODEL_BASE_ROTATION);
               globeRoot.add(scene);
               stage.add(globeRoot);
+              stage.add(stationaryLogoRoot);
               stage.add(orangeRingRoot);
               stage.add(orangeOrbitARoot);
               stage.add(orangeOrbitBRoot);
@@ -224,6 +275,9 @@ function ModelContent({
               stage.position.y = MODEL_VERTICAL_OFFSET;
               stage.position.y += modelOffsetY;
               scene.traverse((child) => {
+                if (isCenterLogo(child)) {
+                  centerLogoObjects.push(child);
+                }
                 if (isMainOrangeRing(child)) {
                   mainRingObjects.push(child);
                 }
@@ -235,6 +289,8 @@ function ModelContent({
                 }
               });
               stage.updateMatrixWorld(true);
+              moveRootToObjectCenter(stationaryLogoRoot, centerLogoObjects, stage);
+              centerLogoObjects.forEach((object) => stationaryLogoRoot.attach(object));
               mainRingObjects.forEach((object) => orangeRingRoot.attach(object));
               orbitAObjects.forEach((object) => orangeOrbitARoot.attach(object));
               orbitBObjects.forEach((object) => orangeOrbitBRoot.attach(object));
@@ -246,6 +302,9 @@ function ModelContent({
               perspective.far = 80;
               perspective.lookAt(CAMERA_TARGET);
               perspective.updateProjectionMatrix();
+              if (centerLogoObjects[0]) {
+                faceLogoRootToCamera(stationaryLogoRoot, centerLogoObjects[0], perspective);
+              }
 
               loadedRoot.current = stage;
               rotatingRoot.current = globeRoot;
