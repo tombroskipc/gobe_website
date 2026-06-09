@@ -170,22 +170,27 @@ const scaleNodes = [
   {
     title: "Why this is where you belong.",
     body: "We don't scale with numbers — we scale with people who dare to go beyond.",
-    chips: ["GoBeyond Culture", "Bold Mission", "Pushing Boundaries"],
+    chips: [],
+    // chips: ["GoBeyond Culture", "Bold Mission", "Pushing Boundaries"],
   },
   {
     title: "A Strong Core Team.",
     body: "Here, you don't work for leaders — you become one. We build our team with creative, knowledgeable people who are ready for any challenge. You're empowered to decide and lead from day one.",
-    chips: ["Creative Leadership", "Knowledge-Driven", "Ready for Challenges"],
+    // chips: ["Creative Leadership", "Knowledge-Driven", "Ready for Challenges"],
+        chips: [],
+
   },
   {
     title: "A Global Supplier Network.",
     body: "Join GoBeyond and step onto a global stage — connecting product sources, fulfillment partners, and storefronts across markets. Your vision won't be limited by borders.",
-    chips: ["Global Suppliers", "Optimized Storefronts", "International Fulfillment"],
+    // chips: ["Global Suppliers", "Optimized Storefronts", "International Fulfillment"],
+    chips: [],
   },
   {
     title: "AI & Automation First.",
     body: "Machines handle the repetitive; people create. AI frees you from busywork so you can focus on what matters — strategy, ideas, and impact. Work smart, not just hard.",
-    chips: ["AI-First Mindset", "Workflow Automation", "Peak Performance"],
+    // chips: ["AI-First Mindset", "Workflow Automation", "Peak Performance"],
+    chips: [],
   },
 ];
 
@@ -277,10 +282,10 @@ export function CoreValuesSection() {
                   </span>
 
                   <div className="value-body relative z-[2]">
-                    <h3 className="max-w-[11ch] text-[clamp(1.2rem,1.6vw,1.9rem)] font-black uppercase leading-[0.94] text-white">
+                    <h3 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.9" className="max-w-[11ch] text-[clamp(1.2rem,1.6vw,1.9rem)] font-black uppercase leading-[0.94] text-white">
                       [<span className="acronym-hit">{item.code}</span>]{item.title.slice(1)}
                     </h3>
-                    <p className="mt-5 max-w-[24ch] text-sm font-semibold leading-[1.55] text-white/74">{item.body}</p>
+                    <p data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.9" className="mt-5 max-w-[24ch] text-sm font-semibold leading-[1.55] text-white/74">{item.body}</p>
                     <span className="mt-7 inline-flex px-4 py-2 font-black tracking-[0.12em] transition">
                       {/* {"Xem chi ti\u1ebft"} */}
                     </span>
@@ -390,7 +395,7 @@ export function OperationsSection() {
         <div className="operation-content relative mx-auto grid min-h-screen max-w-[92rem] items-center gap-10 px-5 py-20 sm:px-8 lg:px-12">
           <div data-scroll-reveal className="operation-copy relative z-[3]">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">COMPANY OPERATION</p>
-            <h2 className="mt-7 text-[clamp(4.2rem,7vw,8rem)] font-black leading-[0.9] tracking-normal text-white">
+            <h2 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(4.2rem,7vw,8rem)] font-black leading-[0.9] tracking-normal text-white">
               How Gobe Operate
             </h2>
           </div>
@@ -414,8 +419,8 @@ export function OperationsSection() {
               >
                 <span className="operation-index">{item.index}</span>
                 <span>
-                  <h3 className="text-[clamp(2rem,3vw,3rem)] font-black leading-none text-white">{item.title}</h3>
-                  <p className="mt-2 text-base font-medium leading-6 text-white/68">{item.body}</p>
+                  <h3 data-pretext-fit data-pretext-max-lines="1" data-pretext-min-scale="0.82" className="text-[clamp(2rem,3vw,3rem)] font-black leading-none text-white">{item.title}</h3>
+                  <p data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.9" className="mt-2 text-base font-medium leading-6 text-white/68">{item.body}</p>
                   <p className="operation-expanded-copy">{item.fullBody}</p>
                 </span>
                 <span className="hidden h-[3px] w-full bg-[linear-gradient(90deg,#F26522,transparent)] opacity-75 sm:block" aria-hidden="true" />
@@ -474,7 +479,7 @@ export function ScaleSection() {
         <div className="scale-content relative z-[2] mx-auto grid min-h-screen max-w-[94rem] items-center gap-12 px-5 py-24 sm:px-8 lg:px-12">
           <div data-scroll-reveal className="scale-copy">
             <p className="text-xs font-black uppercase tracking-[0.36em] text-white/62">Company scale</p>
-            <h2 className="mt-7 text-[clamp(3.4rem,9vw,8.5rem)] font-black leading-[0.88] tracking-normal text-white">
+            <h2 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(3.4rem,9vw,8.5rem)] font-black leading-[0.88] tracking-normal text-white">
               How GoBe Scale
             </h2>
           </div>
@@ -482,8 +487,8 @@ export function ScaleSection() {
           <div className="scale-card-stack grid gap-6">
             {scaleNodes.map((node) => (
               <article key={node.title} data-scroll-card className="scale-card border border-white/12 bg-[#111622]/76 p-7 shadow-[0_28px_82px_rgba(0,0,0,0.32)] backdrop-blur-md">
-                <h3 className="text-[clamp(1.9rem,2.4vw,3rem)] font-black leading-tight text-white">{node.title}</h3>
-                <p className="mt-4 text-lg font-medium leading-8 text-white/66">{node.body}</p>
+                <h3 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="text-[clamp(1.9rem,2.4vw,3rem)] font-black leading-tight text-white">{node.title}</h3>
+                <p data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.9" className="mt-4 text-lg font-medium leading-8 text-white/66">{node.body}</p>
                 <div className="mt-6 flex flex-wrap gap-2">
                   {node.chips.map((chip) => (
                     <span key={chip} className="rounded-full border border-white/12 bg-white/[0.035] px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-white/78">
@@ -507,10 +512,10 @@ export function ContactCtaSection() {
         <div className="absolute inset-0 bg-[#101726]/36 backdrop-blur-[1px]" aria-hidden="true" />
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-28" aria-hidden="true" />
         <div data-scroll-reveal className="relative mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur-md md:p-12">
-          <h2 className="text-[clamp(2.4rem,6vw,5.8rem)] font-black uppercase leading-[0.9] tracking-normal text-white">
+          <h2 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="text-[clamp(2.4rem,6vw,5.8rem)] font-black uppercase leading-[0.9] tracking-normal text-white">
             Liên hệ đội ngũ GoBe toàn cầu.
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/65">
+          <p data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.82" className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/65">
             {"Li\u00ean h\u1ec7 GoBe v\u1ec1 s\u1ea3n ph\u1ea9m, h\u1ee3p t\u00e1c, tuy\u1ec3n d\u1ee5ng, truy\u1ec1n th\u00f4ng, ho\u1eb7c nh\u1eefng c\u01a1 h\u1ed9i li\u00ean quan \u0111\u1ebfn v\u1eadn h\u00e0nh th\u01b0\u01a1ng m\u1ea1i \u0111i\u1ec7n t\u1eed to\u00e0n c\u1ea7u."}
           </p>
           <a

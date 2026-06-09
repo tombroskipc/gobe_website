@@ -1834,3 +1834,424 @@ html.hero-model-open body {
     contain: paint;
   }
 }
+
+/* Home story sections: one gesture should equal one section transition.
+   Keep every panel locked to the viewport and make dense sections compact
+   instead of creating vertical inner scroll. */
+html.home-story-active [data-home-story-section] {
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+  scrollbar-gutter: auto;
+}
+
+html.home-story-active [data-home-story-content] {
+  height: 100%;
+  max-height: 100dvh;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+html.home-story-active :is(#home, #stack, #operations, #proof, #contact)[data-home-story-section] {
+  width: 100vw;
+}
+
+html.home-story-active #contact {
+  padding-bottom: clamp(1rem, 3vh, 2rem);
+  padding-top: clamp(5rem, 8vh, 6.25rem);
+}
+
+html.home-story-active #contact [data-home-story-content] {
+  align-items: center;
+  min-height: 0;
+}
+
+@media (min-width: 1024px) {
+  html.home-story-active .values-showcase .core-values,
+  html.home-story-active .values-showcase .values-intro,
+  html.home-story-active .operation-showcase .operation-content,
+  html.home-story-active .scale-showcase .scale-content {
+    height: 100%;
+    min-height: 0;
+  }
+
+  html.home-story-active .values-showcase .values-intro {
+    padding-bottom: clamp(2rem, 4vh, 3rem);
+    padding-top: clamp(5rem, 8vh, 6.5rem);
+  }
+
+  html.home-story-active .values-showcase .value-card {
+    height: clamp(280px, 40vh, 420px);
+    width: clamp(152px, 11vw, 220px);
+  }
+
+  html.home-story-active .values-showcase .value-body {
+    padding-top: clamp(50px, 7vh, 78px);
+  }
+
+  html.home-story-active .operation-showcase .operation-content,
+  html.home-story-active .scale-showcase .scale-content {
+    align-items: center;
+    gap: clamp(1rem, 2vh, 1.8rem);
+    padding-bottom: clamp(1rem, 2.5vh, 2rem);
+    padding-top: clamp(5rem, 8vh, 6.25rem);
+  }
+
+  html.home-story-active .operation-card {
+    min-height: 76px;
+    padding: clamp(.75rem, 1vh, .95rem) clamp(.9rem, 1.2vw, 1.2rem) !important;
+  }
+
+  html.home-story-active .operation-card h3 {
+    font-size: clamp(1.35rem, 1.9vw, 2.15rem);
+  }
+
+  html.home-story-active .operation-card p {
+    font-size: clamp(.78rem, .9vw, .92rem);
+    line-height: 1.35;
+  }
+
+  html.home-story-active .scale-card {
+    padding: clamp(.95rem, 1.35vw, 1.35rem) !important;
+  }
+
+  html.home-story-active .scale-card h3 {
+    font-size: clamp(1.35rem, 1.85vw, 2.15rem);
+  }
+
+  html.home-story-active .scale-card p {
+    font-size: clamp(.82rem, .94vw, .96rem);
+    line-height: 1.42;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  html.home-story-active .operation-showcase,
+  html.home-story-active .operation-showcase [data-home-story-content],
+  html.home-story-active .scale-showcase,
+  html.home-story-active .scale-showcase [data-home-story-content] {
+    min-height: 100dvh;
+  }
+
+  html.home-story-active .operation-showcase .operation-content,
+  html.home-story-active .scale-showcase .scale-content {
+    min-height: 0;
+    padding-bottom: clamp(1rem, 2.5vh, 1.8rem);
+    padding-top: clamp(5rem, 8vh, 6rem);
+  }
+}
+
+@media (max-width: 1023px) {
+  html.home-story-active .values-showcase,
+  html.home-story-active .values-showcase [data-home-story-content],
+  html.home-story-active .operation-showcase,
+  html.home-story-active .operation-showcase [data-home-story-content],
+  html.home-story-active .scale-showcase,
+  html.home-story-active .scale-showcase [data-home-story-content] {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+
+  html.home-story-active .values-showcase .core-values {
+    display: grid;
+    gap: clamp(.65rem, 1.5vh, 1rem);
+    grid-template-rows: auto minmax(0, 1fr);
+    height: 100%;
+    min-height: 0;
+    padding: clamp(4.8rem, 9vh, 5.8rem) clamp(.9rem, 3vw, 1.25rem) clamp(.75rem, 2vh, 1.25rem);
+  }
+
+  html.home-story-active .values-showcase .values-intro {
+    min-height: 0;
+  }
+
+  html.home-story-active .values-showcase .values-intro p {
+    font-size: clamp(.62rem, 1.8vw, .76rem);
+    letter-spacing: .22em;
+  }
+
+  html.home-story-active .values-showcase .values-intro h3 {
+    font-size: clamp(2.35rem, 10vw, 4.7rem);
+    margin-top: clamp(.45rem, 1.3vh, .8rem);
+  }
+
+  html.home-story-active .values-showcase .values-panel-stage {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  html.home-story-active .values-showcase .values-panel-track {
+    display: grid;
+    gap: clamp(.45rem, 1.2vh, .7rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    height: 100% !important;
+    overflow: hidden;
+  }
+
+  html.home-story-active .values-showcase .value-card,
+  html.home-story-active .values-showcase .value-card:hover,
+  html.home-story-active .values-showcase .value-card:focus-visible,
+  html.home-story-active .values-showcase .value-card:nth-child(1),
+  html.home-story-active .values-showcase .value-card:nth-child(2),
+  html.home-story-active .values-showcase .value-card:nth-child(3),
+  html.home-story-active .values-showcase .value-card:nth-child(4),
+  html.home-story-active .values-showcase .value-card:nth-child(5),
+  html.home-story-active .values-showcase .value-card:nth-child(6) {
+    min-height: 0 !important;
+    padding: clamp(.75rem, 2vw, 1rem) !important;
+  }
+
+  html.home-story-active .values-showcase .value-body {
+    padding-right: clamp(2.8rem, 11vw, 4rem);
+    padding-top: clamp(2.35rem, 6vh, 3.4rem);
+  }
+
+  html.home-story-active .values-showcase .value-card .value-body h3 {
+    font-size: clamp(.86rem, 3.8vw, 1.45rem);
+    line-height: .94;
+  }
+
+  html.home-story-active .values-showcase .value-card .value-body p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: clamp(.68rem, 2.5vw, .86rem);
+    line-height: 1.32;
+    margin-top: clamp(.45rem, 1.4vh, .8rem);
+    max-width: 24ch;
+    overflow: hidden;
+  }
+
+  html.home-story-active .values-showcase .value-card::after {
+    bottom: .45rem;
+    font-size: clamp(4.2rem, 19vw, 7.2rem);
+    right: -12%;
+  }
+
+  html.home-story-active .values-showcase .value-card > span.absolute {
+    font-size: .55rem;
+    left: .75rem;
+    top: .75rem;
+  }
+
+  html.home-story-active .operation-showcase .operation-content,
+  html.home-story-active .scale-showcase .scale-content {
+    display: grid;
+    gap: clamp(.6rem, 1.5vh, .95rem);
+    grid-template-rows: auto minmax(0, 1fr);
+    height: 100%;
+    min-height: 0;
+    padding: clamp(4.9rem, 9vh, 5.8rem) clamp(.9rem, 3vw, 1.25rem) clamp(.8rem, 2vh, 1.25rem);
+  }
+
+  html.home-story-active .operation-copy h2,
+  html.home-story-active .scale-copy h2 {
+    font-size: clamp(2.25rem, 10vw, 4.4rem);
+    margin-top: clamp(.5rem, 1.5vh, .85rem);
+  }
+
+  html.home-story-active .operation-list,
+  html.home-story-active .scale-card-stack {
+    align-content: stretch;
+    display: grid;
+    gap: clamp(.45rem, 1.1vh, .65rem);
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  html.home-story-active .operation-list {
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+  }
+
+  html.home-story-active .scale-card-stack {
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+  }
+
+  html.home-story-active .operation-card {
+    align-content: center;
+    border-radius: 1rem;
+    gap: .55rem;
+    min-height: 0;
+    padding: clamp(.62rem, 1.8vw, .9rem) !important;
+  }
+
+  html.home-story-active .operation-index {
+    font-size: .68rem;
+    height: clamp(32px, 7vw, 42px);
+    width: clamp(32px, 7vw, 42px);
+  }
+
+  html.home-story-active .operation-card h3 {
+    font-size: clamp(1rem, 4.5vw, 1.65rem);
+  }
+
+  html.home-story-active .operation-card p,
+  html.home-story-active .scale-card p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: clamp(.7rem, 2.55vw, .88rem);
+    line-height: 1.32;
+    overflow: hidden;
+  }
+
+  html.home-story-active .operation-expanded-copy {
+    display: none;
+  }
+
+  html.home-story-active .scale-card {
+    align-content: center;
+    border-radius: 1rem;
+    display: grid;
+    min-height: 0;
+    padding: clamp(.7rem, 2vw, 1rem) !important;
+  }
+
+  html.home-story-active .scale-card h3 {
+    font-size: clamp(1rem, 4.4vw, 1.65rem);
+  }
+
+  html.home-story-active .scale-card div {
+    gap: .35rem;
+    margin-top: clamp(.45rem, 1vh, .65rem);
+  }
+
+  html.home-story-active .scale-card span {
+    font-size: clamp(.52rem, 1.8vw, .62rem);
+    padding: .32rem .48rem;
+  }
+}
+
+@media (max-width: 420px), (max-height: 720px) {
+  html.home-story-active .values-showcase .core-values,
+  html.home-story-active .operation-showcase .operation-content,
+  html.home-story-active .scale-showcase .scale-content {
+    padding-top: 4.75rem;
+  }
+
+  html.home-story-active .values-showcase .values-intro h3,
+  html.home-story-active .operation-copy h2,
+  html.home-story-active .scale-copy h2 {
+    font-size: clamp(2rem, 9vw, 3.35rem);
+  }
+
+  html.home-story-active .values-showcase .value-card .value-body p,
+  html.home-story-active .operation-card p,
+  html.home-story-active .scale-card p {
+    -webkit-line-clamp: 1;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 820px) {
+  html.home-story-active #home [data-hero-model] {
+    height: min(56dvh, 470px) !important;
+    transform: translateY(-1rem);
+    width: min(54vw, 720px) !important;
+  }
+
+  html.home-story-active #home h1 {
+    font-size: clamp(3.7rem, 6vw, 5.8rem);
+  }
+
+  html.home-story-active #home p {
+    font-size: clamp(.9rem, 1.35vw, 1.05rem);
+    line-height: 1.55;
+  }
+
+  html.home-story-active .operation-core {
+    display: none !important;
+  }
+
+  html.home-story-active .operation-showcase .operation-content,
+  html.home-story-active .scale-showcase .scale-content {
+    gap: .8rem;
+    grid-template-columns: minmax(0, .24fr) minmax(0, .76fr);
+    padding-bottom: .9rem;
+    padding-top: 5.1rem;
+  }
+
+  html.home-story-active .operation-copy h2,
+  html.home-story-active .scale-copy h2 {
+    font-size: clamp(2.6rem, 4vw, 4.3rem);
+    margin-top: .8rem;
+  }
+
+  html.home-story-active .operation-copy p,
+  html.home-story-active .scale-copy p {
+    font-size: .65rem;
+    letter-spacing: .22em;
+  }
+
+  html.home-story-active .operation-list,
+  html.home-story-active .scale-card-stack {
+    align-content: center;
+    gap: .55rem;
+    width: min(100%, 850px);
+  }
+
+  html.home-story-active .operation-card {
+    border-radius: 1.35rem;
+    min-height: 0;
+    padding: .58rem .9rem !important;
+  }
+
+  html.home-story-active .operation-index {
+    height: 40px;
+    width: 40px;
+  }
+
+  html.home-story-active .operation-card h3 {
+    font-size: clamp(1.08rem, 1.55vw, 1.55rem);
+  }
+
+  html.home-story-active .operation-card p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    font-size: .76rem;
+    line-height: 1.28;
+    overflow: hidden;
+  }
+
+  html.home-story-active .scale-card {
+    border-radius: 1.35rem;
+    padding: .72rem 1rem !important;
+  }
+
+  html.home-story-active .scale-card h3 {
+    font-size: clamp(1.12rem, 1.55vw, 1.55rem);
+  }
+
+  html.home-story-active .scale-card p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    font-size: .78rem;
+    line-height: 1.3;
+    margin-top: .45rem;
+    overflow: hidden;
+  }
+
+  html.home-story-active .scale-card div {
+    gap: .35rem;
+    margin-top: .5rem;
+  }
+
+  html.home-story-active .scale-card span {
+    font-size: .58rem;
+    padding: .32rem .52rem;
+  }
+
+  html.home-story-active .scale-card,
+  html.home-story-active .scale-card:nth-child(1),
+  html.home-story-active .scale-card:nth-child(2),
+  html.home-story-active .scale-card:nth-child(3),
+  html.home-story-active .scale-card:nth-child(4) {
+    margin-left: 0;
+    max-width: none;
+  }
+}

@@ -152,8 +152,8 @@ export const Careers: CollectionConfig = {
     },
     {
       name: "excerpt",
+      label: "Excerpt",
       type: "textarea",
-      required: true,
     },
     {
       name: "larkUrl",

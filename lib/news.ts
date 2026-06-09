@@ -5,7 +5,7 @@ export type NewsPost = {
   id?: string | number;
   title: string;
   slug: string;
-  excerpt: string;
+  excerpt?: string;
   tag?: NewsTag | string;
   template?: string;
   publishedAt?: string;
@@ -36,7 +36,7 @@ function legacyPost({
   id: string;
   title: string;
   slug: string;
-  excerpt: string;
+  excerpt?: string;
   tag: NewsTag;
   publishedAt: string;
   sourceUrl: string;

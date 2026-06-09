@@ -13,9 +13,11 @@ import {
 } from "./LegacySections";
 import { Navbar } from "./Navbar";
 import { initScrollController } from "./ScrollController";
+import { usePretextHomeTextFit } from "./usePretextHomeTextFit";
 
 export function Experience() {
   useEffect(() => initScrollController(), []);
+  usePretextHomeTextFit();
 
   return (
     <main id="scroll-story" className="relative min-h-screen overflow-x-hidden bg-[#0c1018]/45 text-white">

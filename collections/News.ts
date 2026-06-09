@@ -223,8 +223,8 @@ export const News: CollectionConfig = {
     },
     {
       name: "excerpt",
+      label: "Excerpt",
       type: "textarea",
-      required: true,
     },
     {
       name: "heroImage",

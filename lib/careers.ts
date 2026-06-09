@@ -23,7 +23,7 @@ export type CareerItem = {
   employmentType?: string;
   location?: string;
   quantity?: string;
-  excerpt: string;
+  excerpt?: string;
   larkUrl?: string;
   applyUrl?: string;
   description?: string;

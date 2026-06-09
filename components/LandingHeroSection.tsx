@@ -185,7 +185,7 @@ export function LandingHeroSection() {
                 Go Big Or Go Home
               </span>
             </h1>
-            <p data-scroll-reveal className="mt-5 max-w-full text-sm font-medium leading-7 text-white/70 sm:text-base md:max-w-2xl md:text-lg md:leading-8">
+            <p data-scroll-reveal data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.86" className="mt-5 max-w-full text-sm font-medium leading-7 text-white/70 sm:text-base md:max-w-2xl md:text-lg md:leading-8">
               From Vietnam to the world. GoBeyond is building a global e-commerce powerhouse — 5 million orders by 2030.            </p>
           </div>
           <div
