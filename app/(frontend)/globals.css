@@ -1113,16 +1113,19 @@ html.hero-model-open body {
 }
 
 .operation-list {
-  width: min(100%, 820px);
+  align-items: stretch;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(100%, 940px);
 }
 
 .operation-card {
+  align-items: start;
   appearance: none;
   border-radius: 2.45rem;
   cursor: pointer;
+  grid-template-columns: auto minmax(0, 1fr);
   min-height: 108px;
   overflow: hidden;
-  transform: translateX(var(--operation-offset, 0));
   transition:
     border-color 260ms ease,
     box-shadow 320ms ease,
@@ -1146,35 +1149,15 @@ html.hero-model-open body {
     transform 420ms cubic-bezier(.2, .72, .18, 1);
 }
 
-.operation-card:nth-child(1) {
-  --operation-offset: -4.5rem;
-}
-
-.operation-card:nth-child(2) {
-  --operation-offset: 0;
-}
-
-.operation-card:nth-child(3) {
-  --operation-offset: 2.2rem;
-}
-
-.operation-card:nth-child(4) {
-  --operation-offset: 0;
-}
-
-.operation-card:nth-child(5) {
-  --operation-offset: -4.5rem;
-}
-
 .operation-card::before {
   background: linear-gradient(90deg, rgba(242, 101, 34, .38), transparent);
   content: "";
-  height: 1px;
-  left: -12rem;
+  height: 100%;
+  left: 0;
   opacity: .48;
   position: absolute;
-  top: 50%;
-  width: 12rem;
+  top: 0;
+  width: 2px;
 }
 
 .operation-card:hover {
@@ -1182,7 +1165,7 @@ html.hero-model-open body {
   box-shadow:
     0 34px 92px rgba(0, 0, 0, .42),
     0 0 54px rgba(242, 101, 34, .16);
-  transform: translateX(var(--operation-offset, 0)) translateY(-6px);
+  transform: translateY(-6px);
 }
 
 .operation-card:focus-visible {
@@ -1400,23 +1383,11 @@ html.hero-model-open body {
 
 .scale-card {
   border-radius: 2rem;
-  max-width: 620px;
+  max-width: none;
   transition:
     border-color 260ms ease,
     box-shadow 320ms ease,
     transform 360ms cubic-bezier(.2, .72, .18, 1);
-}
-
-.scale-card:nth-child(1) {
-  margin-left: 0;
-}
-
-.scale-card:nth-child(2) {
-  margin-left: clamp(2rem, 6vw, 6rem);
-}
-
-.scale-card:nth-child(3) {
-  margin-left: clamp(4rem, 10vw, 10rem);
 }
 
 .scale-card:hover {
@@ -1437,7 +1408,9 @@ html.hero-model-open body {
 }
 
 .scale-card-stack {
-  width: min(100%, 760px);
+  align-items: stretch;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(100%, 980px);
 }
 
 .scale-card {
@@ -1550,6 +1523,7 @@ html.hero-model-open body {
 
   .operation-showcase .operation-list {
     gap: .9rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
   }
 
@@ -1569,6 +1543,7 @@ html.hero-model-open body {
 
   .operation-card {
     border-radius: 1.25rem;
+    grid-template-columns: minmax(0, 1fr);
     min-height: 0;
     padding: 1.15rem !important;
   }
@@ -1590,7 +1565,8 @@ html.hero-model-open body {
   .scale-card,
   .scale-card:nth-child(1),
   .scale-card:nth-child(2),
-  .scale-card:nth-child(3) {
+  .scale-card:nth-child(3),
+  .scale-card:nth-child(4) {
     margin-left: 0;
     max-width: none;
   }
@@ -1617,6 +1593,7 @@ html.hero-model-open body {
 
   .scale-card-stack {
     gap: .9rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .scale-card {
@@ -1692,11 +1669,11 @@ html.hero-model-open body {
 
   .operation-card:nth-child(1),
   .operation-card:nth-child(5) {
-    --operation-offset: -3.3rem;
+    --operation-offset: 0;
   }
 
   .operation-card:nth-child(3) {
-    --operation-offset: 1.25rem;
+    --operation-offset: 0;
   }
 
   .operation-index {
@@ -1723,11 +1700,11 @@ html.hero-model-open body {
   }
 
   .scale-card:nth-child(2) {
-    margin-left: clamp(2rem, 4.5vw, 4.5rem);
+    margin-left: 0;
   }
 
   .scale-card:nth-child(3) {
-    margin-left: clamp(4rem, 8vw, 8rem);
+    margin-left: 0;
   }
 
   .scale-card h3 {
@@ -2064,25 +2041,32 @@ html.home-story-active #contact [data-home-story-content] {
   }
 
   html.home-story-active .operation-list {
-    grid-template-rows: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
   }
 
   html.home-story-active .scale-card-stack {
-    grid-template-rows: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+
+  html.home-story-active .operation-card:nth-child(5) {
+    grid-column: 1 / -1;
   }
 
   html.home-story-active .operation-card {
     align-content: center;
     border-radius: 1rem;
     gap: .55rem;
+    grid-template-columns: minmax(0, 1fr);
     min-height: 0;
     padding: clamp(.62rem, 1.8vw, .9rem) !important;
   }
 
   html.home-story-active .operation-index {
     font-size: .68rem;
-    height: clamp(32px, 7vw, 42px);
-    width: clamp(32px, 7vw, 42px);
+    height: clamp(28px, 6vw, 36px);
+    width: clamp(28px, 6vw, 36px);
   }
 
   html.home-story-active .operation-card h3 {

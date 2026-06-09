@@ -190,7 +190,7 @@ export interface News {
    */
   template: 'standard' | 'editorial' | 'caseStudy' | 'companyUpdate' | 'activity';
   publishedAt?: string | null;
-  excerpt: string;
+  excerpt?: string | null;
   /**
    * Optional hero image for listing cards and article headers.
    */
@@ -327,7 +327,7 @@ export interface Career {
   employmentType?: string | null;
   location?: string | null;
   quantity?: string | null;
-  excerpt: string;
+  excerpt?: string | null;
   /**
    * Public Lark wiki JD URL for this role.
    */
