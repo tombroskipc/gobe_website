@@ -26,6 +26,7 @@ interface GobeModelProps {
   className?: string;
   modelOffsetX?: number;
   modelOffsetY?: number;
+  onLoaded?: () => void;
 }
 
 async function resolveModelSource(signal: AbortSignal) {
@@ -180,12 +181,14 @@ function ModelContent({
   groupRef,
   modelOffsetX,
   modelOffsetY,
+  onLoaded,
 }: {
   scale: number;
   autoRotate: boolean;
   groupRef: RefObject<THREE.Group | null>;
   modelOffsetX: number;
   modelOffsetY: number;
+  onLoaded?: () => void;
 }) {
   const { camera } = useThree();
   const [loaded, setLoaded] = useState(false);
@@ -314,6 +317,7 @@ function ModelContent({
               groupRef.current.add(stage);
               setLoaded(true);
               setIsLoading(false);
+              onLoaded?.();
             },
             undefined,
             (error) => {
@@ -357,7 +361,7 @@ function ModelContent({
       orbitARoot.current = null;
       orbitBRoot.current = null;
     };
-  }, [camera, groupRef]);
+  }, [camera, groupRef, onLoaded]);
 
   useEffect(() => {
     if (!loadedRoot.current) {
@@ -405,6 +409,7 @@ export function GobeModel({
   className,
   modelOffsetX = 0,
   modelOffsetY = 0,
+  onLoaded,
 }: GobeModelProps) {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -428,6 +433,7 @@ export function GobeModel({
             groupRef={groupRef}
             modelOffsetX={modelOffsetX}
             modelOffsetY={modelOffsetY}
+            onLoaded={onLoaded}
           />
         </group>
       </Canvas>

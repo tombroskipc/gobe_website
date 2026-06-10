@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { CustomCursor } from "./CustomCursor";
 import { LandingHeroSection } from "./LandingHeroSection";
+import { PageLoadingOverlay } from "./PageLoadingOverlay";
 import {
   ContactCtaSection,
   CoreValuesSection,
@@ -92,6 +93,11 @@ function useDeferredEnhancements() {
 
 export function Experience() {
   const enhancementsEnabled = useDeferredEnhancements();
+  const [initialModelReady, setInitialModelReady] = useState(false);
+
+  const handleInitialModelLoaded = useCallback(() => {
+    setInitialModelReady(true);
+  }, []);
 
   useEffect(() => {
     if (!enhancementsEnabled) {
@@ -121,7 +127,8 @@ export function Experience() {
       <CustomCursor />
       <Navbar />
       {enhancementsEnabled ? <DeferredHomeSectionStoryController /> : null}
-      <LandingHeroSection />
+      <PageLoadingOverlay ready={initialModelReady} />
+      <LandingHeroSection forceInitialModelLoad={!initialModelReady} onInitialModelLoaded={handleInitialModelLoaded} />
       <CoreValuesSection />
       <OperationsSection />
       <ScaleSection />

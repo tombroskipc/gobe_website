@@ -14,14 +14,25 @@ const LazyGobeModel = dynamic(() => import("./GobeModel").then((mod) => mod.Gobe
 });
 const INLINE_MODEL_LAZY_DELAY_MS = 9000;
 
-export function LandingHeroSection() {
+type LandingHeroSectionProps = {
+  forceInitialModelLoad?: boolean;
+  onInitialModelLoaded?: () => void;
+};
+
+export function LandingHeroSection({ forceInitialModelLoad = false, onInitialModelLoaded }: LandingHeroSectionProps) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isModelOpen, setIsModelOpen] = useState(false);
-  const [shouldLoadInlineModel, setShouldLoadInlineModel] = useState(false);
+  const [shouldLoadInlineModel, setShouldLoadInlineModel] = useState(forceInitialModelLoad);
   const modelStageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (shouldLoadInlineModel) {
+    if (forceInitialModelLoad) {
+      setShouldLoadInlineModel(true);
+    }
+  }, [forceInitialModelLoad]);
+
+  useEffect(() => {
+    if (shouldLoadInlineModel || forceInitialModelLoad) {
       return;
     }
 
@@ -58,7 +69,7 @@ export function LandingHeroSection() {
         window.cancelIdleCallback(idleHandle);
       }
     };
-  }, [shouldLoadInlineModel]);
+  }, [forceInitialModelLoad, shouldLoadInlineModel]);
 
   useEffect(() => {
     if (!isModelOpen) {
@@ -118,8 +129,8 @@ export function LandingHeroSection() {
           aria-hidden="true"
         />
 
-        <div className="relative z-[3] mx-auto grid min-h-[calc(100svh-5rem)] w-full max-w-7xl grid-cols-1 content-center items-center gap-4 pb-8 sm:min-h-[calc(100svh-5.5rem)] sm:gap-6 sm:pb-10 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[minmax(0,0.82fr)_minmax(480px,1.08fr)] lg:gap-8 lg:pb-[clamp(4rem,12vh,8rem)] xl:grid-cols-[minmax(0,0.82fr)_minmax(540px,1.08fr)]">
-          <div className="relative z-[3] flex w-full min-w-0 max-w-[40rem] flex-col text-left">
+        <div className="relative z-[3] mx-auto grid min-h-[calc(100svh-5rem)] w-full max-w-[96rem] grid-cols-1 content-center items-center gap-4 pb-8 sm:min-h-[calc(100svh-5.5rem)] sm:gap-6 sm:pb-10 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[minmax(0,0.68fr)_minmax(520px,1.12fr)] lg:gap-12 lg:pb-[clamp(4rem,12vh,8rem)] xl:grid-cols-[minmax(0,0.72fr)_minmax(560px,1.08fr)] xl:gap-14 2xl:max-w-[100rem] 2xl:grid-cols-[minmax(0,0.82fr)_minmax(540px,1.08fr)]">
+          <div className="relative z-[3] flex w-full min-w-0 max-w-[34rem] flex-col text-left xl:max-w-[36rem] 2xl:max-w-[40rem]">
             <h1 data-scroll-reveal className="max-w-full text-4xl font-black leading-[0.9] tracking-normal text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
               GOBEYOND LLC
               <span className="mt-2 block text-lg font-medium italic leading-tight text-white/86 sm:text-xl md:text-2xl lg:text-3xl">
@@ -132,7 +143,7 @@ export function LandingHeroSection() {
           <div
             ref={modelStageRef}
             data-hero-model
-            className="pointer-events-none relative z-[2] flex h-[min(46svh,360px)] w-[min(108vw,560px)] max-w-none items-center justify-center justify-self-center overflow-visible sm:h-[min(52svh,470px)] sm:w-[min(104vw,720px)] md:h-[min(56svh,600px)] md:w-[min(96vw,820px)] lg:h-[clamp(540px,58vw,860px)] lg:w-[min(54vw,820px)] lg:-translate-x-[clamp(0rem,1vw,1rem)] lg:justify-self-end xl:h-[clamp(600px,58vw,900px)] xl:w-[min(54vw,860px)]"
+            className="pointer-events-none relative z-[2] flex h-[min(46svh,360px)] w-[min(108vw,560px)] max-w-none items-center justify-center justify-self-center overflow-visible sm:h-[min(52svh,470px)] sm:w-[min(104vw,720px)] md:h-[min(56svh,600px)] md:w-[min(96vw,820px)] lg:h-[clamp(520px,56vw,800px)] lg:w-[min(48vw,720px)] lg:translate-x-[clamp(0.75rem,2vw,2rem)] lg:justify-self-end xl:h-[clamp(560px,54vw,820px)] xl:w-[min(48vw,760px)] xl:translate-x-[clamp(0.5rem,1.4vw,1.5rem)] 2xl:h-[clamp(600px,58vw,900px)] 2xl:w-[min(54vw,860px)] 2xl:translate-x-0"
             aria-label="3D globe"
           >
             <div className="relative z-[2] h-full w-full">
@@ -151,6 +162,7 @@ export function LandingHeroSection() {
                     scale={1.3}
                     modelOffsetX={0}
                     autoRotate
+                    onLoaded={onInitialModelLoaded}
                   />
                 ) : null
               ) : null}

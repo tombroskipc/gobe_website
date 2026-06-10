@@ -166,14 +166,6 @@ export const fallbackCareers: CareerItem[] = [
   },
 ];
 
-function mergeWithFallback(docs: CareerItem[], fallback: CareerItem[]) {
-  if (docs.length === 0) {
-    return fallback;
-  }
-
-  return docs;
-}
-
 export async function getPublishedCareers(): Promise<CareerItem[]> {
   try {
     const payload = await getPayloadClient();
@@ -189,7 +181,7 @@ export async function getPublishedCareers(): Promise<CareerItem[]> {
       },
     });
 
-    return mergeWithFallback(result.docs as CareerItem[], fallbackCareers);
+    return result.docs as CareerItem[];
   } catch (error) {
     console.warn("Payload careers query failed, using fallback content.", error);
     return fallbackCareers;
@@ -241,7 +233,7 @@ export async function getPublishedCareerBySlug(slug: string): Promise<CareerItem
       },
     });
 
-    return (result.docs[0] as CareerItem | undefined) || fallbackCareers.find((career) => career.slug === slug) || null;
+    return (result.docs[0] as CareerItem | undefined) || null;
   } catch (error) {
     console.warn("Payload career detail query failed, using fallback content.", error);
     return fallbackCareers.find((career) => career.slug === slug) || null;

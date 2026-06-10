@@ -35,7 +35,7 @@ type RichTextSegment = {
 };
 
 type DetailContentBlock = {
-  kind: "heading" | "item" | "paragraph";
+  kind: "heading" | "subheading" | "item" | "subitem" | "paragraph";
   key: string;
   segments: RichTextSegment[];
 };
@@ -73,14 +73,16 @@ function splitPastedListText(value: string) {
     .filter(Boolean);
 }
 
-function isHeadingLikeLine(text: string) {
+function isSectionHeadingLine(text: string) {
   const trimmed = text.trim();
 
-  return (
-    /^(?:[IVX]+\/\s*)?(?:Mô tả công việc|Yêu cầu công việc|Quyền lợi|Kỹ năng\/\s*Chuyên môn|Thái độ\/Giá trị|Thu nhập:?|Phúc lợi khác:?|Điểm cộng:)$/i.test(trimmed) ||
-    /^[IVX]+\/\s+\S/.test(trimmed) ||
-    (trimmed.endsWith(":") && trimmed.length <= 48)
-  );
+  return /^[IVX]+\/\s+\S/i.test(trimmed) || /^(?:Mô tả công việc|Yêu cầu công việc|Quyền lợi)$/i.test(trimmed);
+}
+
+function isSubheadingLine(text: string) {
+  const trimmed = text.trim().replace(/:$/, "");
+
+  return /^(?:Kỹ năng\/\s*Chuyên môn|Thái độ\/Giá trị|Yêu cầu khác|Thu nhập|Bạn nhận được gì\?|Phúc lợi khác|Điểm cộng)$/i.test(trimmed);
 }
 
 function normalizeSegments(segments: RichTextSegment[]) {
@@ -125,11 +127,107 @@ function getInlineSegments(node: CareerRichTextNode): RichTextSegment[] {
   return node.children.filter((child) => child.type !== "list").flatMap(getInlineSegments);
 }
 
+function getSegmentsText(segments: RichTextSegment[]) {
+  return segments.map((segment) => segment.text).join("").trim();
+}
+
+function splitSegmentsByLine(segments: RichTextSegment[]) {
+  const lines: RichTextSegment[][] = [[]];
+
+  segments.forEach((segment) => {
+    const parts = segment.text.replace(/\r\n/g, "\n").split("\n");
+
+    parts.forEach((part, index) => {
+      if (index > 0) {
+        lines.push([]);
+      }
+
+      if (part.length > 0) {
+        lines[lines.length - 1].push({ ...segment, text: part });
+      }
+    });
+  });
+
+  return lines.map(normalizeSegments).filter((line) => line.length > 0);
+}
+
+function emphasizeLeadingLabel(segments: RichTextSegment[]) {
+  const text = getSegmentsText(segments);
+  const match = text.match(/^([^:：]{1,34}):\s+(.+)$/);
+
+  if (!match) {
+    return segments;
+  }
+
+  return [
+    { text: `${match[1]}:`, format: 1 },
+    { text: ` ${match[2]}` },
+  ];
+}
+
+function classifyJdLines(lines: RichTextSegment[][], keyPrefix: string) {
+  const blocks: DetailContentBlock[] = [];
+  let shouldUseParagraphAfterSection = false;
+  let previousWasColonOnlyItem = false;
+
+  lines.forEach((segments, index) => {
+    const text = getSegmentsText(segments);
+    const key = `${keyPrefix}-line-${index}`;
+
+    if (!text) {
+      return;
+    }
+
+    if (isSectionHeadingLine(text)) {
+      blocks.push({ key, kind: "heading", segments });
+      shouldUseParagraphAfterSection = true;
+      previousWasColonOnlyItem = false;
+      return;
+    }
+
+    if (isSubheadingLine(text)) {
+      blocks.push({ key, kind: "subheading", segments: segments.map((segment) => ({ ...segment, text: segment.text.replace(/:\s*$/, "") })) });
+      shouldUseParagraphAfterSection = false;
+      previousWasColonOnlyItem = false;
+      return;
+    }
+
+    if (shouldUseParagraphAfterSection) {
+      blocks.push({ key, kind: "paragraph", segments });
+      shouldUseParagraphAfterSection = false;
+      previousWasColonOnlyItem = false;
+      return;
+    }
+
+    const isColonOnlyItem = text.endsWith(":") && text.length <= 34;
+    blocks.push({
+      key,
+      kind: previousWasColonOnlyItem ? "subitem" : "item",
+      segments: emphasizeLeadingLabel(segments),
+    });
+    previousWasColonOnlyItem = isColonOnlyItem;
+  });
+
+  return blocks;
+}
+
 function textToBlocks(text: string, keyPrefix: string, kind: DetailContentBlock["kind"] = "item") {
-  return splitPastedListText(text).map<DetailContentBlock>((line, index) => ({
+  const normalizedLines = text
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .flatMap((line) => splitPastedListText(line))
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => [{ text: line }]);
+
+  if (kind === "item") {
+    return classifyJdLines(normalizedLines, keyPrefix);
+  }
+
+  return normalizedLines.map<DetailContentBlock>((segments, index) => ({
     key: `${keyPrefix}-text-${index}`,
-    kind: isHeadingLikeLine(line) ? "heading" : kind,
-    segments: [{ text: line }],
+    kind,
+    segments,
   }));
 }
 
@@ -145,16 +243,17 @@ function addNodeBlock(blocks: DetailContentBlock[], node: CareerRichTextNode, ki
 
   if (splitLines.length > 1 && segments.length === 1) {
     blocks.push(
-      ...splitLines.map((line, index) => ({
-        key: `${key}-split-${index}`,
-        kind: isHeadingLikeLine(line) ? "heading" : index === 0 ? kind : "item",
-        segments: [{ format: segments[0].format, text: line }],
-      })),
+      ...classifyJdLines(
+        splitLines.map((line) => [{ format: segments[0].format, text: line }]),
+        key,
+      ),
     );
     return;
   }
 
-  blocks.push({ key, kind, segments });
+  splitSegmentsByLine(segments).forEach((lineSegments, index) => {
+    blocks.push(...classifyJdLines([lineSegments], `${key}-line-${index}`));
+  });
 }
 
 function extractRichTextBlocks(value?: CareerRichText, keyPrefix = "rich-text"): DetailContentBlock[] {
@@ -172,7 +271,7 @@ function extractRichTextBlocks(value?: CareerRichText, keyPrefix = "rich-text"):
     return [];
   }
 
-  const blocks: DetailContentBlock[] = [];
+  const lines: RichTextSegment[][] = [];
 
   const visit = (node: CareerRichTextNode, key: string) => {
     if (node.type === "list" && Array.isArray(node.children)) {
@@ -181,18 +280,18 @@ function extractRichTextBlocks(value?: CareerRichText, keyPrefix = "rich-text"):
     }
 
     if (node.type === "listitem") {
-      addNodeBlock(blocks, node, "item", key);
+      splitSegmentsByLine(normalizeSegments(getInlineSegments(node))).forEach((line) => lines.push(line));
       node.children?.filter((child) => child.type === "list").forEach((child, index) => visit(child, `${key}-nested-${index}`));
       return;
     }
 
     if (node.type === "heading") {
-      addNodeBlock(blocks, node, "heading", key);
+      splitSegmentsByLine(normalizeSegments(getInlineSegments(node))).forEach((line) => lines.push(line));
       return;
     }
 
     if (node.type === "paragraph") {
-      addNodeBlock(blocks, node, "paragraph", key);
+      splitSegmentsByLine(normalizeSegments(getInlineSegments(node))).forEach((line) => lines.push(line));
       return;
     }
 
@@ -202,12 +301,12 @@ function extractRichTextBlocks(value?: CareerRichText, keyPrefix = "rich-text"):
     }
 
     if (typeof node.text === "string") {
-      blocks.push(...textToBlocks(node.text, key));
+      splitSegmentsByLine([{ format: node.format, text: node.text }]).forEach((line) => lines.push(line));
     }
   };
 
   children.forEach((child, index) => visit(child, `${keyPrefix}-${index}`));
-  return blocks;
+  return classifyJdLines(lines, keyPrefix);
 }
 
 function detailBlocks(items?: { text?: CareerRichText }[]) {
@@ -276,14 +375,6 @@ function JobCard({ job, index }: { job: CareerItem; index: number }) {
   );
 }
 
-function mergeJobsWithFallback(docs: CareerItem[], fallback: CareerItem[]) {
-  if (docs.length === 0) {
-    return fallback;
-  }
-
-  return docs;
-}
-
 export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[]; listingSourceUrl: string }) {
   const [liveJobs, setLiveJobs] = useState(jobs);
 
@@ -298,7 +389,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
     })
       .then((docs) => {
         if (mounted) {
-          setLiveJobs(mergeJobsWithFallback(docs, jobs));
+          setLiveJobs(docs);
         }
       })
       .catch(() => {
@@ -459,34 +550,53 @@ function renderRichTextSegment(segment: RichTextSegment, index: number) {
 
 function DetailContentList({ blocks }: { blocks: DetailContentBlock[] }) {
   return (
-    <div className="grid gap-5 md:gap-6">
+    <div className="grid gap-4 md:gap-5">
       {blocks.map((block, index) => {
         const key = `${block.key}-${index}`;
 
         if (block.kind === "heading") {
           return (
-            <h3 key={key} className="pt-3 text-xl font-black uppercase leading-snug text-white md:text-2xl">
-              <span className="mr-3 text-[#F26522]">/</span>
+            <h3 key={key} className="pt-4 text-2xl font-black leading-tight text-white first:pt-0 md:text-3xl">
               {block.segments.map(renderRichTextSegment)}
             </h3>
           );
         }
 
+        if (block.kind === "subheading") {
+          return (
+            <h4 key={key} className="pt-1 text-xl font-black leading-snug text-white underline decoration-white/70 decoration-1 underline-offset-4 md:text-2xl">
+              {block.segments.map(renderRichTextSegment)}
+            </h4>
+          );
+        }
+
         if (block.kind === "paragraph") {
           return (
-            <p key={key} className="text-base font-semibold leading-8 text-white/72 md:text-[18px] md:leading-9">
+            <p key={key} className="text-base font-medium leading-8 text-white/82 md:text-[18px] md:leading-8">
               {block.segments.map(renderRichTextSegment)}
             </p>
           );
         }
 
+        if (block.kind === "subitem") {
+          return (
+            <div key={key} className="ml-8 grid grid-cols-[7px_minmax(0,1fr)] gap-4 md:ml-11">
+              <span className="text-base font-bold leading-7 text-white/78 md:text-[17px] md:leading-8" aria-hidden="true">
+                ◦
+              </span>
+              <div className="min-w-0 text-base font-medium leading-7 text-white/82 md:text-[17px] md:leading-8">
+                {block.segments.map(renderRichTextSegment)}
+              </div>
+            </div>
+          );
+        }
+
         return (
-          <div key={key} className="grid grid-cols-[10px_minmax(0,1fr)] gap-5">
-            <span
-              className="mt-[0.72em] h-2 w-2 shrink-0 rounded-full bg-[#F26522] shadow-[0_0_18px_rgba(242,101,34,0.36)]"
-              aria-hidden="true"
-            />
-            <div className="min-w-0 text-lg font-extrabold leading-9 text-white/88 md:text-[22px] md:leading-[1.75]">
+          <div key={key} className="ml-6 grid grid-cols-[7px_minmax(0,1fr)] gap-4 md:ml-8">
+            <span className="text-base font-bold leading-7 text-white/86 md:text-[17px] md:leading-8" aria-hidden="true">
+              •
+            </span>
+            <div className="min-w-0 text-base font-medium leading-7 text-white/84 md:text-[17px] md:leading-8">
               {block.segments.map(renderRichTextSegment)}
             </div>
           </div>
@@ -672,7 +782,7 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
 }
 
 export function CareerDetail({ job }: { job: CareerItem }) {
-  const jdContent = typeof job.description === "string" ? [] : extractRichTextBlocks(job.description, "jd-content");
+  const jdContent = extractRichTextBlocks(job.description, "jd-content");
   const responsibilities = detailBlocks(job.responsibilities);
   const requirements = detailBlocks(job.requirements);
   const benefits = detailBlocks(job.benefits);

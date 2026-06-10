@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 
 type ValueCardStyle = CSSProperties &
@@ -175,24 +175,26 @@ const scaleNodes = [
   {
     title: "A Strong Core Team.",
     body: "Here, you don't work for leaders — you become one. We build our team with creative, knowledgeable people who are ready for any challenge. You're empowered to decide and lead from day one.",
-    chips: ["Creative Leadership", "Knowledge-Driven", "Ready for Challenges"],
+    // chips: ["Creative Leadership", "Knowledge-Driven", "Ready for Challenges"],
+    chips: [],
   },
   {
     title: "A Global Supplier Network.",
     body: "Join GoBeyond and step onto a global stage — connecting product sources, fulfillment partners, and storefronts across markets. Your vision won't be limited by borders.",
-    chips: ["Global Suppliers", "Optimized Storefronts", "International Fulfillment"],
+    // chips: ["Global Suppliers", "Optimized Storefronts", "International Fulfillment"],
+    chips: [],
   },
   {
     title: "AI & Automation First.",
     body: "Machines handle the repetitive; people create. AI frees you from busywork so you can focus on what matters — strategy, ideas, and impact. Work smart, not just hard.",
-    chips: ["AI-First Mindset", "Workflow Automation", "Peak Performance"],
+    // chips: ["AI-First Mindset", "Workflow Automation", "Peak Performance"],
+    chips: [],
   },
 ];
 
 export function CoreValuesSection() {
   const [activeValue, setActiveValue] = useState<CoreValue | null>(null);
   const [mounted, setMounted] = useState(false);
-  const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -222,30 +224,9 @@ export function CoreValuesSection() {
   return (
     <section
       id="stack"
-      ref={sectionRef}
       data-home-story-section
       data-scroll-section
       className="values-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90"
-      onPointerMove={(event) => {
-        if (!window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 1024px)").matches) {
-          return;
-        }
-
-        const element = sectionRef.current;
-        if (!element) {
-          return;
-        }
-
-        const rect = element.getBoundingClientRect();
-        const x = (event.clientX - rect.left) / rect.width - 0.5;
-        const y = (event.clientY - rect.top) / rect.height - 0.5;
-        element.style.setProperty("--mx", x.toFixed(3));
-        element.style.setProperty("--my", y.toFixed(3));
-        element.style.setProperty("--panel-shift-x", `${(-x * 38).toFixed(1)}px`);
-        element.style.setProperty("--panel-shift-y", `${(-y * 28).toFixed(1)}px`);
-        element.style.setProperty("--panel-rotate-x", `${(-y * 5).toFixed(2)}deg`);
-        element.style.setProperty("--panel-rotate-y", `${(x * 7).toFixed(2)}deg`);
-      }}
     >
       <div data-home-story-content className="relative min-h-screen overflow-hidden">
         <div
@@ -277,10 +258,10 @@ export function CoreValuesSection() {
                   </span>
 
                   <div className="value-body relative z-[2]">
-                    <h3 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.9" className="max-w-[11ch] text-[clamp(1.2rem,1.6vw,1.9rem)] font-black uppercase leading-[0.94] text-white">
+                    <h3 className="max-w-[11ch] text-[clamp(1.2rem,1.6vw,1.9rem)] font-black uppercase leading-[0.94] text-white">
                       [<span className="acronym-hit">{item.code}</span>]{item.title.slice(1)}
                     </h3>
-                    <p data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.9" className="mt-5 max-w-[24ch] text-sm font-semibold leading-[1.55] text-white/74">{item.body}</p>
+                    <p className="mt-5 max-w-[24ch] text-sm font-semibold leading-[1.55] text-white/74">{item.body}</p>
                     <span className="mt-7 inline-flex px-4 py-2 font-black tracking-[0.12em] transition">
                       {/* {"Xem chi ti\u1ebft"} */}
                     </span>
