@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import type { CareerItem, CareerRichText, CareerRichTextNode } from "@/lib/careers";
 import { fetchPayloadDocs } from "@/lib/cmsClient";
 import { CustomCursor } from "./CustomCursor";
@@ -320,13 +320,14 @@ function fallbackBlocks(items: string[], keyPrefix: string) {
 function JobCard({ job, index }: { job: CareerItem; index: number }) {
   const tag = job.tag || "hiring";
   const accent = tagColors[tag] || "#F26522";
+  const qrCodeUrl = getQrCodeUrl(job.larkUrl);
 
   return (
     <Link
       href={`/tuyen-dung/${job.slug}`}
       prefetch={false}
       data-scroll-card
-      className="group relative min-h-[390px] overflow-hidden border border-white/12 bg-[#101520]/82 p-5 text-white shadow-[0_28px_82px_rgba(0,0,0,0.30)] backdrop-blur-md transition hover:-translate-y-2 hover:border-[#F26522]/70 hover:shadow-[0_34px_100px_rgba(242,101,34,0.16)]"
+      className="group relative min-h-[430px] overflow-hidden border border-white/12 bg-[#101520]/82 p-5 text-white shadow-[0_28px_82px_rgba(0,0,0,0.30)] backdrop-blur-md transition hover:-translate-y-2 hover:border-[#F26522]/70 hover:shadow-[0_34px_100px_rgba(242,101,34,0.16)]"
       style={{ "--accent": accent } as CSSProperties}
     >
       <span className="absolute left-5 top-5 z-[2] border border-[color:var(--accent)] px-2 py-1 text-center text-[10px] font-black uppercase leading-3 text-[color:var(--accent)]">
@@ -338,25 +339,34 @@ function JobCard({ job, index }: { job: CareerItem; index: number }) {
       </div>
 
       <div className="mt-14 overflow-hidden rounded-[1.75rem] bg-white p-4 text-[#182452]">
-        <div className="mx-auto w-fit rounded-full bg-black px-5 py-2 text-xs font-black uppercase tracking-[0.08em] text-white">
-          Chúng tôi đang tuyển!
+        <div className="mx-auto w-fit rounded-full bg-black px-5 py-2 text-[11px] font-black uppercase tracking-[0.1em] text-white">
+          WE ARE HIRING!
         </div>
-        <div className="mt-4 rounded-2xl bg-[#F26522] px-4 py-4 text-center text-xl font-black text-white">
-          {job.title}
-        </div>
-        <div className="mt-5 grid grid-cols-[96px_1fr] items-center gap-4">
-          <div className="grid aspect-square place-items-center border-2 border-[#F26522] bg-white p-2">
-            <span className="text-center text-[10px] font-black uppercase leading-tight text-[#182452]">
-              Lark
-              <br />
-              JD
-            </span>
+
+        <div className="relative mt-5 min-h-[230px] overflow-hidden rounded-2xl bg-[#fff8f2]">
+          <span className="absolute -right-12 -top-12 size-40 rounded-full bg-[#F26522]/12" aria-hidden="true" />
+          <span className="absolute bottom-8 right-28 hidden text-7xl font-black uppercase leading-none text-[#182452]/10 sm:block" aria-hidden="true">
+            GO
+          </span>
+
+          <div className="absolute bottom-5 left-5 z-[2] grid size-24 place-items-center border-2 border-[#F26522] bg-white p-2 shadow-[0_12px_28px_rgba(24,36,82,0.10)]">
+            {qrCodeUrl ? (
+              <img src={qrCodeUrl} alt={`QR Lark JD ${job.title}`} className="h-full w-full object-contain" loading="lazy" />
+            ) : (
+              <span className="text-center text-[10px] font-black uppercase leading-tight text-[#182452]">
+                Lark
+                <br />
+                JD
+              </span>
+            )}
           </div>
-          <div className="relative h-24">
-            <div className="absolute bottom-0 right-2 h-20 w-20 rounded-full bg-[#F26522]/16" />
-            <div className="absolute bottom-2 right-8 text-5xl">GO</div>
-            <div className="absolute bottom-2 right-0 h-12 w-12 rounded-full bg-[#F26522]" />
-          </div>
+
+          <img
+            src="/careers/hiring-mascot.png"
+            alt="GoBeyond hiring mascot"
+            className="absolute bottom-0 right-[-18px] z-[1] h-[205px] w-auto max-w-[72%] object-contain object-bottom drop-shadow-[0_18px_28px_rgba(242,101,34,0.20)] transition duration-500 group-hover:translate-y-[-4px]"
+            loading="lazy"
+          />
         </div>
       </div>
 
@@ -367,10 +377,6 @@ function JobCard({ job, index }: { job: CareerItem; index: number }) {
         <h3 className="mt-3 text-2xl font-black uppercase leading-tight text-white">{job.title}</h3>
         <p className="mt-3 text-sm font-medium leading-6 text-white/64">{job.excerpt}</p>
       </div>
-
-      <span className="absolute bottom-5 right-5 rounded-full bg-[#F26522] px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-white opacity-0 transition group-hover:opacity-100">
-        Xem JD
-      </span>
     </Link>
   );
 }
@@ -428,14 +434,14 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
               >
                 Xem vị trí
               </a>
-              <a
+              {/* <a
                 href={listingSourceUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="magnetic inline-flex min-h-12 items-center rounded-full border border-white/18 px-7 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-white hover:text-white"
               >
                 Danh sách Lark
-              </a>
+              </a> */}
             </div>
           </div>
 
@@ -460,14 +466,13 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
               <div data-scroll-reveal>
                 <SectionMark current="02" label="" />
               </div>
-              <h2 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] sm:text-5xl lg:text-7xl">
-                Tất cả vị trí
-                <span className="block text-[#ff7648]">đang tuyển</span>
+              <h2 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] sm:text-3xl lg:text-5xl">
+                Tất cả vị trí <span className="text-[#ff7648]">đang tuyển</span>
               </h2>
             </div>
-            <p data-scroll-reveal className="max-w-2xl text-base font-medium leading-8 text-white/68 md:text-lg">
+            {/* <p data-scroll-reveal className="max-w-2xl text-base font-medium leading-8 text-white/68 md:text-lg">
               Mỗi vai trò đều là một mảnh ghép trong hệ thống vận hành toàn cầu của GoBeyond. Nội dung có thể chỉnh sửa trong Payload CMS.
-            </p>
+            </p> */}
           </div>
 
           {liveJobs.length > 0 ? (
@@ -610,21 +615,54 @@ function isActionUrl(value?: string) {
   return Boolean(value && /^(https?:\/\/|mailto:)/i.test(value));
 }
 
-function getApplyUrl(job: CareerItem) {
-  if (isActionUrl(job.applyUrl)) {
-    return job.applyUrl as string;
+function getQrCodeUrl(value?: string) {
+  if (!value || !/^https?:\/\//i.test(value)) {
+    return null;
   }
 
-  return `mailto:tuyendung@gobe.asia?subject=${encodeURIComponent(`[GOBEYOND - ${job.title.toUpperCase()}] Ho va ten`)}`;
+  return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=8&data=${encodeURIComponent(value)}`;
+}
+
+function formatSlugTitle(slug: string) {
+  const title = slug
+    .replace(/^jd[-_]?/i, "")
+    .replace(/[-_]+/g, " ")
+    .replace(/\bfull time\b/gi, "Full-time")
+    .replace(/\bintern\b/gi, "Intern")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b[a-z]/g, (character) => character.toUpperCase());
+
+  return title || "Vị trí tuyển dụng";
+}
+
+function getCareerTitle(job: CareerItem) {
+  return job.title?.trim() || formatSlugTitle(job.slug);
+}
+
+function getApplyUrl(job: CareerItem) {
+  const subject = encodeURIComponent(`[GOBEYOND - ${getCareerTitle(job).toUpperCase()}] Ho va ten`);
+
+  if (isActionUrl(job.applyUrl)) {
+    const applyUrl = job.applyUrl as string;
+
+    if (applyUrl.toLowerCase().startsWith("mailto:") && !applyUrl.includes("?")) {
+      return `${applyUrl}?subject=${subject}`;
+    }
+
+    return applyUrl;
+  }
+
+  return `mailto:tuyendung@gobe.asia?subject=${subject}`;
 }
 
 function getDisplayDate(job: CareerItem) {
-  if (job.dateLabel) {
+  if (job.dateLabel && !/^\d{4}$/.test(job.dateLabel.trim())) {
     return job.dateLabel;
   }
 
   if (!job.publishedAt) {
-    return "2026";
+    return "12/06/2026";
   }
 
   const parsed = new Date(job.publishedAt);
@@ -641,9 +679,10 @@ function getDisplayDate(job: CareerItem) {
 
 function getFallbackResponsibilities(job: CareerItem) {
   const department = job.department || "growth";
+  const title = getCareerTitle(job);
 
   return [
-    `Theo dõi mục tiêu của vị trí ${job.title} và biến kế hoạch thành kết quả thực tế theo từng tuần.`,
+    `Theo dõi mục tiêu của vị trí ${title} và biến kế hoạch thành kết quả thực tế theo từng tuần.`,
     "Phối hợp với các team marketing, creative, fulfillment và operations để vận hành chiến dịch e-commerce quốc tế.",
     `Chủ động phân tích dữ liệu, phát hiện vấn đề và đề xuất cách tối ưu cho ${department}.`,
   ];
@@ -675,16 +714,17 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
     message: "",
   });
 
-  const updateField = (field: keyof typeof form) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const title = getCareerTitle(job);
+  const updateField = (field: keyof typeof form) => (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((current) => ({ ...current, [field]: event.target.value }));
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const subject = `[GOBEYOND - ${job.title.toUpperCase()}] ${form.name || "Ho va ten"}`;
+    const subject = `[GOBEYOND - ${title.toUpperCase()}] ${form.name || "Ho va ten"}`;
     const body = [
-      `Vi tri ung tuyen: ${job.title}`,
+      `Vi tri ung tuyen: ${title}`,
       `Ho va ten: ${form.name}`,
       `Email: ${form.email}`,
       `So dien thoai: ${form.phone}`,
@@ -710,7 +750,7 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
           required
           value={form.name}
           onChange={updateField("name")}
-          className="mt-2 h-12 w-full border border-white/12 bg-white/[0.04] px-4 text-sm font-bold text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522]"
+          className="mt-2 h-12 w-full border border-white/16 bg-white/[0.04] px-4 text-sm font-bold text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522] focus:bg-white/[0.06]"
           placeholder="Nguyễn Văn A"
         />
       </div>
@@ -725,7 +765,7 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
             type="email"
             value={form.email}
             onChange={updateField("email")}
-            className="mt-2 h-12 w-full border border-white/12 bg-white/[0.04] px-4 text-sm font-bold text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522]"
+            className="mt-2 h-12 w-full border border-white/16 bg-white/[0.04] px-4 text-sm font-bold text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522] focus:bg-white/[0.06]"
             placeholder="you@email.com"
           />
         </div>
@@ -738,7 +778,7 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
             required
             value={form.phone}
             onChange={updateField("phone")}
-            className="mt-2 h-12 w-full border border-white/12 bg-white/[0.04] px-4 text-sm font-bold text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522]"
+            className="mt-2 h-12 w-full border border-white/16 bg-white/[0.04] px-4 text-sm font-bold text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522] focus:bg-white/[0.06]"
             placeholder="090..."
           />
         </div>
@@ -751,7 +791,7 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
           id="career-portfolio"
           value={form.portfolio}
           onChange={updateField("portfolio")}
-          className="mt-2 h-12 w-full border border-white/12 bg-white/[0.04] px-4 text-sm font-bold text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522]"
+          className="mt-2 h-12 w-full border border-white/16 bg-white/[0.04] px-4 text-sm font-bold text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522] focus:bg-white/[0.06]"
           placeholder="Google Drive, LinkedIn, portfolio..."
         />
       </div>
@@ -764,20 +804,123 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
           value={form.message}
           onChange={updateField("message")}
           rows={4}
-          className="mt-2 w-full resize-none border border-white/12 bg-white/[0.04] px-4 py-3 text-sm font-bold leading-6 text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522]"
+          className="mt-2 w-full resize-none border border-white/16 bg-white/[0.04] px-4 py-3 text-sm font-bold leading-6 text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522] focus:bg-white/[0.06]"
           placeholder="Bạn muốn GoBeyond biết thêm điều gì?"
         />
       </div>
       <button
         type="submit"
-        className="magnetic mt-1 inline-flex min-h-12 items-center justify-center rounded-full bg-[#F26522] px-6 text-sm font-black uppercase tracking-[0.1em] text-white shadow-[0_18px_42px_rgba(242,101,34,0.26)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
+        className="mt-1 inline-flex min-h-12 items-center justify-center rounded-full bg-[#F26522] px-6 text-sm font-black uppercase tracking-[0.1em] text-white shadow-[0_18px_42px_rgba(242,101,34,0.26)] transition-colors hover:bg-[#d94d12]"
       >
         Gửi đơn ứng tuyển
       </button>
-      <p className="text-xs font-semibold leading-6 text-white/45">
-        Form sẽ mở email đã điền sẵn nội dung. Bạn có thể đính kèm CV trong email trước khi gửi.
-      </p>
     </form>
+  );
+}
+
+type FixedApplicationState = {
+  height: number;
+  left: number;
+  maxHeight: number;
+  top: number;
+  width: number;
+};
+
+function CareerApplicationCard({ applyUrl, job }: { applyUrl: string; job: CareerItem }) {
+  const placeholderRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const [fixedState, setFixedState] = useState<FixedApplicationState | null>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    let frame = 0;
+
+    const updateFixedState = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const placeholder = placeholderRef.current;
+        const panel = panelRef.current;
+
+        if (!placeholder || !panel || !mediaQuery.matches) {
+          setFixedState(null);
+          return;
+        }
+
+        const top = window.innerWidth >= 1280 ? 112 : 96;
+        const stopGap = 24;
+        const placeholderRect = placeholder.getBoundingClientRect();
+        const detailContent = document.querySelector<HTMLElement>("[data-career-detail-content]");
+        const detailContentRect = detailContent?.getBoundingClientRect();
+        const footer = document.querySelector<HTMLElement>("footer");
+        const footerRect = footer?.getBoundingClientRect();
+        const baseMaxHeight = Math.max(360, window.innerHeight - top - 16);
+        const boundaryBottom = Math.min(detailContentRect?.bottom ?? Number.POSITIVE_INFINITY, footerRect?.top ?? Number.POSITIVE_INFINITY);
+        const maxHeight = Number.isFinite(boundaryBottom)
+          ? Math.max(220, Math.min(baseMaxHeight, boundaryBottom - top - stopGap))
+          : baseMaxHeight;
+        const height = Math.min(panel.scrollHeight, maxHeight);
+
+        if (placeholderRect.top > top) {
+          setFixedState(null);
+          return;
+        }
+
+        setFixedState({
+          height,
+          left: placeholderRect.left,
+          maxHeight,
+          top: Number.isFinite(boundaryBottom) ? Math.min(top, boundaryBottom - height - stopGap) : top,
+          width: placeholderRect.width,
+        });
+      });
+    };
+
+    updateFixedState();
+    window.addEventListener("scroll", updateFixedState, { passive: true });
+    window.addEventListener("resize", updateFixedState);
+    mediaQuery.addEventListener("change", updateFixedState);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", updateFixedState);
+      window.removeEventListener("resize", updateFixedState);
+      mediaQuery.removeEventListener("change", updateFixedState);
+    };
+  }, []);
+
+  const fixedStyle = fixedState
+    ? ({
+      left: fixedState.left,
+      maxHeight: fixedState.maxHeight,
+      position: "fixed",
+      top: fixedState.top,
+      width: fixedState.width,
+    } satisfies CSSProperties)
+    : undefined;
+
+  return (
+    <div
+      ref={placeholderRef}
+      className="order-1 z-20 scroll-mt-28 lg:order-2 lg:self-start"
+      style={fixedState ? { minHeight: fixedState.height } : undefined}
+    >
+      <aside
+        ref={panelRef}
+        id="career-application"
+        data-scroll-card
+        className="border border-white/14 bg-[#101520]/82 p-5 shadow-[0_28px_82px_rgba(0,0,0,0.30)] backdrop-blur-md sm:p-6 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto xl:max-h-[calc(100dvh-8rem)]"
+        style={fixedStyle}
+      >
+        <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Application form</p>
+        <h2 className="mt-4 text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-2xl">Ứng tuyển vị trí này</h2>
+        <p className="mt-4 text-sm font-semibold leading-7 text-white/58">
+          Điền nhanh thông tin, hệ thống sẽ mở email gửi tới team tuyển dụng GoBeyond.
+        </p>
+        <div className="mt-6">
+          <CareerApplicationForm applyUrl={applyUrl} job={job} />
+        </div>
+      </aside>
+    </div>
   );
 }
 
@@ -792,19 +935,31 @@ export function CareerDetail({ job }: { job: CareerItem }) {
   const displayedRequirements = requirements.length > 0 ? requirements : fallbackBlocks(getFallbackRequirements(job), "fallback-requirement");
   const displayedBenefits = benefits.length > 0 ? benefits : fallbackBlocks(getFallbackBenefits(), "fallback-benefit");
   const tag = job.tag || "hiring";
+  const title = getCareerTitle(job);
   const applyUrl = getApplyUrl(job);
   const larkUrl = isActionUrl(job.larkUrl) ? job.larkUrl : null;
-  const description =
-    (typeof job.description === "string" ? job.description : "") ||
-    job.excerpt ||
-    "GoBeyond đang tìm kiếm những đồng đội sẵn sàng đi xa hơn trong hành trình xây dựng hệ thống thương mại điện tử toàn cầu.";
+  // const description =
+  //   (typeof job.description === "string" ? job.description : "") ||
+  //   job.excerpt ||
+  //   "";
   const displayDate = getDisplayDate(job);
+  const roleFacts = [
+    ["Lĩnh vực", job.department || "Operation"],
+    ["Loại hình làm việc", job.employmentType || "Toàn thời gian"],
+    ["Số lượng", job.quantity || "01"],
+    ["Địa chỉ", job.location || "St Moritz, 1014 Đường Phạm Văn Đồng, TP. Hồ Chí Minh"],
+    ["Ngày tuyển", displayDate],
+  ];
 
   return (
     <PageShell>
-      <section id="career-detail" data-scroll-section className="relative z-10 overflow-hidden bg-[#000314] px-5 pb-16 pt-28 text-white sm:px-8 lg:px-12 lg:pb-20 lg:pt-32">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_12%,rgba(242,101,34,0.22),transparent_30%),radial-gradient(circle_at_16%_28%,rgba(90,162,232,0.14),transparent_28%),linear-gradient(135deg,#000314_0%,#071026_52%,#02030b_100%)]" />
-        <div className="grid-mask pointer-events-none absolute inset-0 opacity-24" aria-hidden="true" />
+      <section
+        id="career-detail"
+        data-scroll-section
+        className="relative z-10 bg-[#030711] px-5 py-14 text-white sm:px-8 md:py-20 lg:px-12"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(242,101,34,0.14),transparent_28%),linear-gradient(135deg,#030711,#071026_48%,#02030b)]" />
+        <div className="grid-mask pointer-events-none absolute inset-0 opacity-20" aria-hidden="true" />
 
         <div className="relative mx-auto max-w-6xl">
           <Link
@@ -815,121 +970,84 @@ export function CareerDetail({ job }: { job: CareerItem }) {
             Back to careers
           </Link>
 
-          <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,0.68fr)_minmax(280px,0.32fr)] lg:items-start">
-            <header data-scroll-reveal className="max-w-4xl">
-              <div className="flex flex-wrap items-center gap-3 text-[11px] font-black uppercase tracking-[0.18em] text-white/52">
-                <span className="rounded-full border border-[#F26522]/44 bg-[#F26522]/12 px-4 py-2 text-[#F26522]">
-                  {tagLabels[tag] || tagLabels.hiring}
-                </span>
-                <span>{job.department || "E-commerce"}</span>
-                <span className="h-1 w-1 rounded-full bg-white/34" />
-                <span>{job.location || "Ho Chi Minh"}</span>
-              </div>
-              <h1 className="mt-6 text-4xl font-black uppercase leading-[0.95] tracking-normal text-white sm:text-5xl md:text-6xl lg:text-7xl">
-                {job.title}
-              </h1>
-              <p className="mt-7 max-w-3xl text-lg font-semibold leading-8 text-white/70 md:text-xl md:leading-9">{description}</p>
-            </header>
+          <header data-scroll-reveal className="relative mt-8 border-y border-white/14 py-8 md:py-11">
+            <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">{tagLabels[tag] || tagLabels.hiring}</p>
+            <h1 className="mt-4 max-w-5xl text-3xl font-black uppercase leading-[1.02] text-white sm:text-4xl md:text-5xl lg:text-5xl">
+              {title}
+            </h1>
+            {/* <p className="mt-7 max-w-4xl text-lg font-semibold leading-8 text-white/72 md:text-xl md:leading-9">{description}</p> */}
 
-            <aside data-scroll-card className="top-28 border border-white/12 bg-[#101520]/82 p-6 shadow-[0_28px_82px_rgba(0,0,0,0.30)] backdrop-blur-md lg:sticky">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Job overview</p>
-              <dl className="mt-6 grid gap-5">
-                {[
-                  ["Department", job.department || "E-commerce"],
-                  ["Employment type", job.employmentType || "Toàn thời gian"],
-                  ["Quantity", job.quantity || "01"],
-                  ["Location", job.location || "Ho Chi Minh"],
-                  ["Published", displayDate],
-                ].map(([label, value]) => (
-                  <div key={label} className="border-b border-white/10 pb-4 last:border-b-0 last:pb-0">
-                    <dt className="text-[11px] font-black uppercase tracking-[0.18em] text-white/36">{label}</dt>
-                    <dd className="mt-1 text-sm font-black leading-6 text-white">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-
-              <div className="mt-7 grid gap-3">
-                <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#F26522] px-6 text-sm font-black uppercase tracking-[0.1em] text-white shadow-[0_18px_42px_rgba(242,101,34,0.26)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]" href="#career-application">
-                  Apply now
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a
+                className="magnetic inline-flex min-h-12 items-center justify-center rounded-full bg-[#F26522] px-6 text-sm font-black uppercase tracking-[0.1em] text-white shadow-[0_18px_42px_rgba(242,101,34,0.24)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
+                href="#career-application"
+              >
+                Ứng tuyển ngay
+              </a>
+              {/* {larkUrl ? (
+                <a
+                  className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/18 px-6 text-sm font-black uppercase tracking-[0.1em] text-white/76 transition hover:border-[#F26522] hover:text-white"
+                  href={larkUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Xem JD gốc
                 </a>
-                {larkUrl ? (
-                  <a
-                    className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/18 px-6 text-sm font-black uppercase tracking-[0.1em] text-white/76 transition hover:border-[#F26522] hover:text-white"
-                    href={larkUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Open JD
-                  </a>
-                ) : null}
-              </div>
-
-              <p className="mt-6 text-sm font-semibold leading-7 text-white/56">
-                Gửi CV tới <span className="font-black text-white">tuyendung@gobe.asia</span> với tiêu đề:
-                <br />
-                <span className="font-black text-[#F26522]">[GOBEYOND - {job.title.toUpperCase()}] Họ và tên</span>
-              </p>
-            </aside>
-          </div>
-        </div>
-      </section>
-
-      <section data-scroll-section className="relative z-10 bg-[#030711] px-5 py-14 text-white sm:px-8 md:py-20 lg:px-12">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(242,101,34,0.14),transparent_28%),linear-gradient(135deg,#030711,#071026_48%,#02030b)]" />
-        <div className="grid-mask pointer-events-none absolute inset-0 opacity-20" aria-hidden="true" />
-
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,0.68fr)_minmax(280px,0.32fr)]">
-          <article className="relative min-w-0">
-            <DetailSection eyebrow="ABOUT THE ROLE" title="About the role">
-              <p>{description}</p>
-            </DetailSection>
-            {hasJdContent ? (
-              <DetailSection eyebrow="JOB DESCRIPTION" title="Chi tiết JD">
-                <DetailContentList blocks={jdContent} />
-              </DetailSection>
-            ) : (
-              <>
-                <DetailSection eyebrow="WHAT YOU WILL DO" title="What you will do">
-                  <DetailContentList blocks={displayedResponsibilities} />
-                </DetailSection>
-                <DetailSection eyebrow="WHAT WE ARE LOOKING FOR" title="What we are looking for">
-                  <DetailContentList blocks={displayedRequirements} />
-                </DetailSection>
-                <DetailSection eyebrow="WHAT YOU CAN EXPECT" title="What you can expect">
-                  <DetailContentList blocks={displayedBenefits} />
-                </DetailSection>
-              </>
-            )}
-            <DetailSection eyebrow="WORKING TIME" title="Working time">
-              <p>{job.workingTime || "Thông tin sẽ được trao đổi cụ thể trong quá trình phỏng vấn."}</p>
-            </DetailSection>
-          </article>
-
-          <div className="relative grid gap-5 lg:mt-9">
-            <aside id="career-application" data-scroll-card className="border border-white/12 bg-[#101520]/82 p-6 shadow-[0_28px_82px_rgba(0,0,0,0.30)] backdrop-blur-md">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Application form</p>
-              <h2 className="mt-4 text-2xl font-black uppercase leading-tight text-white">Ứng tuyển vị trí này</h2>
-              <p className="mt-4 text-sm font-semibold leading-7 text-white/58">
-                Điền nhanh thông tin, hệ thống sẽ mở email gửi tới team tuyển dụng GoBeyond.
-              </p>
-              <div className="mt-6">
-                <CareerApplicationForm applyUrl={applyUrl} job={job} />
-              </div>
-            </aside>
-
-            <aside data-scroll-card className="border border-white/12 bg-white/[0.04] p-6 backdrop-blur-md">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Other opportunities</p>
-              <h2 className="mt-4 text-2xl font-black uppercase leading-tight text-white">Explore more roles at GoBeyond</h2>
-              <p className="mt-4 text-sm font-semibold leading-7 text-white/58">
-                Các vị trí mới được đồng bộ từ Payload CMS. Quay lại danh sách để xem thêm team đang tuyển.
-              </p>
+              ) : null} */}
               <Link
                 href="/tuyen-dung"
-                className="mt-6 inline-flex min-h-12 items-center rounded-full border border-white/18 px-6 text-sm font-black uppercase tracking-[0.1em] text-white/76 transition hover:border-[#F26522] hover:text-white"
+                className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/18 px-6 text-sm font-black uppercase tracking-[0.1em] text-white/76 transition hover:border-[#F26522] hover:text-white"
               >
-                View all roles
+                Tất cả vị trí
               </Link>
-            </aside>
+            </div>
+
+            <p className="mt-5 text-sm font-semibold leading-7 text-white/52">
+              Gửi CV tới <span className="font-black text-white">tuyendung@gobe.asia</span> với tiêu đề{" "}
+              <span className="font-black text-[#F26522]">[GOBEYOND - {title.toUpperCase()}] Họ và tên</span>.
+            </p>
+          </header>
+
+          <div className="relative mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-start">
+            <CareerApplicationCard applyUrl={applyUrl} job={job} />
+
+            <article data-career-detail-content className="order-2 min-w-0 lg:order-1">
+              <DetailSection eyebrow="" title="About the role">
+                <div className="grid gap-6">
+                  {/* <p>{description}</p> */}
+                  <dl className="grid gap-1">
+                    {roleFacts.map(([label, value]) => (
+                      <div key={label} className="grid gap-2.5 py-5 sm:grid-cols-[180px_minmax(0,1fr)] sm:items-start sm:py-4">
+                        <dt className="text-[15px] font-black uppercase leading-5 tracking-[0.18em] text-[#F26522] sm:text-[10px] sm:leading-normal">
+                          {label}
+                        </dt>
+                        <dd className="text-[17px] font-black leading-7 text-white/88 sm:text-base sm:leading-6">{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              </DetailSection>
+              {hasJdContent ? (
+                <DetailSection eyebrow="" title="Chi tiết JD">
+                  <DetailContentList blocks={jdContent} />
+                </DetailSection>
+              ) : (
+                <>
+                  <DetailSection eyebrow="" title="What you will do">
+                    <DetailContentList blocks={displayedResponsibilities} />
+                  </DetailSection>
+                  <DetailSection eyebrow="" title="What we are looking for">
+                    <DetailContentList blocks={displayedRequirements} />
+                  </DetailSection>
+                  <DetailSection eyebrow="" title="What you can expect">
+                    <DetailContentList blocks={displayedBenefits} />
+                  </DetailSection>
+                </>
+              )}
+              <DetailSection eyebrow="" title="Working time">
+                <p>{job.workingTime || "Thông tin sẽ được trao đổi cụ thể trong quá trình phỏng vấn."}</p>
+              </DetailSection>
+            </article>
           </div>
         </div>
       </section>

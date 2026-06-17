@@ -10,11 +10,28 @@ export type NewsPost = {
   template?: string;
   publishedAt?: string;
   heroImage?: unknown;
+  content?: NewsRichText;
   layout?: NewsBlock[];
   sourceUrl?: string;
 };
 
 export type NewsTag = "news" | "activity";
+
+export type NewsRichTextNode = {
+  type?: string;
+  text?: string;
+  format?: number | string;
+  tag?: string;
+  children?: NewsRichTextNode[];
+};
+
+export type NewsRichText =
+  | string
+  | {
+      root?: {
+        children?: NewsRichTextNode[];
+      };
+    };
 
 export type NewsBlock = {
   id?: string;

@@ -33,6 +33,7 @@
     }
   ],
   "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://gobe.asia",
     "NEXT_PUBLIC_SERVER_URL": "https://gobe-immersive-3d.joe-378.workers.dev"
   },
   "observability": {

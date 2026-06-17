@@ -225,7 +225,7 @@ export function CareersPage() {
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-20" aria-hidden="true" />
 
         <div className="relative mx-auto max-w-7xl">
-          <div className="grid items-end gap-6 lg:grid-cols-[minmax(0,0.5fr)_minmax(0,0.5fr)]">
+          <div className="grid items-end gap-6">
             <div>
               <div data-scroll-reveal>
                 <SectionMark current="02" label="Vị trí đang mở" />

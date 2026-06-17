@@ -1,14 +1,14 @@
-export const cmsOrigin =
-  process.env.NEXT_PUBLIC_CMS_API_ORIGIN ||
-  process.env.NEXT_PUBLIC_SERVER_URL ||
-  "https://gobe-immersive-3d.joe-378.workers.dev";
+export const cmsOrigin = process.env.NEXT_PUBLIC_CMS_API_ORIGIN || "";
+const cmsAssetOrigin = process.env.NEXT_PUBLIC_CMS_ASSET_ORIGIN;
 
 type PayloadListResponse<T> = {
   docs?: T[];
 };
 
 export function cmsPath(path: string) {
-  return `${cmsOrigin}${path.startsWith("/") ? path : `/${path}`}`;
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+
+  return cmsOrigin ? `${cmsOrigin}${normalizedPath}` : normalizedPath;
 }
 
 export function getPayloadCollectionUrl(collection: string, params: Record<string, string | number>) {
@@ -18,7 +18,7 @@ export function getPayloadCollectionUrl(collection: string, params: Record<strin
     searchParams.set(key, String(value));
   }
 
-  return `${cmsOrigin}/api/${collection}?${searchParams.toString()}`;
+  return cmsPath(`/api/${collection}?${searchParams.toString()}`);
 }
 
 export async function fetchPayloadDocs<T>(collection: string, params: Record<string, string | number>) {
@@ -39,5 +39,15 @@ export function normalizeCmsAssetUrl(url: string | null) {
     return null;
   }
 
-  return url.startsWith("/") ? cmsPath(url) : url;
+  const payloadMediaPrefix = "/api/media/file/";
+
+  if (!cmsAssetOrigin && url.startsWith(payloadMediaPrefix)) {
+    return `/media/${url.slice(payloadMediaPrefix.length)}`;
+  }
+
+  if (!url.startsWith("/")) {
+    return url;
+  }
+
+  return cmsAssetOrigin ? `${cmsAssetOrigin}${url}` : url;
 }

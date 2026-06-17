@@ -188,9 +188,27 @@ export interface News {
   /**
    * Seeds the starter content blocks when a post is created.
    */
-  template: 'standard' | 'editorial' | 'caseStudy' | 'companyUpdate' | 'activity';
+  template?: ('standard' | 'editorial' | 'caseStudy' | 'companyUpdate' | 'activity') | null;
   publishedAt?: string | null;
   excerpt?: string | null;
+  /**
+   * Nhập toàn bộ nội dung bài viết tại đây. Có thể dùng heading, paragraph, bullet list và format text.
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   /**
    * Optional hero image for listing cards and article headers.
    */
@@ -198,81 +216,83 @@ export interface News {
   /**
    * WordPress-style structured content. Add, remove, and reorder blocks per post.
    */
-  layout: (
-    | {
-        kicker?: string | null;
-        heading: string;
-        body: string;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'lead';
-      }
-    | {
-        /**
-         * Plain text body copy. Separate paragraphs with blank lines.
-         */
-        content: string;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'bodyCopy';
-      }
-    | {
-        image: number | Media;
-        caption?: string | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'featureImage';
-      }
-    | {
-        quote: string;
-        attribution?: string | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'pullQuote';
-      }
-    | {
-        items?:
-          | {
-              value: string;
-              label: string;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'statsGrid';
-      }
-    | {
-        heading: string;
-        items?:
-          | {
-              text: string;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'checklist';
-      }
-    | {
-        heading: string;
-        body?: string | null;
-        label: string;
-        href: string;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'cta';
-      }
-    | {
-        /**
-         * Pick a shared CTA. Edit it once in Reusable CTAs and every post updates.
-         */
-        cta: number | ReusableCta;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'reusableCta';
-      }
-  )[];
+  layout?:
+    | (
+        | {
+            kicker?: string | null;
+            heading: string;
+            body: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'lead';
+          }
+        | {
+            /**
+             * Plain text body copy. Separate paragraphs with blank lines.
+             */
+            content: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'bodyCopy';
+          }
+        | {
+            image: number | Media;
+            caption?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'featureImage';
+          }
+        | {
+            quote: string;
+            attribution?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pullQuote';
+          }
+        | {
+            items?:
+              | {
+                  value: string;
+                  label: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'statsGrid';
+          }
+        | {
+            heading: string;
+            items?:
+              | {
+                  text: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'checklist';
+          }
+        | {
+            heading: string;
+            body?: string | null;
+            label: string;
+            href: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
+          }
+        | {
+            /**
+             * Pick a shared CTA. Edit it once in Reusable CTAs and every post updates.
+             */
+            cta: number | ReusableCta;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'reusableCta';
+          }
+      )[]
+    | null;
   /**
    * Internal editor notes. Not rendered publicly.
    */
@@ -579,6 +599,7 @@ export interface NewsSelect<T extends boolean = true> {
   template?: T;
   publishedAt?: T;
   excerpt?: T;
+  content?: T;
   heroImage?: T;
   layout?:
     | T

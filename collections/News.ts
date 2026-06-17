@@ -11,6 +11,41 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)+/g, "");
 
+const textToLexicalRichText = (value: string) => ({
+  root: {
+    type: "root",
+    format: "",
+    indent: 0,
+    version: 1,
+    direction: null,
+    children: value.trim()
+      ? value
+          .replace(/\r\n/g, "\n")
+          .split(/\n{2,}/)
+          .map((paragraph) => paragraph.trim())
+          .filter(Boolean)
+          .map((paragraph) => ({
+            type: "paragraph",
+            format: "",
+            indent: 0,
+            version: 1,
+            direction: null,
+            children: [
+              {
+                type: "text",
+                text: paragraph,
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                version: 1,
+              },
+            ],
+          }))
+      : [],
+  },
+});
+
 const templateLayouts: Record<string, unknown[]> = {
   standard: [
     {
@@ -102,8 +137,16 @@ const seedTemplateLayout: CollectionBeforeValidateHook = ({ data, operation }) =
     data.slug = slugify(String(data.title));
   }
 
-  if (operation === "create" && (!Array.isArray(data.layout) || data.layout.length === 0)) {
-    data.layout = templateLayouts[String(data.template || "standard")] || templateLayouts.standard;
+  if (typeof data.content === "string") {
+    data.content = textToLexicalRichText(data.content);
+  }
+
+  if (operation === "create" && !data.content) {
+    const layout = templateLayouts[String(data.template || "standard")] || templateLayouts.standard;
+    const lead = layout.find((block) => block && typeof block === "object" && (block as { blockType?: unknown }).blockType === "lead") as
+      | { heading?: string; body?: string }
+      | undefined;
+    data.content = textToLexicalRichText([lead?.heading, lead?.body].filter(Boolean).join("\n\n"));
   }
 
   if (!data.publishedAt && data.status === "published") {
@@ -111,6 +154,11 @@ const seedTemplateLayout: CollectionBeforeValidateHook = ({ data, operation }) =
   }
 
   return data;
+};
+
+const legacyAdminConfig = {
+  condition: () => false,
+  description: "Legacy block field kept for existing data fallback. Use Content for new posts.",
 };
 
 export const News: CollectionConfig = {
@@ -208,6 +256,7 @@ export const News: CollectionConfig = {
       ],
       admin: {
         position: "sidebar",
+        condition: () => false,
         description: "Seeds the starter content blocks when a post is created.",
       },
     },
@@ -227,6 +276,14 @@ export const News: CollectionConfig = {
       type: "textarea",
     },
     {
+      name: "content",
+      label: "Content",
+      type: "richText",
+      admin: {
+        description: "Nhập toàn bộ nội dung bài viết tại đây. Có thể dùng heading, paragraph, bullet list và format text.",
+      },
+    },
+    {
       name: "heroImage",
       type: "upload",
       relationTo: "media",
@@ -237,9 +294,10 @@ export const News: CollectionConfig = {
     {
       name: "layout",
       type: "blocks",
-      required: true,
+      required: false,
       blocks: newsBlocks,
       admin: {
+        ...legacyAdminConfig,
         description: "WordPress-style structured content. Add, remove, and reorder blocks per post.",
       },
     },

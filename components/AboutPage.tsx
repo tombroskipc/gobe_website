@@ -1,10 +1,10 @@
 "use client";
 
-import { type CSSProperties, type ReactNode } from "react";
+import { useEffect, type CSSProperties, type ReactNode } from "react";
 import { CustomCursor } from "./CustomCursor";
-import { HomeSectionStoryController } from "./HomeSectionStoryController";
 import { FooterSection } from "./LegacySections";
 import { Navbar } from "./Navbar";
+import { initScrollController } from "./ScrollController";
 
 type AccentStyle = CSSProperties & {
   "--accent": string;
@@ -105,11 +105,12 @@ function SectionFrame({
 }
 
 export function AboutPage() {
+  useEffect(() => initScrollController(), []);
+
   return (
     <main id="scroll-story" className="relative min-h-screen overflow-x-hidden bg-[#000314] text-white">
       <CustomCursor />
       <Navbar />
-      <HomeSectionStoryController />
 
       <nav
         aria-label="Điều hướng các phần giới thiệu"

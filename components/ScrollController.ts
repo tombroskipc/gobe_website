@@ -6,7 +6,9 @@ import { scrollRig } from "./scrollRig";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initScrollController() {
+const DEFAULT_MIN_ACTIVE_WIDTH = 768;
+
+function activateScrollController() {
   const magneticCleanups: Array<() => void> = [];
 
   const ctx = gsap.context(() => {
@@ -52,10 +54,12 @@ export function initScrollController() {
       );
     });
 
-    gsap.utils.toArray<HTMLElement>("[data-scroll-section]").forEach((section) => {
-      const isHomeStoryPanel = section.hasAttribute("data-home-story-section");
+    const isHomeStoryModeActive = document.documentElement.classList.contains("home-story-active");
 
-      if (!isHomeStoryPanel) {
+    gsap.utils.toArray<HTMLElement>("[data-scroll-section]").forEach((section) => {
+      const shouldUseScrollReveal = !section.hasAttribute("data-home-story-section") || !isHomeStoryModeActive;
+
+      if (shouldUseScrollReveal) {
         const revealTargets = section.querySelectorAll<HTMLElement>("[data-scroll-reveal]");
         if (revealTargets.length) {
           gsap.fromTo(
@@ -191,5 +195,34 @@ export function initScrollController() {
   return () => {
     magneticCleanups.forEach((cleanup) => cleanup());
     ctx.revert();
+  };
+}
+
+export function initScrollController({ minActiveWidth = DEFAULT_MIN_ACTIVE_WIDTH }: { minActiveWidth?: number } = {}) {
+  const activeViewport = window.matchMedia(`(min-width: ${minActiveWidth}px)`);
+  let cleanup: (() => void) | undefined;
+
+  const stop = () => {
+    cleanup?.();
+    cleanup = undefined;
+  };
+
+  const syncActivation = () => {
+    if (!activeViewport.matches) {
+      stop();
+      return;
+    }
+
+    if (!cleanup) {
+      cleanup = activateScrollController();
+    }
+  };
+
+  syncActivation();
+  activeViewport.addEventListener("change", syncActivation);
+
+  return () => {
+    activeViewport.removeEventListener("change", syncActivation);
+    stop();
   };
 }

@@ -23,6 +23,40 @@ const DeferredHomeSectionStoryController = dynamic(
   },
 );
 
+const HOME_LOADING_SEEN_KEY = "gobe:home-loading-seen";
+
+let homeLoadingSeenInRuntime = false;
+
+function hasSeenHomeLoading() {
+  if (homeLoadingSeenInRuntime) {
+    return true;
+  }
+
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  try {
+    return window.sessionStorage.getItem(HOME_LOADING_SEEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function markHomeLoadingSeen() {
+  homeLoadingSeenInRuntime = true;
+
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.sessionStorage.setItem(HOME_LOADING_SEEN_KEY, "1");
+  } catch {
+    // Runtime flag still prevents repeats if sessionStorage is unavailable.
+  }
+}
+
 function useDeferredEnhancements() {
   const [enabled, setEnabled] = useState(false);
 
@@ -93,9 +127,11 @@ function useDeferredEnhancements() {
 
 export function Experience() {
   const enhancementsEnabled = useDeferredEnhancements();
+  const [showLoadingOverlay] = useState(() => !hasSeenHomeLoading());
   const [initialModelReady, setInitialModelReady] = useState(false);
 
   const handleInitialModelLoaded = useCallback(() => {
+    markHomeLoadingSeen();
     setInitialModelReady(true);
   }, []);
 
@@ -126,8 +162,8 @@ export function Experience() {
     <main id="scroll-story" className="relative min-h-screen overflow-x-hidden bg-[#0c1018]/45 text-white">
       <CustomCursor />
       <Navbar />
-      {enhancementsEnabled ? <DeferredHomeSectionStoryController /> : null}
-      <PageLoadingOverlay ready={initialModelReady} />
+      <DeferredHomeSectionStoryController />
+      {showLoadingOverlay ? <PageLoadingOverlay ready={initialModelReady} /> : null}
       <LandingHeroSection forceInitialModelLoad={!initialModelReady} onInitialModelLoaded={handleInitialModelLoaded} />
       <CoreValuesSection />
       <OperationsSection />
