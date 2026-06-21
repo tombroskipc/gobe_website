@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { SuppressDevWarnings } from "@/components/SuppressDevWarnings";
+import { ThemeScript } from "@/components/ThemeScript";
 import "./globals.css";
 
 const siteTitle = "GoBeyond - Go Big Or Go Home";
@@ -55,8 +56,9 @@ export default function FrontendLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="vi" className="dark mdl-js" suppressHydrationWarning>
+    <html lang="vi" className="dark mdl-js" data-theme="dark" suppressHydrationWarning>
       <body className="text-[#18213d] antialiased">
+        <ThemeScript />
         <SuppressDevWarnings />
         {children}
         {/* Film grain nhẹ để nền gradient có chiều sâu hơn. */}

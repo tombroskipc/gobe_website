@@ -487,13 +487,13 @@ export function ScaleSection() {
 
 export function ContactCtaSection() {
   return (
-    <section id="contact" data-home-story-section data-scroll-section className="relative z-10 overflow-hidden px-5 py-20 sm:px-6 md:py-28 lg:px-8">
-      <div data-home-story-content className="relative flex min-h-screen items-center overflow-hidden">
+    <section id="contact" data-home-story-section data-scroll-section className="relative z-10 overflow-hidden px-0 py-20 md:py-28">
+      <div data-home-story-content className="relative z-[2] flex min-h-screen items-center overflow-hidden px-5 sm:px-6 lg:px-8">
         <div className="absolute inset-0 bg-[#101726]/36 backdrop-blur-[1px]" aria-hidden="true" />
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-28" aria-hidden="true" />
         <div data-scroll-reveal className="relative mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur-md md:p-12">
-          <h2 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="text-[clamp(2.4rem,6vw,5.8rem)] font-black uppercase leading-[0.9] tracking-normal text-white">
-            Liên hệ đội ngũ GoBe toàn cầu.
+          <h2 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="text-[clamp(2.4rem,6vw,5.8rem)] font-black leading-[0.9] tracking-normal text-white">
+            Gia nhập Gobeyond ngay!
           </h2>
           <p data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.82" className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/65">
             {"Li\u00ean h\u1ec7 GoBe v\u1ec1 s\u1ea3n ph\u1ea9m, h\u1ee3p t\u00e1c, tuy\u1ec3n d\u1ee5ng, truy\u1ec1n th\u00f4ng, ho\u1eb7c nh\u1eefng c\u01a1 h\u1ed9i li\u00ean quan \u0111\u1ebfn v\u1eadn h\u00e0nh th\u01b0\u01a1ng m\u1ea1i \u0111i\u1ec7n t\u1eed to\u00e0n c\u1ea7u."}
@@ -506,8 +506,13 @@ export function ContactCtaSection() {
           </a>
         </div>
       </div>
+      <div className="contact-footer-bridge pointer-events-none absolute inset-x-0 bottom-0 h-44" aria-hidden="true" />
     </section>
   );
+}
+
+export function FooterBridge() {
+  return <div className="footer-page-bridge pointer-events-none relative z-[9] -mb-px h-28" aria-hidden="true" />;
 }
 
 export function FooterSection() {
@@ -530,7 +535,7 @@ export function FooterSection() {
   return (
     <footer data-home-story-footer className="relative z-10 overflow-hidden bg-[radial-gradient(circle_at_54%_26%,rgba(255,176,65,0.9),transparent_19%),linear-gradient(112deg,#ef2b0b_0%,#ff5b13_36%,#f03b0c_72%,#e7260a_100%)] px-5 pb-8 pt-20 text-white sm:px-6 lg:px-8">
       <svg
-        className="pointer-events-none absolute inset-x-0 top-0 h-14 w-full text-white"
+        className="footer-top-wave pointer-events-none absolute inset-x-0 top-0 h-14 w-full"
         viewBox="0 0 1440 90"
         preserveAspectRatio="none"
         aria-hidden="true"

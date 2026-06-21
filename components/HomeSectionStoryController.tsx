@@ -10,6 +10,8 @@ gsap.registerPlugin(Observer);
 const SECTION_SELECTOR = "[data-home-story-section]";
 const CONTENT_SELECTOR = "[data-home-story-content]";
 const DEFAULT_MIN_ACTIVE_WIDTH = 768;
+const HEADER_SCROLL_OFFSET = 78;
+const FOOTER_REENTRY_TOLERANCE = 12;
 
 function isStoryInteractionPaused() {
   return (
@@ -135,6 +137,19 @@ function activateHomeSectionStory() {
         );
     };
 
+    let observer: ReturnType<typeof Observer.create> | undefined;
+
+    const reenterStoryFromFooter = () => {
+      if (!released || animating || isStoryInteractionPaused()) {
+        return;
+      }
+
+      observer?.enable();
+      window.scrollTo({ left: 0, top: 0 });
+      currentIndex = -1;
+      showSection(sections.length - 1, -1);
+    };
+
     const setInitialSection = (index: number) => {
       const panel = panels[index];
       const revealSelector =
@@ -164,6 +179,32 @@ function activateHomeSectionStory() {
       });
     };
 
+    const getFooterScrollTop = () => {
+      const maxScrollTop = Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight,
+      );
+      const footerTop = footer.getBoundingClientRect().top + window.scrollY;
+
+      return Math.max(
+        0,
+        Math.min(maxScrollTop, footerTop - HEADER_SCROLL_OFFSET),
+      );
+    };
+
+    const isNearFooterEntry = () =>
+      window.scrollY <= getFooterScrollTop() + FOOTER_REENTRY_TOLERANCE;
+
+    const scrollToFooter = () => {
+      window.requestAnimationFrame(() => {
+        window.scrollTo({
+          behavior: "smooth",
+          left: 0,
+          top: getFooterScrollTop(),
+        });
+      });
+    };
+
     const releaseToFooter = () => {
       if (animating || released) {
         return;
@@ -183,8 +224,9 @@ function activateHomeSectionStory() {
             html.classList.add("home-story-released");
             gsap.set(panel.section, { autoAlpha: 1, yPercent: 0, zIndex: 2 });
             gsap.set(panel.content, { autoAlpha: 1, yPercent: 0 });
-            window.scrollTo({ left: 0, top: 0 });
+            observer?.disable();
             animating = false;
+            scrollToFooter();
           },
         })
         .to(panel.content, { autoAlpha: 0.9, yPercent: -8 }, 0);
@@ -199,7 +241,7 @@ function activateHomeSectionStory() {
         return;
       }
 
-      if (released && window.scrollY > 8) {
+      if (released && direction === -1 && !isNearFooterEntry()) {
         return;
       }
 
@@ -222,13 +264,28 @@ function activateHomeSectionStory() {
       showSection(transition.index, transition.direction);
     };
 
-    const observer = Observer.create({
+    observer = Observer.create({
       onDown: () => handleGesture(-1),
       onUp: () => handleGesture(1),
+      preventDefault: false,
       tolerance: 10,
       type: "wheel,touch,pointer",
       wheelSpeed: -1,
     });
+
+    const onReleasedWheel = (event: WheelEvent) => {
+      if (
+        !released ||
+        animating ||
+        event.deltaY >= -8 ||
+        !isNearFooterEntry()
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      reenterStoryFromFooter();
+    };
 
     const onAnchorClick = (event: MouseEvent) => {
       const target =
@@ -259,6 +316,7 @@ function activateHomeSectionStory() {
 
       if (released) {
         currentIndex = -1;
+        observer?.enable();
       }
 
       showSection(targetIndex, direction);
@@ -273,6 +331,10 @@ function activateHomeSectionStory() {
         ["ArrowDown", "PageDown", " "].includes(event.key) &&
         !event.shiftKey
       ) {
+        if (released) {
+          return;
+        }
+
         event.preventDefault();
 
         handleGesture(1);
@@ -282,6 +344,15 @@ function activateHomeSectionStory() {
         ["ArrowUp", "PageUp"].includes(event.key) ||
         (event.key === " " && event.shiftKey)
       ) {
+        if (released) {
+          if (isNearFooterEntry()) {
+            event.preventDefault();
+            reenterStoryFromFooter();
+          }
+
+          return;
+        }
+
         event.preventDefault();
 
         handleGesture(-1);
@@ -290,6 +361,7 @@ function activateHomeSectionStory() {
 
     document.addEventListener("click", onAnchorClick);
     document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("wheel", onReleasedWheel, { passive: false });
 
     const getHashIndex = () =>
       sections.findIndex(
@@ -324,7 +396,8 @@ function activateHomeSectionStory() {
       window.clearInterval(hashReconcileTimer);
       document.removeEventListener("click", onAnchorClick);
       document.removeEventListener("keydown", onKeyDown);
-      observer.kill();
+      window.removeEventListener("wheel", onReleasedWheel);
+      observer?.kill();
     };
   }, root);
 

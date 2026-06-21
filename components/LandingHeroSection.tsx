@@ -111,7 +111,7 @@ export function LandingHeroSection({ forceInitialModelLoad = false, onInitialMod
       data-reveal
       data-home-story-section
       data-scroll-section
-      className={`relative min-h-svh overflow-hidden bg-[#000314] pt-20 text-white sm:px-6 sm:pt-[5.5rem] lg:min-h-screen lg:px-8 lg:pt-24 ${isModelOpen ? "z-[120]" : "z-10"}`}
+      className={`relative min-h-svh overflow-hidden bg-[#000314] text-white lg:min-h-screen ${isModelOpen ? "z-[120]" : "z-10"}`}
       onMouseMove={(event) => {
         const rect = event.currentTarget.getBoundingClientRect();
         const x = (event.clientX - rect.left) / rect.width - 0.5;
@@ -129,7 +129,7 @@ export function LandingHeroSection({ forceInitialModelLoad = false, onInitialMod
           aria-hidden="true"
         />
 
-        <div className="relative z-[3] px-4 mx-auto grid min-h-[calc(100svh-5rem)] w-full max-w-[96rem] grid-cols-1 content-center items-center gap-4 pb-8 sm:min-h-[calc(100svh-5.5rem)] sm:gap-6 sm:pb-10 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[minmax(0,0.68fr)_minmax(520px,1.12fr)] lg:gap-12 lg:pb-[clamp(4rem,12vh,8rem)] xl:grid-cols-[minmax(0,0.72fr)_minmax(560px,1.08fr)] xl:gap-14 2xl:max-w-[100rem] 2xl:grid-cols-[minmax(0,0.82fr)_minmax(540px,1.08fr)]">
+        <div className="relative z-[3] px-4 mx-auto grid min-h-[calc(100svh-5rem)] w-full max-w-[96rem] grid-cols-1 content-center items-center gap-4 pb-8 sm:min-h-[calc(100svh-5.5rem)] sm:gap-6 sm:pb-10 lg:min-h-[calc(100vh-6rem)] lg:grid-cols-[minmax(0,0.68fr)_minmax(520px,1.12fr)] lg:gap-12 lg:pt-[clamp(5rem,10vh,6.5rem)] lg:pb-[clamp(3rem,6vh,4rem)] xl:grid-cols-[minmax(0,0.72fr)_minmax(560px,1.08fr)] xl:gap-14 2xl:max-w-[100rem] 2xl:grid-cols-[minmax(0,0.82fr)_minmax(540px,1.08fr)]">
           <div className="relative z-[3] flex w-full min-w-0 max-w-[34rem] flex-col text-left xl:max-w-[36rem] 2xl:max-w-[40rem]">
             <h1 data-scroll-reveal className="max-w-full text-4xl font-black leading-[0.9] tracking-normal text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
               GOBEYOND LLC

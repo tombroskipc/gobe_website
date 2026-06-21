@@ -2,7 +2,7 @@
 
 import { useEffect, type CSSProperties, type ReactNode } from "react";
 import { CustomCursor } from "./CustomCursor";
-import { FooterSection } from "./LegacySections";
+import { FooterBridge, FooterSection } from "./LegacySections";
 import { Navbar } from "./Navbar";
 import { initScrollController } from "./ScrollController";
 
@@ -287,6 +287,7 @@ export function AboutPage() {
       </SectionFrame>
 
       <div data-home-story-footer>
+        <FooterBridge />
         <FooterSection />
       </div>
     </main>

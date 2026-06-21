@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { ThemeToggle } from "./ThemeToggle";
 
 const menuItems = [
   { label: "TRANG CH\u1ee6", href: "/", match: "/" },
@@ -72,21 +73,25 @@ export function Navbar() {
           >
             {"\u1ee8ng tuy\u1ec3n"}
           </a>
+          <ThemeToggle className="ml-1" />
         </nav>
 
-        <button
-          type="button"
-          aria-label={open ? "Đóng menu" : "Mở menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((value) => !value)}
-          className="ml-auto grid h-11 w-11 place-items-center rounded-full border border-[#F26522]/35 bg-white/10 text-[#F26522] transition hover:bg-[#F26522]/10 lg:hidden"
-        >
-          <span className="relative h-5 w-6">
-            <span className={`absolute left-0 top-0 h-0.5 w-6 rounded-full bg-current transition duration-300 ${open ? "translate-y-2 rotate-45" : ""}`} />
-            <span className={`absolute left-0 top-2 h-0.5 w-6 rounded-full bg-current transition duration-300 ${open ? "opacity-0" : ""}`} />
-            <span className={`absolute left-0 top-4 h-0.5 w-6 rounded-full bg-current transition duration-300 ${open ? "-translate-y-2 -rotate-45" : ""}`} />
-          </span>
-        </button>
+        <div className="ml-auto flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            aria-label={open ? "Đóng menu" : "Mở menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((value) => !value)}
+            className="grid h-11 w-11 place-items-center rounded-full border border-[#F26522]/35 bg-white/10 text-[#F26522] transition hover:bg-[#F26522]/10"
+          >
+            <span className="relative h-5 w-6">
+              <span className={`absolute left-0 top-0 h-0.5 w-6 rounded-full bg-current transition duration-300 ${open ? "translate-y-2 rotate-45" : ""}`} />
+              <span className={`absolute left-0 top-2 h-0.5 w-6 rounded-full bg-current transition duration-300 ${open ? "opacity-0" : ""}`} />
+              <span className={`absolute left-0 top-4 h-0.5 w-6 rounded-full bg-current transition duration-300 ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+            </span>
+          </button>
+        </div>
       </div>
 
       <div
@@ -105,16 +110,19 @@ export function Navbar() {
         <div className="flex h-full flex-col px-6 py-5">
           <div className="flex items-center justify-between">
             <img src="/Logo_2.png" alt="GOBeyond" className="w-40 object-contain" />
-            <button
-              type="button"
-              aria-label="Đóng menu"
-              onClick={() => setOpen(false)}
-              className="grid h-10 w-10 place-items-center rounded-full bg-[#F26522]/10 text-[#F26522]"
-            >
-              <Icon className="h-5 w-5">
-                <path d="m6 6 12 12M18 6 6 18" />
-              </Icon>
-            </button>
+            <div className="flex items-center gap-2">
+              <ThemeToggle className="h-10 w-10" />
+              <button
+                type="button"
+                aria-label="Đóng menu"
+                onClick={() => setOpen(false)}
+                className="grid h-10 w-10 place-items-center rounded-full bg-[#F26522]/10 text-[#F26522]"
+              >
+                <Icon className="h-5 w-5">
+                  <path d="m6 6 12 12M18 6 6 18" />
+                </Icon>
+              </button>
+            </div>
           </div>
 
           <nav className="mt-10 grid gap-2" aria-label="Điều hướng di động">

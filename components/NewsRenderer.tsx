@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, type ReactNode } from "react";
-import { fetchPayloadDocs, normalizeCmsAssetUrl } from "@/lib/cmsClient";
+import { useEffect, type ReactNode } from "react";
+import { normalizeCmsAssetUrl } from "@/lib/cmsClient";
 import type { NewsBlock, NewsPost, NewsRichText, NewsRichTextNode } from "@/lib/news";
 import { CustomCursor } from "./CustomCursor";
-import { FooterSection } from "./LegacySections";
+import { FooterBridge, FooterSection } from "./LegacySections";
 import { Navbar } from "./Navbar";
 import { initScrollController } from "./ScrollController";
 
@@ -61,6 +61,7 @@ function NewsPageShell({ children }: { children: ReactNode }) {
       <CustomCursor />
       <Navbar />
       {children}
+      <FooterBridge />
       <FooterSection />
     </div>
   );
@@ -434,14 +435,6 @@ function NewsCard({ post, surface, index }: { post: NewsPost; surface: NewsSurfa
   );
 }
 
-function mergePostsWithFallback(docs: NewsPost[], fallback: NewsPost[]) {
-  if (docs.length === 0) {
-    return fallback;
-  }
-
-  return docs;
-}
-
 function renderBlock(block: NewsBlock, index: number) {
   switch (block.blockType) {
     case "lead":
@@ -578,7 +571,7 @@ export function NewsArticle({ post, surface = "news" }: { post: NewsPost; surfac
 
           <header data-scroll-reveal className="relative mt-8 border-y border-white/14 py-8 md:py-11">
             {/* <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">{copy.eyebrow}</p> */}
-            <h1 className="mt-4 max-w-5xl text-3xl font-black uppercase leading-[1.02] text-white sm:text-4xl md:text-5xl lg:text-5xl">
+            <h1 className="mt-4 max-w-4xl text-2xl font-black leading-[1.12] text-white sm:text-3xl md:text-4xl lg:text-[2.8rem]">
               {post.title}
             </h1>
             {post.excerpt ? <p className="mt-7 max-w-4xl text-lg font-semibold leading-8 text-white/72 md:text-xl md:leading-9">{post.excerpt}</p> : null}
@@ -641,45 +634,7 @@ export function NewsArticle({ post, surface = "news" }: { post: NewsPost; surfac
 
 export function NewsListing({ posts, surface = "news" }: { posts: NewsPost[]; surface?: NewsSurface }) {
   const copy = surfaceCopy[surface];
-  const [livePosts, setLivePosts] = useState(posts);
-
-  useEffect(() => {
-    let mounted = true;
-    const params: Record<string, string | number> =
-      surface === "activity"
-        ? {
-            depth: 2,
-            limit: 24,
-            sort: "-publishedAt",
-            "where[status][equals]": "published",
-            "where[tag][equals]": "activity",
-          }
-        : {
-            depth: 2,
-            limit: 24,
-            sort: "-publishedAt",
-            "where[status][equals]": "published",
-            "where[tag][not_equals]": "activity",
-          };
-
-    fetchPayloadDocs<NewsPost>("news", params)
-      .then((docs) => {
-        if (mounted) {
-          setLivePosts(mergePostsWithFallback(docs, posts));
-        }
-      })
-      .catch(() => {
-        if (mounted) {
-          setLivePosts(posts);
-        }
-      });
-
-    return () => {
-      mounted = false;
-    };
-  }, [posts, surface]);
-
-  const previewPost = livePosts[0];
+  const previewPost = posts[0];
   const listId = surface === "activity" ? "activity-list" : "news-list";
 
   return (
@@ -698,7 +653,7 @@ export function NewsListing({ posts, surface = "news" }: { posts: NewsPost[]; su
               <div data-scroll-reveal>
                 <SectionMark current="01" label="" />
               </div>
-              <h1 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.86] tracking-normal sm:text-6xl lg:text-7xl xl:text-8xl">
+              <h1 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] tracking-normal sm:text-5xl lg:text-6xl xl:text-7xl">
                 {copy.heroTitle}
                 <span className="block text-[#ff7648]">{copy.heroAccent}</span>
               </h1>
@@ -732,7 +687,7 @@ export function NewsListing({ posts, surface = "news" }: { posts: NewsPost[]; su
                   </div>
                   <div className="relative flex h-full max-w-xl flex-col justify-end">
                     <p className="text-xs font-black uppercase tracking-[0.24em] text-[#F26522]">{copy.previewLabel}</p>
-                    <h2 className="mt-5 text-3xl font-black uppercase leading-tight text-white md:text-5xl">
+                    <h2 className="mt-5 text-2xl font-black uppercase leading-tight text-white md:text-4xl">
                       {previewPost?.title || copy.heroTitle}
                     </h2>
                     <p className="mt-5 line-clamp-3 text-base font-semibold leading-7 text-white/64">
@@ -755,7 +710,7 @@ export function NewsListing({ posts, surface = "news" }: { posts: NewsPost[]; su
                 <div data-scroll-reveal>
                   <SectionMark current="02" label="" />
                 </div>
-                <h3 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] sm:text-3xl lg:text-5xl">
+                <h3 data-scroll-reveal className="mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl">
                   {copy.listTitle} <span className="text-[#ff7648]">{copy.listAccent}</span>
                 </h3>
               </div>
@@ -764,16 +719,16 @@ export function NewsListing({ posts, surface = "news" }: { posts: NewsPost[]; su
               </p> */}
             </div>
 
-            {livePosts.length > 0 ? (
+            {posts.length > 0 ? (
               <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {livePosts.map((post, index) => (
+                {posts.map((post, index) => (
                   <NewsCard key={post.slug} post={post} surface={surface} index={index} />
                 ))}
               </div>
             ) : (
               <div data-scroll-card className="mt-10 border border-white/12 bg-[#101520]/82 p-8 text-white shadow-[0_28px_82px_rgba(0,0,0,0.26)] backdrop-blur-md md:p-10">
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">{copy.backLabel}</p>
-                <h2 className="mt-4 text-3xl font-black uppercase text-white md:text-5xl">{copy.emptyHeading}</h2>
+                <h2 className="mt-4 text-2xl font-black uppercase text-white md:text-4xl">{copy.emptyHeading}</h2>
                 <p className="mt-5 max-w-2xl text-base leading-8 text-white/66">{copy.emptyBody}</p>
               </div>
             )}

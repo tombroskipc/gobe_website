@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type ChangeEvent, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import type { CareerItem, CareerRichText, CareerRichTextNode } from "@/lib/careers";
-import { fetchPayloadDocs } from "@/lib/cmsClient";
 import { CustomCursor } from "./CustomCursor";
-import { FooterSection } from "./LegacySections";
+import { FooterBridge, FooterSection } from "./LegacySections";
 import { Navbar } from "./Navbar";
 import { initScrollController } from "./ScrollController";
 
@@ -48,6 +47,7 @@ function PageShell({ children }: { children: ReactNode }) {
       <CustomCursor />
       <Navbar />
       {children}
+      <FooterBridge />
       <FooterSection />
     </main>
   );
@@ -382,33 +382,6 @@ function JobCard({ job, index }: { job: CareerItem; index: number }) {
 }
 
 export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[]; listingSourceUrl: string }) {
-  const [liveJobs, setLiveJobs] = useState(jobs);
-
-  useEffect(() => {
-    let mounted = true;
-
-    fetchPayloadDocs<CareerItem>("careers", {
-      depth: 1,
-      limit: 50,
-      sort: "-publishedAt",
-      "where[_status][equals]": "published",
-    })
-      .then((docs) => {
-        if (mounted) {
-          setLiveJobs(docs);
-        }
-      })
-      .catch(() => {
-        if (mounted) {
-          setLiveJobs(jobs);
-        }
-      });
-
-    return () => {
-      mounted = false;
-    };
-  }, [jobs]);
-
   return (
     <PageShell>
       <section id="careers" data-scroll-section className="relative z-10 min-h-screen overflow-hidden bg-[#000314] px-5 pt-24 text-white sm:px-8 lg:px-12">
@@ -420,7 +393,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
             <div data-scroll-reveal>
               <SectionMark current="01" label="" />
             </div>
-            <h1 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.86] tracking-normal sm:text-6xl lg:text-7xl xl:text-8xl">
+            <h1 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] tracking-normal sm:text-5xl lg:text-6xl xl:text-7xl">
               Gia nhập
               <span className="block text-[#ff7648]">GoBeyond</span>
             </h1>
@@ -466,7 +439,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
               <div data-scroll-reveal>
                 <SectionMark current="02" label="" />
               </div>
-              <h2 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] sm:text-3xl lg:text-5xl">
+              <h2 data-scroll-reveal className="mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl">
                 Tất cả vị trí <span className="text-[#ff7648]">đang tuyển</span>
               </h2>
             </div>
@@ -475,16 +448,16 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
             </p> */}
           </div>
 
-          {liveJobs.length > 0 ? (
+          {jobs.length > 0 ? (
             <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {liveJobs.map((job, index) => (
+              {jobs.map((job, index) => (
                 <JobCard key={job.slug} job={job} index={index} />
               ))}
             </div>
           ) : (
             <div data-scroll-card className="mt-10 border border-white/12 bg-[#101520]/82 p-8 text-white shadow-[0_28px_82px_rgba(0,0,0,0.26)] backdrop-blur-md md:p-10">
               <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Tuyển dụng</p>
-              <h3 className="mt-4 text-3xl font-black uppercase tracking-normal text-white md:text-5xl">
+              <h3 className="mt-4 text-2xl font-black uppercase tracking-normal text-white md:text-4xl">
                 Chưa có tin tuyển dụng
               </h3>
               <p className="mt-5 max-w-2xl text-base font-medium leading-8 text-white/68">
@@ -972,7 +945,7 @@ export function CareerDetail({ job }: { job: CareerItem }) {
 
           <header data-scroll-reveal className="relative mt-8 border-y border-white/14 py-8 md:py-11">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">{tagLabels[tag] || tagLabels.hiring}</p>
-            <h1 className="mt-4 max-w-5xl text-3xl font-black uppercase leading-[1.02] text-white sm:text-4xl md:text-5xl lg:text-5xl">
+            <h1 className="mt-4 max-w-4xl text-2xl font-black uppercase leading-[1.08] text-white sm:text-3xl md:text-4xl lg:text-[2.8rem]">
               {title}
             </h1>
             {/* <p className="mt-7 max-w-4xl text-lg font-semibold leading-8 text-white/72 md:text-xl md:leading-9">{description}</p> */}

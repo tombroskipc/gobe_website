@@ -251,14 +251,6 @@ export const fallbackActivities: NewsPost[] = [
   }),
 ];
 
-function mergeWithFallback(docs: NewsPost[], fallback: NewsPost[]) {
-  if (docs.length === 0) {
-    return fallback;
-  }
-
-  return docs;
-}
-
 const publishedNewsWhere: Where = {
   and: [
     {
@@ -309,7 +301,7 @@ export async function getPublishedNews(): Promise<NewsPost[]> {
       where: publishedNewsWhere,
     });
 
-    return mergeWithFallback(result.docs as NewsPost[], fallbackNews);
+    return result.docs as NewsPost[];
   } catch (error) {
     console.warn("Payload news query failed, using fallback content.", error);
     return fallbackNews;
@@ -327,7 +319,7 @@ export async function getPublishedActivities(): Promise<NewsPost[]> {
       where: publishedActivityWhere,
     });
 
-    return mergeWithFallback(result.docs as NewsPost[], fallbackActivities);
+    return result.docs as NewsPost[];
   } catch (error) {
     console.warn("Payload activity query failed, using fallback content.", error);
     return fallbackActivities;
@@ -444,7 +436,7 @@ export async function getPublishedNewsBySlug(slug: string): Promise<NewsPost | n
       },
     });
 
-    return (result.docs[0] as NewsPost | undefined) || fallbackNews.find((post) => post.slug === slug) || null;
+    return (result.docs[0] as NewsPost | undefined) || null;
   } catch (error) {
     console.warn("Payload news detail query failed, using fallback content.", error);
     return fallbackNews.find((post) => post.slug === slug) || null;
@@ -479,7 +471,7 @@ export async function getPublishedActivityBySlug(slug: string): Promise<NewsPost
       },
     });
 
-    return (result.docs[0] as NewsPost | undefined) || fallbackActivities.find((post) => post.slug === slug) || null;
+    return (result.docs[0] as NewsPost | undefined) || null;
   } catch (error) {
     console.warn("Payload activity detail query failed, using fallback content.", error);
     return fallbackActivities.find((post) => post.slug === slug) || null;

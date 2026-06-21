@@ -2,7 +2,7 @@
 
 import { useEffect, type CSSProperties, type ReactNode } from "react";
 import { CustomCursor } from "./CustomCursor";
-import { FooterSection } from "./LegacySections";
+import { FooterBridge, FooterSection } from "./LegacySections";
 import { Navbar } from "./Navbar";
 import { initScrollController } from "./ScrollController";
 
@@ -108,6 +108,7 @@ function PageShell({ children }: { children: ReactNode }) {
       <CustomCursor />
       <Navbar />
       {children}
+      <FooterBridge />
       <FooterSection />
     </main>
   );
@@ -193,7 +194,7 @@ export function CareersPage() {
             <div data-scroll-reveal>
               <SectionMark current="01" label="Tuyển dụng" />
             </div>
-            <h1 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.86] tracking-normal sm:text-6xl lg:text-8xl xl:text-9xl">
+            <h1 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] tracking-normal sm:text-5xl lg:text-6xl xl:text-7xl">
               Gia nhập
               <span className="block text-[#ff7648]">GoBeyond</span>
             </h1>
@@ -230,7 +231,7 @@ export function CareersPage() {
               <div data-scroll-reveal>
                 <SectionMark current="02" label="Vị trí đang mở" />
               </div>
-              <h2 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] sm:text-5xl lg:text-7xl">
+              <h2 data-scroll-reveal className="mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl">
                 Tất cả vị trí
                 <span className="block text-[#ff7648]">đang tuyển</span>
               </h2>
@@ -281,7 +282,7 @@ export function FulfillmentJobPage() {
             <div data-scroll-reveal>
               <SectionMark current="JD" label="Fulfillment" />
             </div>
-            <h1 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] sm:text-5xl lg:text-7xl xl:text-8xl">
+            <h1 data-scroll-reveal className="mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl xl:text-6xl">
               Tuyển dụng
               <span className="block text-[#ff7648]">Fulfillment</span>
               <span className="block">Toàn thời gian</span>
