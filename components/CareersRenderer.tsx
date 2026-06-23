@@ -393,7 +393,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
             <div data-scroll-reveal>
               <SectionMark current="01" label="" />
             </div>
-            <h1 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] tracking-normal sm:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 data-scroll-reveal className="mobile-page-title mt-6 text-4xl font-black uppercase leading-[0.9] tracking-normal sm:text-5xl lg:text-6xl xl:text-7xl">
               Gia nhập
               <span className="block text-[#ff7648]">GoBeyond</span>
             </h1>
@@ -439,7 +439,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
               <div data-scroll-reveal>
                 <SectionMark current="02" label="" />
               </div>
-              <h2 data-scroll-reveal className="mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl">
+              <h2 data-scroll-reveal className="mobile-page-title mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl">
                 Tất cả vị trí <span className="text-[#ff7648]">đang tuyển</span>
               </h2>
             </div>
@@ -614,7 +614,7 @@ function getCareerTitle(job: CareerItem) {
 }
 
 function getApplyUrl(job: CareerItem) {
-  const subject = encodeURIComponent(`[GOBEYOND - ${getCareerTitle(job).toUpperCase()}] Ho va ten`);
+  const subject = encodeURIComponent(`[GoBeyond - ${getCareerTitle(job).toUpperCase()}] Ho va ten`);
 
   if (isActionUrl(job.applyUrl)) {
     const applyUrl = job.applyUrl as string;
@@ -695,7 +695,7 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const subject = `[GOBEYOND - ${title.toUpperCase()}] ${form.name || "Ho va ten"}`;
+    const subject = `[GoBeyond - ${title.toUpperCase()}] ${form.name || "Ho va ten"}`;
     const body = [
       `Vi tri ung tuyen: ${title}`,
       `Ho va ten: ${form.name}`,
@@ -977,7 +977,7 @@ export function CareerDetail({ job }: { job: CareerItem }) {
 
             <p className="mt-5 text-sm font-semibold leading-7 text-white/52">
               Gửi CV tới <span className="font-black text-white">tuyendung@gobe.asia</span> với tiêu đề{" "}
-              <span className="font-black text-[#F26522]">[GOBEYOND - {title.toUpperCase()}] Họ và tên</span>.
+              <span className="font-black text-[#F26522]">[GoBeyond - {title.toUpperCase()}] Họ và tên</span>.
             </p>
           </header>
 

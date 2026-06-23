@@ -194,7 +194,7 @@ export function CareersPage() {
             <div data-scroll-reveal>
               <SectionMark current="01" label="Tuyển dụng" />
             </div>
-            <h1 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] tracking-normal sm:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 data-scroll-reveal className="mobile-page-title mt-6 text-4xl font-black uppercase leading-[0.9] tracking-normal sm:text-5xl lg:text-6xl xl:text-7xl">
               Gia nhập
               <span className="block text-[#ff7648]">GoBeyond</span>
             </h1>
@@ -231,7 +231,7 @@ export function CareersPage() {
               <div data-scroll-reveal>
                 <SectionMark current="02" label="Vị trí đang mở" />
               </div>
-              <h2 data-scroll-reveal className="mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl">
+              <h2 data-scroll-reveal className="mobile-page-title mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl">
                 Tất cả vị trí
                 <span className="block text-[#ff7648]">đang tuyển</span>
               </h2>
@@ -282,7 +282,7 @@ export function FulfillmentJobPage() {
             <div data-scroll-reveal>
               <SectionMark current="JD" label="Fulfillment" />
             </div>
-            <h1 data-scroll-reveal className="mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl xl:text-6xl">
+            <h1 data-scroll-reveal className="mobile-page-title mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl xl:text-6xl">
               Tuyển dụng
               <span className="block text-[#ff7648]">Fulfillment</span>
               <span className="block">Toàn thời gian</span>
@@ -294,7 +294,7 @@ export function FulfillmentJobPage() {
               GoBeyond đang tìm kiếm nhân viên Fulfillment tài năng và nhiệt huyết để gia nhập đội ngũ. Nếu bạn thích môi trường chuyên nghiệp, năng động và có cơ hội thăng tiến, đây là nơi dành cho bạn.
             </p>
             <div data-scroll-reveal className="mt-8 flex flex-wrap gap-3">
-              <a className="rounded-full bg-[#F26522] px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white transition hover:bg-[#d94d12]" href="mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20FULFILLMENT%20FULL-TIME%5D%20Ho%20va%20ten">
+              <a className="rounded-full bg-[#F26522] px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white transition hover:bg-[#d94d12]" href="mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20FULFILLMENT%20FULL-TIME%5D%20Ho%20va%20ten">
                 Gửi CV
               </a>
               <a className="rounded-full border border-white/20 px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-white hover:text-white" href="/tuyen-dung">
@@ -363,7 +363,7 @@ export function FulfillmentJobPage() {
               <p className="mt-5 font-bold text-white">
                 Gửi CV và Portfolio tới Email: tuyendung@gobe.asia
                 <br />
-                Tiêu đề: [GOBEYOND - FULFILLMENT TOÀN THỜI GIAN] Họ và tên
+                Tiêu đề: [GoBeyond - FULFILLMENT TOÀN THỜI GIAN] Họ và tên
               </p>
             </DetailSection>
           </div>

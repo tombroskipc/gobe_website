@@ -118,7 +118,7 @@ export const fallbackNews: NewsPost[] = [
     id: "legacy-news-brainstorm",
     title: 'Brainstorm - Nơi những ý tưởng "bùng cháy"',
     slug: "brainstorm-noi-nhung-y-tuong-bung-chay",
-    excerpt: "Không gian để Gobe-ers cùng thử nghiệm góc nhìn mới, chia sẻ insight và biến ý tưởng thành hướng triển khai cụ thể.",
+    excerpt: "Không gian để đội ngũ GoBeyond cùng thử nghiệm góc nhìn mới, chia sẻ insight và biến ý tưởng thành hướng triển khai cụ thể.",
     tag: "news",
     publishedAt: "2025-06-21T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/brainstorm-noi-nhung-y-tuong-bung-chay/",
@@ -138,9 +138,9 @@ export const fallbackNews: NewsPost[] = [
   }),
   legacyPost({
     id: "legacy-news-warrior",
-    title: "Cuộc chiến bất bại giữa những chiến binh Gobe-ers",
+    title: "Cuộc chiến bất bại giữa những chiến binh GoBeyond",
     slug: "cuoc-chien-bat-bai-giua-nhung-chien-binh-gobe-ers",
-    excerpt: "Một câu chuyện nội bộ về tinh thần thi đua, sự quyết liệt và năng lượng chiến đấu của Gobe-ers.",
+    excerpt: "Một câu chuyện nội bộ về tinh thần thi đua, sự quyết liệt và năng lượng chiến đấu của GoBeyond.",
     tag: "news",
     publishedAt: "2025-03-29T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/cuoc-chien-bat-bai-giua-nhung-chien-binh-gobe-ers/",
@@ -163,7 +163,7 @@ export const fallbackNews: NewsPost[] = [
 export const fallbackActivities: NewsPost[] = [
   legacyPost({
     id: "legacy-activity-kickoff-2026",
-    title: 'Kick Off 2026: Gobe-ers "bật công tắc", quyết tâm phá đảo năm mới',
+    title: 'Kick Off 2026: GoBeyond "bật công tắc", quyết tâm phá đảo năm mới',
     slug: "kick-off-2026-gobe-ers-bat-cong-tac-quyet-tam-pha-dao-nam-moi",
     excerpt: "Buổi kick-off mở đầu năm 2026 với tinh thần bứt phá, đặt mục tiêu rõ ràng và khởi động chặng tăng trưởng mới.",
     tag: "activity",

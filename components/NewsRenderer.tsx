@@ -653,7 +653,7 @@ export function NewsListing({ posts, surface = "news" }: { posts: NewsPost[]; su
               <div data-scroll-reveal>
                 <SectionMark current="01" label="" />
               </div>
-              <h1 data-scroll-reveal className="mt-6 text-4xl font-black uppercase leading-[0.9] tracking-normal sm:text-5xl lg:text-6xl xl:text-7xl">
+              <h1 data-scroll-reveal className="mobile-page-title mt-6 text-4xl font-black uppercase leading-[0.9] tracking-normal sm:text-5xl lg:text-6xl xl:text-7xl">
                 {copy.heroTitle}
                 <span className="block text-[#ff7648]">{copy.heroAccent}</span>
               </h1>
@@ -710,7 +710,7 @@ export function NewsListing({ posts, surface = "news" }: { posts: NewsPost[]; su
                 <div data-scroll-reveal>
                   <SectionMark current="02" label="" />
                 </div>
-                <h3 data-scroll-reveal className="mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl">
+                <h3 data-scroll-reveal className="mobile-page-title mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl">
                   {copy.listTitle} <span className="text-[#ff7648]">{copy.listAccent}</span>
                 </h3>
               </div>

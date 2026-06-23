@@ -133,9 +133,9 @@ export function AboutPage() {
             <div data-scroll-reveal>
               <SectionMark current="01" label="" />
             </div>
-            <h1 data-scroll-reveal className="mt-6 max-w-4xl text-4xl font-black uppercase leading-[0.86] tracking-normal text-white sm:text-4xl lg:text-6xl xl:text-8xl">
+            <h1 data-scroll-reveal className="mobile-page-title mt-6 max-w-4xl text-4xl font-black uppercase leading-[0.86] tracking-normal text-white sm:text-4xl lg:text-6xl xl:text-8xl">
               Về
-              <span className="block text-[#ff7648]">GOBEYOND</span>
+              <span className="block text-[#ff7648]">GoBeyond</span>
             </h1>
             <div data-scroll-reveal className="mt-6 max-w-2xl space-y-4 text-base font-medium leading-7 text-white/72 md:text-lg md:leading-8">
               <p>
@@ -179,7 +179,7 @@ export function AboutPage() {
             <div data-scroll-reveal>
               <SectionMark current="02" label="" />
             </div>
-            <h2 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.9] tracking-normal sm:text-6xl lg:text-6xl xl:text-7xl">
+            <h2 data-scroll-reveal className="mobile-page-title mt-6 text-5xl font-black uppercase leading-[0.9] tracking-normal sm:text-6xl lg:text-6xl xl:text-7xl">
               Ấn tượng về
               <span className="block text-[#ff7648]">GoBeyond</span>
             </h2>
@@ -217,7 +217,7 @@ export function AboutPage() {
             <div data-scroll-reveal>
               <SectionMark current="03" label="" />
             </div>
-            <h2 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.9] tracking-normal sm:text-6xl lg:text-6xl xl:text-7xl">
+            <h2 data-scroll-reveal className="mobile-page-title mt-6 text-5xl font-black uppercase leading-[0.9] tracking-normal sm:text-6xl lg:text-6xl xl:text-7xl">
               Tầm nhìn
               <span className="block text-[#ff7648]">Sứ mệnh</span>
             </h2>
@@ -226,7 +226,7 @@ export function AboutPage() {
           <div className="grid gap-5 lg:grid-cols-2">
             <article data-scroll-card className="border border-white/12 bg-[#101520]/78 p-6 shadow-[0_28px_82px_rgba(0,0,0,0.30)] backdrop-blur-md md:p-7">
               <p className="text-xs font-black uppercase tracking-[0.28em] text-[#2ED4A4]">Tầm nhìn</p>
-              <h3 className="mt-4 text-4xl font-black uppercase leading-[0.92] text-white lg:text-5xl xl:text-6xl">
+              <h3 className="mobile-card-title mt-4 text-4xl font-black uppercase leading-[0.92] text-white lg:text-5xl xl:text-6xl">
                 Go global or go home
               </h3>
               <p className="mt-5 text-base font-medium leading-7 text-white/68 md:text-lg md:leading-8">
@@ -237,7 +237,7 @@ export function AboutPage() {
 
             <article data-scroll-card className="border border-white/12 bg-[#101520]/78 p-6 shadow-[0_28px_82px_rgba(0,0,0,0.30)] backdrop-blur-md md:p-7">
               <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">Sứ mệnh</p>
-              <h3 className="mt-4 text-4xl font-black uppercase leading-[0.92] text-white lg:text-5xl xl:text-6xl">
+              <h3 className="mobile-card-title mt-4 text-4xl font-black uppercase leading-[0.92] text-white lg:text-5xl xl:text-6xl">
                 Khám phá
                 <span className="block text-[#ff7648]">Kết nối</span>
                 <span className="block">Thúc đẩy</span>
@@ -261,7 +261,7 @@ export function AboutPage() {
               <div data-scroll-reveal>
                 <SectionMark current="04" label="" />
               </div>
-              <h2 data-scroll-reveal className="mt-6 text-5xl font-black uppercase leading-[0.9] tracking-normal sm:text-6xl lg:text-6xl xl:text-7xl">
+              <h2 data-scroll-reveal className="mobile-page-title mt-6 text-5xl font-black uppercase leading-[0.9] tracking-normal sm:text-6xl lg:text-6xl xl:text-7xl">
                 Hệ sinh thái
                 <span className="block mt-4 text-[#ff7648]">đồng hành</span>
               </h2>

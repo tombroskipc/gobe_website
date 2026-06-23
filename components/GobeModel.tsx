@@ -19,8 +19,11 @@ const MAIN_RING_ROTATE_SPEED = 0.05;
 const ORBIT_ROTATE_SPEED = 0.042;
 const GLASS_OPACITY = 0.16;
 const MODEL_BASE_ROTATION = new THREE.Euler(-0.04, -0.82, 0);
+const ACTIVE_CANVAS_DPR: [number, number] = [0.65, 0.95];
+const IDLE_CANVAS_DPR: [number, number] = [0.5, 0.75];
 
 interface GobeModelProps {
+  active?: boolean;
   scale?: number;
   autoRotate?: boolean;
   className?: string;
@@ -176,6 +179,7 @@ function faceLogoRootToCamera(root: THREE.Group, logo: THREE.Object3D, camera: T
 }
 
 function ModelContent({
+  active,
   scale,
   autoRotate,
   groupRef,
@@ -183,6 +187,7 @@ function ModelContent({
   modelOffsetY,
   onLoaded,
 }: {
+  active: boolean;
   scale: number;
   autoRotate: boolean;
   groupRef: RefObject<THREE.Group | null>;
@@ -190,7 +195,7 @@ function ModelContent({
   modelOffsetY: number;
   onLoaded?: () => void;
 }) {
-  const { camera } = useThree();
+  const { camera, invalidate } = useThree();
   const [loaded, setLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const loadedRoot = useRef<THREE.Group | null>(null);
@@ -372,8 +377,12 @@ function ModelContent({
     loadedRoot.current.position.y = MODEL_VERTICAL_OFFSET + modelOffsetY;
   }, [modelOffsetX, modelOffsetY]);
 
+  useEffect(() => {
+    invalidate();
+  }, [active, invalidate]);
+
   useFrame((_, delta) => {
-    if (!loaded) return;
+    if (!loaded || !active) return;
 
     if (autoRotate) {
       if (rotatingRoot.current) {
@@ -404,6 +413,7 @@ function ModelContent({
 }
 
 export function GobeModel({
+  active = true,
   scale = 1,
   autoRotate = false,
   className,
@@ -414,10 +424,15 @@ export function GobeModel({
   const groupRef = useRef<THREE.Group>(null);
 
   return (
-    <div className={["gobe-model-canvas", className].filter(Boolean).join(" ")} style={{ width: "100%", height: "100%" }}>
+    <div
+      className={["gobe-model-canvas", className].filter(Boolean).join(" ")}
+      data-gobe-model-active={active ? "true" : "false"}
+      style={{ width: "100%", height: "100%" }}
+    >
       <Canvas
         camera={{ position: CAMERA_POSITION.toArray(), fov: CAMERA_FOV, near: 0.05, far: 80 }}
-        dpr={[0.8, 1.15]}
+        dpr={active ? ACTIVE_CANVAS_DPR : IDLE_CANVAS_DPR}
+        frameloop={active ? "always" : "demand"}
         gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
         style={{ background: "transparent", display: "block", height: "100%", width: "100%" }}
       >
@@ -428,6 +443,7 @@ export function GobeModel({
         <pointLight position={[0, 4, 5]} intensity={1.08} color="#ffffff" />
         <group ref={groupRef} scale={scale}>
           <ModelContent
+            active={active}
             scale={scale}
             autoRotate={autoRotate}
             groupRef={groupRef}

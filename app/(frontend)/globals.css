@@ -801,7 +801,8 @@ html.page-loading-active body {
   font-weight: 900;
   line-height: .9;
   margin-top: 28px;
-  max-width: 10ch;
+  max-width: min(100%, 10ch);
+  overflow-wrap: anywhere;
   text-transform: uppercase;
 }
 
@@ -854,9 +855,11 @@ html.page-loading-active body {
   }
 
   .value-focus-title {
-    font-size: clamp(2.35rem, 12vw, 3.85rem);
+    font-size: clamp(2rem, 10vw, 3.1rem);
+    line-height: 1.02;
     margin-top: 1.8rem;
-    max-width: 8.5ch;
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 
   .value-focus-copy {
@@ -3292,7 +3295,7 @@ html.home-story-active .operation-card p {
   }
 }
 
-/* Final fit guard for How Gobe Operate. Older desktop rules intentionally
+/* Final fit guard for How GoBeyond Operates. Older desktop rules intentionally
    keep the visual style, so this block only normalizes the layout box. */
 html.home-story-active .operation-showcase {
   overflow-x: hidden;
@@ -3822,6 +3825,243 @@ html.home-story-active .operation-showcase .operation-card .operation-expanded-c
   html.home-story-active .operation-showcase .operation-card:hover,
   html.home-story-active .operation-showcase .operation-card:focus-visible {
     min-height: clamp(4.9rem, 9.2vh, 6.55rem);
+  }
+}
+
+/* Mobile typography guard: Vietnamese diacritics need more line-height than
+   desktop hero type, and short phones need the home hero below fixed nav. */
+.mobile-page-title,
+.mobile-card-title,
+.home-hero-title {
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+@media (max-width: 767px) {
+  .mobile-page-title {
+    font-size: clamp(1.95rem, 9.4vw, 2.85rem) !important;
+    letter-spacing: 0 !important;
+    line-height: 1.08 !important;
+  }
+
+  .mobile-page-title span {
+    line-height: inherit !important;
+  }
+
+  .mobile-card-title {
+    font-size: clamp(1.45rem, 7.4vw, 2.08rem) !important;
+    letter-spacing: 0 !important;
+    line-height: 1.12 !important;
+  }
+
+  .mobile-card-title span {
+    line-height: inherit !important;
+  }
+
+  .home-hero-layout {
+    align-content: start !important;
+    align-items: start !important;
+    gap: clamp(.85rem, 2svh, 1.15rem) !important;
+    min-height: 100svh !important;
+    padding-bottom: clamp(1rem, 3svh, 1.5rem) !important;
+    padding-top: clamp(5.8rem, 14svh, 6.6rem) !important;
+  }
+
+  .home-hero-copy {
+    max-width: min(100%, 31rem) !important;
+  }
+
+  .home-hero-title {
+    font-size: clamp(2.05rem, 10vw, 2.95rem) !important;
+    line-height: 1.06 !important;
+  }
+
+  .home-hero-title span {
+    font-size: clamp(1rem, 4.4vw, 1.25rem) !important;
+    line-height: 1.28 !important;
+    margin-top: .35rem !important;
+  }
+
+  .home-hero-copy p {
+    font-size: clamp(.86rem, 3.6vw, .98rem) !important;
+    line-height: 1.65 !important;
+    margin-top: clamp(.7rem, 2svh, 1rem) !important;
+  }
+
+  .home-hero-model {
+    height: min(40svh, 320px) !important;
+    justify-self: center !important;
+    margin-top: clamp(.2rem, 1.2svh, .6rem) !important;
+    width: min(112vw, 440px) !important;
+  }
+}
+
+@media (max-width: 390px) and (max-height: 760px) {
+  .mobile-page-title {
+    font-size: clamp(1.82rem, 8.9vw, 2.35rem) !important;
+    line-height: 1.1 !important;
+  }
+
+  .mobile-card-title {
+    font-size: clamp(1.32rem, 6.9vw, 1.82rem) !important;
+    line-height: 1.14 !important;
+  }
+
+  .home-hero-layout {
+    gap: .65rem !important;
+    padding-bottom: .9rem !important;
+    padding-top: 5.9rem !important;
+  }
+
+  .home-hero-title {
+    font-size: clamp(1.82rem, 8.9vw, 2.25rem) !important;
+    line-height: 1.1 !important;
+  }
+
+  .home-hero-title span {
+    font-size: .98rem !important;
+    margin-top: .2rem !important;
+  }
+
+  .home-hero-copy p {
+    font-size: .88rem !important;
+    line-height: 1.58 !important;
+    max-width: 30ch !important;
+  }
+
+  .home-hero-model {
+    height: min(37svh, 280px) !important;
+    width: min(116vw, 400px) !important;
+  }
+
+  .value-focus-overlay {
+    padding: calc(env(safe-area-inset-top, 0px) + 4.75rem) 1rem calc(env(safe-area-inset-bottom, 0px) + 1rem) !important;
+  }
+
+  .value-focus-card {
+    min-height: min(72dvh, 31rem) !important;
+    padding: 1.25rem !important;
+  }
+
+  .value-focus-title {
+    font-size: clamp(1.45rem, 7.1vw, 1.78rem) !important;
+    line-height: 1.05 !important;
+    margin-top: 1.45rem !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere;
+  }
+
+  .value-focus-copy {
+    font-size: .94rem !important;
+    line-height: 1.58 !important;
+    margin-top: 1.15rem !important;
+  }
+
+  .value-focus-card::after {
+    bottom: -.85rem !important;
+    font-size: clamp(8rem, 40vw, 13rem) !important;
+    right: -1.7rem !important;
+  }
+
+  .values-showcase,
+  .values-showcase [data-home-story-content],
+  html.home-story-active .values-showcase,
+  html.home-story-active .values-showcase [data-home-story-content] {
+    height: auto !important;
+    max-height: none !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
+  .values-showcase .core-values,
+  html.home-story-active .values-showcase .core-values {
+    gap: .65rem !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    padding: 5.15rem .95rem 2.5rem !important;
+  }
+
+  .values-showcase .values-intro,
+  html.home-story-active .values-showcase .values-intro {
+    min-height: 0 !important;
+  }
+
+  .values-showcase .values-intro p,
+  html.home-story-active .values-showcase .values-intro p {
+    font-size: .58rem !important;
+    letter-spacing: .2em !important;
+  }
+
+  .values-showcase .values-intro h3,
+  html.home-story-active .values-showcase .values-intro h3 {
+    font-size: clamp(1.82rem, 8.9vw, 2.3rem) !important;
+    line-height: .94 !important;
+    margin-top: .35rem !important;
+  }
+
+  .values-showcase .values-panel-stage,
+  html.home-story-active .values-showcase .values-panel-stage {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .values-showcase .values-panel-track,
+  html.home-story-active .values-showcase .values-panel-track {
+    gap: .55rem !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .values-showcase .value-card,
+  .values-showcase .value-card:hover,
+  .values-showcase .value-card:focus-visible,
+  .values-showcase .value-card:nth-child(1),
+  .values-showcase .value-card:nth-child(2),
+  .values-showcase .value-card:nth-child(3),
+  .values-showcase .value-card:nth-child(4),
+  .values-showcase .value-card:nth-child(5),
+  .values-showcase .value-card:nth-child(6),
+  html.home-story-active .values-showcase .value-card,
+  html.home-story-active .values-showcase .value-card:hover,
+  html.home-story-active .values-showcase .value-card:focus-visible,
+  html.home-story-active .values-showcase .value-card:nth-child(1),
+  html.home-story-active .values-showcase .value-card:nth-child(2),
+  html.home-story-active .values-showcase .value-card:nth-child(3),
+  html.home-story-active .values-showcase .value-card:nth-child(4),
+  html.home-story-active .values-showcase .value-card:nth-child(5),
+  html.home-story-active .values-showcase .value-card:nth-child(6) {
+    min-height: 10.45rem !important;
+    padding: .72rem !important;
+  }
+
+  .values-showcase .value-body,
+  html.home-story-active .values-showcase .value-body {
+    padding-right: clamp(2.15rem, 9vw, 3rem) !important;
+    padding-top: 2.5rem !important;
+  }
+
+  .values-showcase .value-card .value-body h3,
+  html.home-story-active .values-showcase .value-card .value-body h3 {
+    font-size: clamp(.7rem, 3.05vw, .9rem) !important;
+    line-height: 1 !important;
+  }
+
+  .values-showcase .value-card .value-body p,
+  html.home-story-active .values-showcase .value-card .value-body p {
+    font-size: clamp(.54rem, 2.1vw, .62rem) !important;
+    line-height: 1.25 !important;
+    margin-top: .42rem !important;
+  }
+
+  .values-showcase .value-card::after,
+  html.home-story-active .values-showcase .value-card::after {
+    bottom: .35rem !important;
+    font-size: clamp(3.5rem, 16vw, 5rem) !important;
+    right: -11% !important;
   }
 }
 

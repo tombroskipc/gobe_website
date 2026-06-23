@@ -372,13 +372,13 @@ export function OperationsSection() {
           <div data-scroll-reveal className="operation-copy relative z-[3]">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">COMPANY OPERATION</p>
             <h2 data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(4.2rem,7vw,8rem)] font-black leading-[0.9] tracking-normal text-white">
-              How Gobe Operate
+              How GoBeyond Operates
             </h2>
           </div>
 
           <div className="operation-core relative z-[2] hidden items-center justify-center lg:flex">
             <div className="operation-core-orb">
-              <span>GOBEYOND</span>
+              <span>GoBeyond</span>
               <small>COMPANY CORE</small>
             </div>
           </div>
@@ -455,8 +455,8 @@ export function ScaleSection() {
         <div className="scale-content relative z-[2] mx-auto grid min-h-screen max-w-[94rem] items-center gap-12 px-5 py-24 sm:px-8 lg:px-12">
           <div data-scroll-reveal className="scale-copy">
             <p className="text-xs font-black uppercase tracking-[0.36em] text-white/62">Company scale</p>
-            <h2 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(3.4rem,9vw,8.5rem)] font-black leading-[0.88] tracking-normal text-white">
-              How GoBe Scale
+            <h2 data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(3.4rem,9vw,8.5rem)] font-black leading-[0.88] tracking-normal text-white">
+              How GoBeyond Scales
             </h2>
             <div className="scale-intro-copy">
               <h3 className="scale-intro-title">{scaleIntro.title}</h3>
@@ -493,10 +493,10 @@ export function ContactCtaSection() {
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-28" aria-hidden="true" />
         <div data-scroll-reveal className="relative mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur-md md:p-12">
           <h2 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="text-[clamp(2.4rem,6vw,5.8rem)] font-black leading-[0.9] tracking-normal text-white">
-            Gia nhập Gobeyond ngay!
+            Gia nhập GoBeyond ngay!
           </h2>
           <p data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.82" className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/65">
-            {"Li\u00ean h\u1ec7 GoBe v\u1ec1 s\u1ea3n ph\u1ea9m, h\u1ee3p t\u00e1c, tuy\u1ec3n d\u1ee5ng, truy\u1ec1n th\u00f4ng, ho\u1eb7c nh\u1eefng c\u01a1 h\u1ed9i li\u00ean quan \u0111\u1ebfn v\u1eadn h\u00e0nh th\u01b0\u01a1ng m\u1ea1i \u0111i\u1ec7n t\u1eed to\u00e0n c\u1ea7u."}
+            {"Li\u00ean h\u1ec7 GoBeyond v\u1ec1 s\u1ea3n ph\u1ea9m, h\u1ee3p t\u00e1c, tuy\u1ec3n d\u1ee5ng, truy\u1ec1n th\u00f4ng, ho\u1eb7c nh\u1eefng c\u01a1 h\u1ed9i li\u00ean quan \u0111\u1ebfn v\u1eadn h\u00e0nh th\u01b0\u01a1ng m\u1ea1i \u0111i\u1ec7n t\u1eed to\u00e0n c\u1ea7u."}
           </p>
           <a
             href="mailto:info@gobe.asia"
@@ -559,9 +559,9 @@ export function FooterSection() {
 
       <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.15fr_.9fr_.55fr]">
         <div>
-          <img src="/Logo_2.png" alt="GOBeyond" className="w-64 max-w-full brightness-0 invert" />
+          <img src="/Logo_2.png" alt="GoBeyond" className="w-64 max-w-full brightness-0 invert" />
           <p className="mt-8 max-w-[34rem] text-base font-semibold leading-8 text-white">
-            GoBe là doanh nghiệp phát triển cùng ngành thương mại điện tử xuyên biên giới, tập trung vào Print on Demand và Drop-shipping.
+            GoBeyond là doanh nghiệp phát triển cùng ngành thương mại điện tử xuyên biên giới, tập trung vào Print on Demand và Drop-shipping.
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3" aria-label="Liên kết mạng xã hội GoBeyond">

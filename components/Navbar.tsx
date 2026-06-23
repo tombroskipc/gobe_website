@@ -44,8 +44,8 @@ export function Navbar() {
   return (
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[#0c1018]/60 shadow-[0_12px_42px_rgba(0,0,0,0.24)] backdrop-blur-2xl">
       <div className="mx-auto flex min-h-[78px] max-w-7xl items-center gap-4 px-5 sm:px-6 lg:px-8">
-        <a href="/" className="flex items-center gap-3" aria-label="Trang chủ GoBe">
-          <img src="/Logo_2.png" alt="GOBeyond - đi toàn cầu" className="h-auto w-[164px] object-contain md:w-[202px]" />
+        <a href="/" className="flex items-center gap-3" aria-label="Trang chủ GoBeyond">
+          <img src="/Logo_2.png" alt="GoBeyond - đi toàn cầu" className="h-auto w-[164px] object-contain md:w-[202px]" />
         </a>
 
         <nav aria-label="Điều hướng chính" className="ml-auto hidden items-center gap-2 lg:flex">
@@ -109,7 +109,7 @@ export function Navbar() {
       >
         <div className="flex h-full flex-col px-6 py-5">
           <div className="flex items-center justify-between">
-            <img src="/Logo_2.png" alt="GOBeyond" className="w-40 object-contain" />
+            <img src="/Logo_2.png" alt="GoBeyond" className="w-40 object-contain" />
             <div className="flex items-center gap-2">
               <ThemeToggle className="h-10 w-10" />
               <button

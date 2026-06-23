@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
 const loadingWords = [
-  "GOBEYOND",
+  "GoBeyond",
   "GOAL-ORIENTED",
   "OPEN-MINDEDNESS",
   "BALANCED",

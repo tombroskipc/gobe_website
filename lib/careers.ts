@@ -64,7 +64,7 @@ export const fallbackCareers: CareerItem[] = [
     quantity: "01",
     excerpt: "Tối ưu chiến dịch Google Ads, đọc tín hiệu thị trường và scale sản phẩm e-commerce quốc tế.",
     larkUrl: "https://gobeasia.sg.larksuite.com/wiki/Buy4wgFxqixSBikVhyVlvrKagZb?fromScene=spaceOverview",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20MARKETING%20GOOGLE%20ADS%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20MARKETING%20GOOGLE%20ADS%5D%20Ho%20va%20ten",
     description: "Vai trò dành cho người thích test nhanh, đo dữ liệu rõ ràng và tối ưu tăng trưởng theo hiệu suất.",
   },
   {
@@ -78,7 +78,7 @@ export const fallbackCareers: CareerItem[] = [
     quantity: "01",
     excerpt: "Triển khai, phân tích và scale chiến dịch Facebook Ads cho thị trường quốc tế.",
     larkUrl: "https://gobeasia.sg.larksuite.com/wiki/ATRMwsasqifZ6zk0wullRHpOgLb?fromScene=spaceOverview",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20MARKETING%20FACEBOOK%20ADS%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20MARKETING%20FACEBOOK%20ADS%5D%20Ho%20va%20ten",
     description: "Bạn sẽ phối hợp với creative và vận hành để tìm angle bán hàng, tối ưu funnel và cải thiện hiệu quả quảng cáo.",
   },
   {
@@ -92,7 +92,7 @@ export const fallbackCareers: CareerItem[] = [
     quantity: "01",
     excerpt: "Sản xuất video ngắn, visual angle và nội dung sáng tạo phục vụ chiến dịch e-commerce.",
     larkUrl: "https://gobe.asia/tuyen-dung-creative-video-full-time/",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20CREATIVE%20VIDEO%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20CREATIVE%20VIDEO%5D%20Ho%20va%20ten",
   },
   {
     id: "customer-service",
@@ -105,7 +105,7 @@ export const fallbackCareers: CareerItem[] = [
     quantity: "01",
     excerpt: "Chăm sóc khách hàng, xử lý phản hồi và phối hợp vận hành để trải nghiệm mua hàng mượt mà.",
     larkUrl: "https://gobe.asia/tuyen-dung-customer-service-full-time/",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20CUSTOMER%20SERVICE%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20CUSTOMER%20SERVICE%5D%20Ho%20va%20ten",
   },
   {
     id: "human-resource",
@@ -118,7 +118,7 @@ export const fallbackCareers: CareerItem[] = [
     quantity: "01",
     excerpt: "Tuyển dụng, phát triển con người và xây dựng văn hóa vận hành chủ động trong đội ngũ.",
     larkUrl: "https://gobe.asia/tuyen-dung-human-resource/",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20HUMAN%20RESOURCE%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20HUMAN%20RESOURCE%5D%20Ho%20va%20ten",
   },
   {
     id: "fulfillment-full-time",
@@ -131,7 +131,7 @@ export const fallbackCareers: CareerItem[] = [
     quantity: "02",
     excerpt: "Quản lý đơn hàng, điều phối supplier, logistics và theo dõi vận hành từ lúc nhận đơn đến khi giao thành công.",
     larkUrl: "https://gobe.asia/tuyen-dung-fulfillment-full-time-3/",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20FULFILLMENT%20FULL-TIME%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20FULFILLMENT%20FULL-TIME%5D%20Ho%20va%20ten",
     description:
       "GoBeyond đang tìm kiếm nhân viên Fulfillment tài năng và nhiệt huyết để gia nhập đội ngũ vận hành e-commerce toàn cầu.",
     responsibilities: [
@@ -162,7 +162,7 @@ export const fallbackCareers: CareerItem[] = [
     quantity: "01",
     excerpt: "Thực tập vận hành sàn Etsy, hỗ trợ listing, tracking và quy trình xử lý dữ liệu sản phẩm.",
     larkUrl: "https://gobe.asia/3250-2/",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGOBEYOND%20-%20ETSY%20OPERATIONS%20INTERN%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20ETSY%20OPERATIONS%20INTERN%5D%20Ho%20va%20ten",
   },
 ];
 

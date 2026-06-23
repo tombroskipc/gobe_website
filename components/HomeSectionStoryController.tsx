@@ -3,7 +3,14 @@
 import { useEffect } from "react";
 import gsap from "gsap";
 import { Observer } from "gsap/Observer";
-import { getStoryTransition, type StoryDirection } from "./homeSectionStory";
+import {
+  HOME_STORY_ACTIVE_SECTION_ATTRIBUTE,
+  HOME_STORY_ACTIVE_SECTION_EVENT,
+  getQueuedStoryDirection,
+  getStorySectionIdentifier,
+  getStoryTransition,
+  type StoryDirection,
+} from "./homeSectionStory";
 
 gsap.registerPlugin(Observer);
 
@@ -40,7 +47,29 @@ function activateHomeSectionStory() {
 
   let animating = false;
   let currentIndex = -1;
+  let pendingDirection: StoryDirection | null = null;
   let released = false;
+
+  const publishActiveStorySection = (index: number | null) => {
+    if (index === null || !panels[index]) {
+      html.removeAttribute(HOME_STORY_ACTIVE_SECTION_ATTRIBUTE);
+      window.dispatchEvent(
+        new CustomEvent(HOME_STORY_ACTIVE_SECTION_EVENT, {
+          detail: { id: null, index: null },
+        }),
+      );
+      return;
+    }
+
+    const id = getStorySectionIdentifier(panels[index].section, index);
+
+    html.setAttribute(HOME_STORY_ACTIVE_SECTION_ATTRIBUTE, id);
+    window.dispatchEvent(
+      new CustomEvent(HOME_STORY_ACTIVE_SECTION_EVENT, {
+        detail: { id, index },
+      }),
+    );
+  };
 
   const ctx = gsap.context(() => {
     html.classList.add("home-story-active");
@@ -61,6 +90,17 @@ function activateHomeSectionStory() {
       },
     );
 
+    function playPendingGesture() {
+      const direction = pendingDirection;
+      pendingDirection = null;
+
+      if (!direction || isStoryInteractionPaused()) {
+        return;
+      }
+
+      window.requestAnimationFrame(() => handleGesture(direction));
+    }
+
     const showSection = (index: number, direction: StoryDirection) => {
       if (animating || index === currentIndex) {
         return;
@@ -78,6 +118,7 @@ function activateHomeSectionStory() {
       const revealTargets =
         panel.content.querySelectorAll<HTMLElement>(revealSelector);
 
+      publishActiveStorySection(index);
       html.classList.remove("home-story-released");
       released = false;
       gsap.set(panel.section, {
@@ -98,6 +139,7 @@ function activateHomeSectionStory() {
         onComplete: () => {
           currentIndex = index;
           animating = false;
+          playPendingGesture();
         },
       });
 
@@ -163,6 +205,8 @@ function activateHomeSectionStory() {
       html.classList.remove("home-story-released");
       released = false;
       currentIndex = index;
+      pendingDirection = null;
+      publishActiveStorySection(index);
       window.scrollTo({ left: 0, top: 0 });
       gsap.set(panel.section, {
         autoAlpha: 1,
@@ -221,6 +265,7 @@ function activateHomeSectionStory() {
           },
           onComplete: () => {
             released = true;
+            pendingDirection = null;
             html.classList.add("home-story-released");
             gsap.set(panel.section, { autoAlpha: 1, yPercent: 0, zIndex: 2 });
             gsap.set(panel.content, { autoAlpha: 1, yPercent: 0 });
@@ -232,8 +277,17 @@ function activateHomeSectionStory() {
         .to(panel.content, { autoAlpha: 0.9, yPercent: -8 }, 0);
     };
 
-    const handleGesture = (direction: StoryDirection) => {
-      if (animating || isStoryInteractionPaused()) {
+    function handleGesture(direction: StoryDirection) {
+      if (isStoryInteractionPaused()) {
+        pendingDirection = null;
+        return;
+      }
+
+      if (animating) {
+        pendingDirection = getQueuedStoryDirection({
+          incomingDirection: direction,
+          pendingDirection,
+        });
         return;
       }
 
@@ -262,7 +316,7 @@ function activateHomeSectionStory() {
       }
 
       showSection(transition.index, transition.direction);
-    };
+    }
 
     observer = Observer.create({
       onDown: () => handleGesture(-1),
@@ -404,6 +458,12 @@ function activateHomeSectionStory() {
   return () => {
     ctx.revert();
     html.classList.remove("home-story-active", "home-story-released");
+    html.removeAttribute(HOME_STORY_ACTIVE_SECTION_ATTRIBUTE);
+    window.dispatchEvent(
+      new CustomEvent(HOME_STORY_ACTIVE_SECTION_EVENT, {
+        detail: { id: null, index: null },
+      }),
+    );
   };
 }
 
