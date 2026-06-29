@@ -3889,10 +3889,11 @@ html.home-story-active .operation-showcase .operation-card .operation-expanded-c
   }
 
   .home-hero-model {
-    height: min(40svh, 320px) !important;
+    height: min(55svh, 470px) !important;
     justify-self: center !important;
-    margin-top: clamp(.2rem, 1.2svh, .6rem) !important;
-    width: min(112vw, 440px) !important;
+    margin-top: clamp(.15rem, .8svh, .45rem) !important;
+    padding: 3px !important;
+    width: min(calc(100vw - 20px), 460px) !important;
   }
 }
 
@@ -3930,8 +3931,10 @@ html.home-story-active .operation-showcase .operation-card .operation-expanded-c
   }
 
   .home-hero-model {
-    height: min(37svh, 280px) !important;
-    width: min(116vw, 400px) !important;
+    height: min(58svh, 410px) !important;
+    margin-top: 0 !important;
+    padding: 3px !important;
+    width: min(calc(100vw - 20px), 420px) !important;
   }
 
   .value-focus-overlay {

@@ -18,16 +18,62 @@ const LazyGobeModel = dynamic(() => import("./GobeModel").then((mod) => mod.Gobe
   loading: () => null,
 });
 const INLINE_MODEL_LAZY_DELAY_MS = 9000;
+const DEFAULT_INLINE_MODEL_SIZING = {
+  modelOffsetY: 0,
+  scale: 1.3,
+};
+const DEFAULT_INLINE_MODEL_EXPANDABLE = true;
 
 type LandingHeroSectionProps = {
   forceInitialModelLoad?: boolean;
   onInitialModelLoaded?: () => void;
 };
 
+function getInlineHeroModelSizing() {
+  if (typeof window === "undefined") {
+    return DEFAULT_INLINE_MODEL_SIZING;
+  }
+
+  const { innerHeight, innerWidth } = window;
+
+  if (innerWidth <= 390 && innerHeight <= 760) {
+    return {
+      modelOffsetY: -0.02,
+      scale: 1.34,
+    };
+  }
+
+  if (innerWidth < 640) {
+    return {
+      modelOffsetY: -0.02,
+      scale: 1.38,
+    };
+  }
+
+  if (innerWidth < 768) {
+    return {
+      modelOffsetY: -0.02,
+      scale: 1.34,
+    };
+  }
+
+  return DEFAULT_INLINE_MODEL_SIZING;
+}
+
+function getInlineHeroModelExpandable() {
+  if (typeof window === "undefined") {
+    return DEFAULT_INLINE_MODEL_EXPANDABLE;
+  }
+
+  return window.innerWidth >= 768;
+}
+
 export function LandingHeroSection({ forceInitialModelLoad = false, onInitialModelLoaded }: LandingHeroSectionProps) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [shouldLoadInlineModel, setShouldLoadInlineModel] = useState(forceInitialModelLoad);
+  const [inlineModelSizing, setInlineModelSizing] = useState(DEFAULT_INLINE_MODEL_SIZING);
+  const [isInlineModelExpandable, setIsInlineModelExpandable] = useState(DEFAULT_INLINE_MODEL_EXPANDABLE);
   const [homeStoryState, setHomeStoryState] = useState<{
     activeSectionId: string | null;
     storyActive: boolean;
@@ -60,6 +106,28 @@ export function LandingHeroSection({ forceInitialModelLoad = false, onInitialMod
     isModelOpen,
     storyActive: homeStoryState.storyActive,
   });
+
+  useEffect(() => {
+    const syncInlineModelSizing = () => {
+      const nextSizing = getInlineHeroModelSizing();
+
+      setInlineModelSizing((currentSizing) =>
+        currentSizing.modelOffsetY === nextSizing.modelOffsetY && currentSizing.scale === nextSizing.scale
+          ? currentSizing
+          : nextSizing,
+      );
+      setIsInlineModelExpandable(getInlineHeroModelExpandable());
+    };
+
+    syncInlineModelSizing();
+    window.addEventListener("resize", syncInlineModelSizing);
+    window.addEventListener("orientationchange", syncInlineModelSizing);
+
+    return () => {
+      window.removeEventListener("resize", syncInlineModelSizing);
+      window.removeEventListener("orientationchange", syncInlineModelSizing);
+    };
+  }, []);
 
   useEffect(() => {
     if (forceInitialModelLoad) {
@@ -196,8 +264,9 @@ export function LandingHeroSection({ forceInitialModelLoad = false, onInitialMod
                   <LazyGobeModel
                     active={inlineModelActive}
                     className="relative z-[2] h-full w-full"
-                    scale={1.3}
+                    scale={inlineModelSizing.scale}
                     modelOffsetX={0}
+                    modelOffsetY={inlineModelSizing.modelOffsetY}
                     autoRotate={inlineModelActive}
                     onLoaded={onInitialModelLoaded}
                   />
@@ -205,9 +274,10 @@ export function LandingHeroSection({ forceInitialModelLoad = false, onInitialMod
               ) : null}
               <button
                 type="button"
-                className="pointer-events-auto absolute inset-0 z-[3] cursor-zoom-in appearance-none border-0 bg-transparent p-0 outline-none"
+                className="pointer-events-auto absolute inset-0 z-[3] hidden cursor-zoom-in appearance-none border-0 bg-transparent p-0 outline-none md:block"
                 aria-label="Phóng to quả địa cầu"
-                onClick={openModel}
+                onClick={isInlineModelExpandable ? openModel : undefined}
+                tabIndex={isInlineModelExpandable ? 0 : -1}
               />
             </div>
           </div>

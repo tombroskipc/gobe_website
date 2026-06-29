@@ -27,6 +27,28 @@ test("defines mobile guards for heading scale and Samsung Galaxy S8 class viewpo
   assert.match(css, /\.home-hero-layout/);
 });
 
+test("enlarges the inline home hero globe on mobile viewports", () => {
+  const heroSource = readFileSync("components/LandingHeroSection.tsx", "utf8");
+  const css = readFileSync("app/(frontend)/globals.css", "utf8");
+
+  assert.match(heroSource, /getInlineHeroModelSizing/);
+  assert.match(heroSource, /scale:\s*1\.38/);
+  assert.match(css, /height:\s*min\(55svh,\s*470px\)/);
+  assert.match(css, /padding:\s*3px/);
+  assert.match(css, /width:\s*min\(calc\(100vw - 20px\),\s*460px\)/);
+  assert.match(css, /height:\s*min\(58svh,\s*410px\)/);
+  assert.match(css, /width:\s*min\(calc\(100vw - 20px\),\s*420px\)/);
+});
+
+test("disables the hero globe detail opener on mobile", () => {
+  const heroSource = readFileSync("components/LandingHeroSection.tsx", "utf8");
+
+  assert.match(heroSource, /getInlineHeroModelExpandable/);
+  assert.match(heroSource, /window\.innerWidth >= 768/);
+  assert.match(heroSource, /hidden cursor-zoom-in[\s\S]*md:block/);
+  assert.match(heroSource, /tabIndex=\{isInlineModelExpandable \? 0 : -1\}/);
+});
+
 test("keeps all core value cards reachable on Samsung Galaxy S8 class viewports", () => {
   const css = readFileSync("app/(frontend)/globals.css", "utf8");
   const shortPhoneBlock = css.match(/@media \(max-width:\s*390px\) and \(max-height:\s*760px\) \{(?<body>[\s\S]*?)\n\}/);
