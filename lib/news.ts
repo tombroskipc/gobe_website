@@ -18,11 +18,16 @@ export type NewsPost = {
 export type NewsTag = "news" | "activity";
 
 export type NewsRichTextNode = {
-  type?: string;
-  text?: string;
+  fields?: {
+    caption?: string;
+  } | null;
   format?: number | string;
-  tag?: string;
   children?: NewsRichTextNode[];
+  relationTo?: string;
+  tag?: string;
+  text?: string;
+  type?: string;
+  value?: unknown;
 };
 
 export type NewsRichText =

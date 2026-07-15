@@ -5,12 +5,6 @@ export function normalizeCmsAssetUrl(url: string | null) {
     return null;
   }
 
-  const payloadMediaPrefix = "/api/media/file/";
-
-  if (!cmsAssetOrigin && url.startsWith(payloadMediaPrefix)) {
-    return `/media/${url.slice(payloadMediaPrefix.length)}`;
-  }
-
   if (!url.startsWith("/")) {
     return url;
   }

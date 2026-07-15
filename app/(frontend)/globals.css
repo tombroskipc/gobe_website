@@ -93,6 +93,86 @@ footer {
   color: #ef2b0b;
 }
 
+html.home-native-scroll,
+html.home-native-scroll body {
+  overscroll-behavior-y: auto;
+  scroll-snap-type: none;
+}
+
+html.home-native-scroll #scroll-story {
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+html.home-native-scroll #scroll-story :is(#home, #stack, #operations, #proof, #contact),
+html.home-native-scroll #scroll-story [data-home-story-footer],
+html.home-native-scroll #scroll-story footer {
+  scroll-snap-align: none;
+  scroll-snap-stop: normal;
+}
+
+html.home-native-scroll #scroll-story [data-home-story-section],
+html.home-native-scroll #scroll-story [data-home-story-content] {
+  position: relative;
+  visibility: visible;
+}
+
+html.home-native-scroll #scroll-story [data-home-story-section] {
+  --section-blend-height: clamp(8rem, 18vh, 14rem);
+  isolation: isolate;
+  margin-top: -1px;
+}
+
+html.home-native-scroll #scroll-story [data-home-story-content] {
+  isolation: isolate;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  html.home-native-scroll #scroll-story [data-home-story-section]:not(:first-of-type)::before,
+  html.home-native-scroll #scroll-story [data-home-story-section]:not(:last-of-type)::after {
+    content: "";
+    inset-inline: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+  }
+
+  html.home-native-scroll #scroll-story [data-home-story-section]:not(:first-of-type)::before {
+    height: var(--section-blend-height);
+    top: 0;
+  }
+
+  html.home-native-scroll #scroll-story [data-home-story-section]:not(:last-of-type)::after {
+    bottom: 0;
+    height: var(--section-blend-height);
+  }
+
+  html:not([data-theme="light"]).home-native-scroll
+    #scroll-story
+    [data-home-story-section]:not(:first-of-type)::before {
+    background: linear-gradient(
+      180deg,
+      #000314 0%,
+      rgba(0, 3, 20, 0.96) 34%,
+      rgba(0, 3, 20, 0.64) 70%,
+      transparent 100%
+    );
+  }
+
+  html:not([data-theme="light"]).home-native-scroll
+    #scroll-story
+    [data-home-story-section]:not(:last-of-type)::after {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(0, 3, 20, 0.64) 34%,
+      rgba(0, 3, 20, 0.96) 76%,
+      #000314 100%
+    );
+  }
+}
+
 html.home-story-active:not(.home-story-released),
 html.home-story-active:not(.home-story-released) body {
   height: 100%;

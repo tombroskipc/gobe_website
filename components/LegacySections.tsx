@@ -277,7 +277,7 @@ export function CoreValuesSection() {
             <h3
               id="values-title"
               data-scroll-reveal
-              className="mt-5 text-[clamp(3.9rem,7.1vw,8.35rem)] font-black uppercase leading-[0.84] tracking-normal text-white drop-shadow-[0_20px_48px_rgba(0,0,0,0.62)]"
+              className="mt-5 text-[clamp(3.9rem,7.1vw,8.35rem)] font-black uppercase leading-[0.84] tracking-normal text-white"
             >
               {"CORE VALUE \n "}
               <span className="text-[#ff7648]">GOBE-ER</span>
@@ -455,7 +455,7 @@ export function ScaleSection() {
         <div className="scale-content relative z-[2] mx-auto grid min-h-screen max-w-[94rem] items-center gap-12 px-5 py-24 sm:px-8 lg:px-12">
           <div data-scroll-reveal className="scale-copy">
             <p className="text-xs font-black uppercase tracking-[0.36em] text-white/62">Company scale</p>
-            <h2 data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(3.4rem,9vw,8.5rem)] font-black leading-[0.88] tracking-normal text-white">
+            <h2 data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(3rem,5.2vw,6.2rem)] font-black leading-[0.92] tracking-normal text-white">
               How GoBeyond Scales
             </h2>
             <div className="scale-intro-copy">

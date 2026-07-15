@@ -254,19 +254,52 @@ function extractRichTextBlocks(value?: NewsRichText, keyPrefix = "content"): Art
     });
   };
 
+  const pushSegmentsBlock = (segments: RichTextSegment[], kind: ArticleContentBlock["kind"], key: string) => {
+    splitSegmentsByLine(normalizeSegments(segments)).forEach((lineSegments, index) => {
+      blocks.push({ key: `${key}-${index}`, kind, segments: lineSegments });
+    });
+  };
+
+  const pushUploadBlock = (node: NewsRichTextNode, key: string) => {
+    blocks.push({
+      caption: node.fields?.caption,
+      key,
+      kind: "image",
+      media: node.value,
+      segments: [],
+    });
+  };
+
+  const pushMixedChildren = (children: NewsRichTextNode[], kind: ArticleContentBlock["kind"], key: string, listDepth: number) => {
+    let segmentBuffer: RichTextSegment[] = [];
+
+    const flushSegments = (segmentKey: string) => {
+      pushSegmentsBlock(segmentBuffer, kind, segmentKey);
+      segmentBuffer = [];
+    };
+
+    children.forEach((child, index) => {
+      if (child.type === "upload") {
+        flushSegments(`${key}-before-upload-${index}`);
+        pushUploadBlock(child, `${key}-upload-${index}`);
+        return;
+      }
+
+      if (child.type === "list") {
+        flushSegments(`${key}-before-list-${index}`);
+        visit(child, `${key}-list-${index}`, listDepth + 1);
+        return;
+      }
+
+      segmentBuffer = segmentBuffer.concat(getInlineSegments(child));
+    });
+
+    flushSegments(`${key}-after`);
+  };
+
   const visit = (node: NewsRichTextNode, key: string, listDepth = 0) => {
     if (node.type === "upload") {
-      const uploadNode = node as NewsRichTextNode & {
-        fields?: { caption?: string } | null;
-        value?: unknown;
-      };
-      blocks.push({
-        caption: uploadNode.fields?.caption,
-        key,
-        kind: "image",
-        media: uploadNode.value,
-        segments: [],
-      });
+      pushUploadBlock(node, key);
       return;
     }
 
@@ -276,6 +309,11 @@ function extractRichTextBlocks(value?: NewsRichText, keyPrefix = "content"): Art
     }
 
     if (node.type === "listitem") {
+      if (node.children?.some((child) => child.type === "upload")) {
+        pushMixedChildren(node.children, listDepth > 0 ? "subitem" : "item", key, listDepth);
+        return;
+      }
+
       pushTextBlock(node, listDepth > 0 ? "subitem" : "item", key);
       node.children?.filter((child) => child.type === "list").forEach((child, index) => visit(child, `${key}-nested-${index}`, listDepth + 1));
       return;
@@ -292,6 +330,11 @@ function extractRichTextBlocks(value?: NewsRichText, keyPrefix = "content"): Art
     }
 
     if (node.type === "paragraph") {
+      if (node.children?.some((child) => child.type === "upload")) {
+        pushMixedChildren(node.children, "paragraph", key, listDepth);
+        return;
+      }
+
       pushTextBlock(node, "paragraph", key);
       return;
     }

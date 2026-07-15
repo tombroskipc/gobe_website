@@ -17,7 +17,10 @@ export const Media: CollectionConfig = {
     {
       name: "alt",
       type: "text",
-      required: true,
+      required: false,
+      admin: {
+        description: "Optional. Public pages fall back to the post title or a generic GoBeyond image label when this is empty.",
+      },
     },
   ],
 };

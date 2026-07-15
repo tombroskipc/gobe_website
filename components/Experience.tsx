@@ -1,8 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { CustomCursor } from "./CustomCursor";
 import { LandingHeroSection } from "./LandingHeroSection";
 import { PageLoadingOverlay } from "./PageLoadingOverlay";
 import {
@@ -14,14 +12,6 @@ import {
 } from "./LegacySections";
 import { Navbar } from "./Navbar";
 import { usePretextHomeTextFit } from "./usePretextHomeTextFit";
-
-const DeferredHomeSectionStoryController = dynamic(
-  () => import("./HomeSectionStoryController").then((mod) => mod.HomeSectionStoryController),
-  {
-    ssr: false,
-    loading: () => null,
-  },
-);
 
 const HOME_LOADING_SEEN_KEY = "gobe:home-loading-seen";
 
@@ -130,6 +120,18 @@ export function Experience() {
   const [showLoadingOverlay] = useState(() => !hasSeenHomeLoading());
   const [initialModelReady, setInitialModelReady] = useState(false);
 
+  useEffect(() => {
+    const html = document.documentElement;
+
+    html.classList.add("home-native-scroll");
+    html.classList.remove("home-story-active", "home-story-released");
+    html.removeAttribute("data-home-story-active-section");
+
+    return () => {
+      html.classList.remove("home-native-scroll");
+    };
+  }, []);
+
   const handleInitialModelLoaded = useCallback(() => {
     markHomeLoadingSeen();
     setInitialModelReady(true);
@@ -160,9 +162,7 @@ export function Experience() {
 
   return (
     <main id="scroll-story" className="relative min-h-screen overflow-x-hidden bg-[#0c1018]/45 text-white">
-      <CustomCursor />
       <Navbar />
-      <DeferredHomeSectionStoryController />
       {showLoadingOverlay ? <PageLoadingOverlay ready={initialModelReady} /> : null}
       <LandingHeroSection forceInitialModelLoad={!initialModelReady} onInitialModelLoaded={handleInitialModelLoaded} />
       <CoreValuesSection />
