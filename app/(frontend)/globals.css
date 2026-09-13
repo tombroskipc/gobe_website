@@ -46,6 +46,19 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+html.legal-page-active,
+html.legal-page-active body {
+  height: auto;
+  overflow-y: auto;
+  overscroll-behavior-y: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: none;
+}
+
+html.legal-page-active .legal-document-page footer {
+  scroll-snap-align: none;
+}
+
 /* Display face + crafted tracking on headings — the single biggest "designed,
    not generated" signal. Effects/colors are untouched. */
 h1, h2, h3, h4 {

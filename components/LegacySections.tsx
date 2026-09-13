@@ -522,6 +522,7 @@ export function FooterSection() {
     { href: "/tuyen-dung", label: "Tuyển dụng" },
     { href: "/hoat-dong", label: "Hoạt động" },
     { href: "/tin-tuc", label: "Tin tức" },
+    { href: "/privacy-policy", label: "Chính sách bảo mật" },
   ];
 
   const socialLinks = [
