@@ -16,6 +16,7 @@ node_modules.bak/
 
 # OS / tooling
 .DS_Store
+*.tsbuildinfo
 .agent/
 .agents/
 .minimax/
