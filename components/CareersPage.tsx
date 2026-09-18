@@ -16,88 +16,88 @@ type Job = {
 
 const jobs: Job[] = [
   {
-    date: "08 Th12",
-    excerpt: "Tìm kiếm nhân viên Marketing Google Ads tài năng, biết thử nghiệm, tối ưu và đọc tín hiệu thị trường.",
+    date: "Dec 08",
+    excerpt: "Looking for a talented Google Ads marketer who can test, optimize, and read market signals.",
     href: "/tuyen-dung/marketing-google-ads",
     title: "Marketing Google Ads",
     tone: "#F26522",
   },
   {
-    date: "08 Th12",
-    excerpt: "Đồng hành cùng team performance để scale các chiến dịch Facebook Ads cho thị trường quốc tế.",
+    date: "Dec 08",
+    excerpt: "Partner with the performance team to scale Facebook Ads campaigns for international markets.",
     href: "/tuyen-dung/marketing-facebook-ads",
     title: "Marketing Facebook Ads",
     tone: "#5AA2E8",
   },
   {
-    date: "08 Th12",
-    excerpt: "Sản xuất video ngắn, visual angle và nội dung sáng tạo phục vụ các chiến dịch e-commerce.",
+    date: "Dec 08",
+    excerpt: "Produce short videos, visual angles, and creative content for e-commerce campaigns.",
     href: "/tuyen-dung/creative-video",
-    title: "Sáng tạo Video",
+    title: "Creative Video",
     tone: "#D95B9F",
   },
   {
-    date: "05 Th1",
-    excerpt: "Chăm sóc khách hàng, xử lý phản hồi và phối hợp vận hành để trải nghiệm mua hàng mượt mà.",
+    date: "Jan 05",
+    excerpt: "Support customers, handle feedback, and coordinate with operations for a smooth buying experience.",
     href: "/tuyen-dung/customer-service",
-    title: "Chăm sóc khách hàng",
+    title: "Customer Service",
     tone: "#2ED4A4",
   },
   {
-    date: "29 Th8",
-    excerpt: "Tuyển dụng, phát triển con người và xây dựng văn hóa vận hành chủ động trong đội ngũ.",
+    date: "Aug 29",
+    excerpt: "Recruit, develop people, and build a proactive operating culture within the team.",
     href: "/tuyen-dung/human-resource",
-    title: "Nhân sự",
+    title: "Human Resource",
     tone: "#E9C15F",
   },
   {
-    date: "21 Th4",
-    excerpt: "Quản lý đơn hàng, điều phối supplier, logistics và theo dõi vận hành từ lúc nhận đơn đến khi giao thành công.",
+    date: "Apr 21",
+    excerpt: "Manage orders, coordinate suppliers and logistics, and monitor operations from order receipt to delivery.",
     href: "/tuyen-dung/fulfillment-full-time",
-    title: "Fulfillment Toàn thời gian",
+    title: "Fulfillment Full-time",
     tone: "#F26522",
   },
   {
-    date: "21 Th4",
-    excerpt: "Thực tập vận hành sàn Etsy, hỗ trợ listing, tracking và quy trình xử lý dữ liệu sản phẩm.",
+    date: "Apr 21",
+    excerpt: "Marketplace operations internship supporting Etsy listings, tracking, and product data workflows.",
     href: "/tuyen-dung/van-hanh-san-etsy-intern",
-    title: "Thực tập Vận hành sàn Etsy",
+    title: "Etsy Marketplace Operations Intern",
     tone: "#5AA2E8",
   },
 ];
 
 const jobInfo = [
-  ["Vị trí", "Fulfillment Toàn thời gian"],
-  ["Lĩnh vực", "Thương mại điện tử Âu Mỹ, Dropshipping, FBA, FBM"],
-  ["Số lượng", "02"],
-  ["Địa điểm", "Tòa St Moritz, 1014 Đường Phạm Văn Đồng, TP. Hồ Chí Minh"],
+  ["Role", "Fulfillment Full-time"],
+  ["Field", "US/EU e-commerce, dropshipping, FBA, FBM"],
+  ["Headcount", "02"],
+  ["Location", "St Moritz, 1014 Pham Van Dong Street, Hiep Binh Ward, Ho Chi Minh City"],
 ];
 
 const workScope = [
-  "Quản lý toàn bộ quy trình xử lý và theo dõi đơn hàng từ lúc nhận đơn đến khi giao thành công, đảm bảo tiến độ và chất lượng vận hành.",
-  "Điều phối công việc giữa Customer Support, Supplier và Logistics để đảm bảo hàng hóa được sản xuất và giao đúng kế hoạch.",
-  "Giám sát và tối ưu quy trình Fulfill nhằm giảm thiểu sai sót, rút ngắn thời gian xử lý và tăng trải nghiệm khách hàng.",
-  "Xử lý và hỗ trợ team giải quyết hoàn trả, mất hàng, khiếu nại theo hướng nhanh chóng, linh hoạt và hiệu quả.",
-  "Theo dõi chỉ số vận hành như tỷ lệ giao đúng hạn, tỷ lệ lỗi, thời gian xử lý đơn và đề xuất cải tiến liên tục.",
-  "Báo cáo định kỳ cho Leader về hiệu quả vận hành và tình hình đơn hàng.",
+  "Manage the full order processing and tracking flow from order receipt to successful delivery while maintaining speed and quality.",
+  "Coordinate work between Customer Support, Suppliers, and Logistics to keep production and delivery on schedule.",
+  "Monitor and optimize fulfillment processes to reduce errors, shorten handling time, and improve the customer experience.",
+  "Support the team in resolving returns, lost shipments, and complaints quickly and effectively.",
+  "Track operating metrics such as on-time delivery, error rate, and processing time, then propose continuous improvements.",
+  "Report regularly to the Leader on order status and operational performance.",
 ];
 
 const requirements = [
-  "Tốt nghiệp Đại học các ngành Quản trị Chuỗi Cung Ứng, Quản trị Kinh doanh hoặc lĩnh vực liên quan.",
-  "Tiếng Anh khá, có khả năng làm việc với đối tác và khách hàng nước ngoài.",
-  "Tối thiểu 1-2 năm kinh nghiệm Fulfillment trong lĩnh vực POD, Dropshipping hoặc E-commerce.",
-  "Thành thạo các công cụ quản lý đơn hàng, theo dõi vận chuyển và xử lý dữ liệu.",
-  "Tư duy quản lý, biết điều phối, phân công và giám sát công việc.",
-  "Chủ động, trách nhiệm, nhanh nhẹn, linh hoạt và có khả năng xử lý vấn đề tốt.",
+  "University graduate in Supply Chain Management, Business Administration, or a related field.",
+  "Good English skills and ability to work with international partners and customers.",
+  "At least 1-2 years of fulfillment experience in POD, dropshipping, or e-commerce.",
+  "Proficient with order management, shipment tracking, and data handling tools.",
+  "Management mindset with the ability to coordinate, delegate, and monitor work.",
+  "Proactive, responsible, agile, flexible, and strong at problem solving.",
 ];
 
 const benefits = [
-  "Thu nhập 8-12 triệu/tháng + bonus theo hiệu suất, có thể thỏa thuận trong quá trình phỏng vấn.",
-  "Thời gian thử việc 2 tháng, nhận 85% lương chính thức.",
-  "Review lương 1 lần/năm.",
-  "Đóng BHXH, BHYT, BHTN theo quy định khi là nhân viên chính thức.",
-  "Lương tháng 13, thưởng Lễ, Tết và các hoạt động nội bộ như happy hours, sinh nhật, kick-off, team building.",
-  "Môi trường startup trẻ trung, năng động, sáng tạo và tập trung phát triển con người.",
+  "Compensation of VND 8-12M/month plus performance bonus, negotiable during interviews.",
+  "Two-month probation at 85% of official salary.",
+  "Annual salary review.",
+  "Social, health, and unemployment insurance according to regulations for official employees.",
+  "13th-month salary, holiday bonuses, and internal activities such as happy hours, birthdays, kick-offs, and team building.",
+  "A young, dynamic, creative startup environment focused on people development.",
 ];
 
 function PageShell({ children }: { children: ReactNode }) {
@@ -144,7 +144,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
 
       <div className="mt-14 overflow-hidden rounded-[1.75rem] bg-white p-4 text-[#182452]">
         <div className="mx-auto w-fit rounded-full bg-black px-5 py-2 text-xs font-black uppercase tracking-[0.08em] text-white">
-          Chúng tôi đang tuyển!
+          We are hiring!
         </div>
         <div className="mt-4 rounded-2xl bg-[#F26522] px-4 py-4 text-center text-xl font-black text-white">
           {job.title}
@@ -167,7 +167,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
 
       <div className="mt-5">
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[color:var(--accent)]">
-          Tuyển dụng / 0{index + 1}
+          Careers / 0{index + 1}
         </p>
         <h3 className="mt-3 text-2xl font-black uppercase leading-tight text-white">{job.title}</h3>
         <p className="mt-3 text-sm font-medium leading-6 text-white/64">{job.excerpt}</p>
@@ -175,7 +175,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
 
       {isPrimary ? (
         <span className="absolute bottom-5 right-5 rounded-full bg-[#F26522] px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-white">
-          Xem JD
+          View JD
         </span>
       ) : null}
     </a>
@@ -192,21 +192,21 @@ export function CareersPage() {
         <div className="relative mx-auto grid min-h-[calc(100vh-6rem)] max-w-7xl items-center gap-10 py-10 lg:grid-cols-[minmax(0,0.48fr)_minmax(0,0.52fr)]">
           <div>
             <div data-scroll-reveal>
-              <SectionMark current="01" label="Tuyển dụng" />
+              <SectionMark current="01" label="Careers" />
             </div>
             <h1 data-scroll-reveal className="mobile-page-title mt-6 text-4xl font-black uppercase leading-[0.9] tracking-normal sm:text-5xl lg:text-6xl xl:text-7xl">
-              Gia nhập
+              Join
               <span className="block text-[#ff7648]">GoBeyond</span>
             </h1>
             <p data-scroll-reveal className="mt-7 max-w-2xl text-base font-medium leading-8 text-white/70 md:text-lg">
-              Những vị trí đang mở cho đội ngũ thương mại điện tử toàn cầu: marketing, sáng tạo, fulfillment, chăm sóc khách hàng và vận hành.
+              Open roles for our global e-commerce team across marketing, creative, fulfillment, customer service, and operations.
             </p>
             <a
               href="#open-roles"
               data-scroll-reveal
               className="magnetic mt-8 inline-flex min-h-12 items-center rounded-full bg-[#F26522] px-7 text-sm font-black uppercase tracking-[0.1em] text-white shadow-[0_18px_45px_rgba(242,101,34,0.28)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
             >
-              Xem vị trí
+              View roles
             </a>
           </div>
 
@@ -214,7 +214,7 @@ export function CareersPage() {
             <div className="absolute -inset-5 border border-[#F26522]/28 bg-[#F26522]/8 shadow-[0_34px_120px_rgba(242,101,34,0.14)]" />
             <img
               src="/careers/legacy-careers-list.png"
-              alt="Danh sách tuyển dụng GoBeyond cũ"
+              alt="GoBeyond careers listing preview"
               className="relative aspect-[4/3] w-full object-cover object-top"
             />
           </figure>
@@ -229,15 +229,15 @@ export function CareersPage() {
           <div className="grid items-end gap-6">
             <div>
               <div data-scroll-reveal>
-                <SectionMark current="02" label="Vị trí đang mở" />
+                <SectionMark current="02" label="Open roles" />
               </div>
               <h2 data-scroll-reveal className="mobile-page-title mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl">
-                Tất cả vị trí
-                <span className="block text-[#ff7648]">đang tuyển</span>
+                All open
+                <span className="block text-[#ff7648]">roles</span>
               </h2>
             </div>
             <p data-scroll-reveal className="max-w-2xl text-base font-medium leading-8 text-white/68 md:text-lg">
-              Mỗi vai trò đều là một mảnh ghép trong hệ thống vận hành toàn cầu của GoBeyond. Chọn vị trí phù hợp và gửi CV về team tuyển dụng.
+              Each role is one part of GoBeyond's global operating system. Choose the role that fits and send your CV to our recruitment team.
             </p>
           </div>
 
@@ -283,29 +283,29 @@ export function FulfillmentJobPage() {
               <SectionMark current="JD" label="Fulfillment" />
             </div>
             <h1 data-scroll-reveal className="mobile-page-title mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl xl:text-6xl">
-              Tuyển dụng
+              Careers
               <span className="block text-[#ff7648]">Fulfillment</span>
-              <span className="block">Toàn thời gian</span>
+              <span className="block">Full-time</span>
             </h1>
             <p data-scroll-reveal className="mt-6 text-sm font-black uppercase tracking-[0.18em] text-white/46">
-              Tháng 4 21, 2026
+              April 21, 2026
             </p>
             <p data-scroll-reveal className="mt-7 max-w-2xl text-base font-medium leading-8 text-white/70 md:text-lg">
-              GoBeyond đang tìm kiếm nhân viên Fulfillment tài năng và nhiệt huyết để gia nhập đội ngũ. Nếu bạn thích môi trường chuyên nghiệp, năng động và có cơ hội thăng tiến, đây là nơi dành cho bạn.
+              GoBeyond is looking for a talented and passionate Fulfillment teammate. If you want a professional, dynamic environment with room to grow, this role is for you.
             </p>
             <div data-scroll-reveal className="mt-8 flex flex-wrap gap-3">
-              <a className="rounded-full bg-[#F26522] px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white transition hover:bg-[#d94d12]" href="mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20FULFILLMENT%20FULL-TIME%5D%20Ho%20va%20ten">
-                Gửi CV
+              <a className="rounded-full bg-[#F26522] px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white transition hover:bg-[#d94d12]" href="mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20FULFILLMENT%20FULL-TIME%5D%20Full%20name">
+                Send CV
               </a>
               <a className="rounded-full border border-white/20 px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-white hover:text-white" href="/tuyen-dung">
-                Xem vị trí khác
+                View other roles
               </a>
             </div>
           </div>
 
           <figure data-scroll-media className="relative">
             <div className="absolute -inset-5 border border-[#F26522]/28 bg-[#F26522]/8 shadow-[0_34px_120px_rgba(242,101,34,0.14)]" />
-            <img src="/careers/legacy-fulfillment-jd.png" alt="Bản xem trước JD Fulfillment" className="relative aspect-[4/3] w-full object-cover object-top" />
+            <img src="/careers/legacy-fulfillment-jd.png" alt="Fulfillment JD preview" className="relative aspect-[4/3] w-full object-cover object-top" />
           </figure>
         </div>
       </section>
@@ -316,7 +316,7 @@ export function FulfillmentJobPage() {
 
         <div className="relative mx-auto grid max-w-7xl gap-5 lg:grid-cols-[minmax(0,0.36fr)_minmax(0,0.64fr)]">
           <aside data-scroll-reveal className="top-24 h-fit border border-white/12 bg-white/[0.04] p-6 text-white/72 backdrop-blur-md lg:sticky">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Thông tin tuyển dụng</p>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Recruitment information</p>
             <dl className="mt-5 grid gap-4">
               {jobInfo.map(([label, value]) => (
                 <div key={label}>
@@ -328,7 +328,7 @@ export function FulfillmentJobPage() {
           </aside>
 
           <div className="grid gap-5">
-            <DetailSection eyebrow="01" title="Phạm vi công việc">
+            <DetailSection eyebrow="01" title="Scope of work">
               <ul className="grid gap-3">
                 {workScope.map((item) => (
                   <li key={item} className="pl-4 before:mr-3 before:text-[#F26522] before:content-['•']">
@@ -338,7 +338,7 @@ export function FulfillmentJobPage() {
               </ul>
             </DetailSection>
 
-            <DetailSection eyebrow="02" title="Yêu cầu">
+            <DetailSection eyebrow="02" title="Requirements">
               <ul className="grid gap-3">
                 {requirements.map((item) => (
                   <li key={item} className="pl-4 before:mr-3 before:text-[#F26522] before:content-['•']">
@@ -348,7 +348,7 @@ export function FulfillmentJobPage() {
               </ul>
             </DetailSection>
 
-            <DetailSection eyebrow="03" title="Quyền lợi">
+            <DetailSection eyebrow="03" title="Benefits">
               <ul className="grid gap-3">
                 {benefits.map((item) => (
                   <li key={item} className="pl-4 before:mr-3 before:text-[#F26522] before:content-['•']">
@@ -358,12 +358,12 @@ export function FulfillmentJobPage() {
               </ul>
             </DetailSection>
 
-            <DetailSection eyebrow="04" title="Thời gian làm việc">
-              <p>Giờ làm việc: 8:00-17:30, từ thứ 2 đến thứ 6, thứ 7 remote. Nghỉ trưa: 12:00-13:30.</p>
+            <DetailSection eyebrow="04" title="Working time">
+              <p>Working hours: 8:00 - 17:30, Monday to Friday and Saturday morning remote. Lunch break: 12:00 - 13:30</p>
               <p className="mt-5 font-bold text-white">
-                Gửi CV và Portfolio tới Email: tuyendung@gobe.asia
+                Send your CV and portfolio to: tuyendung@gobe.asia
                 <br />
-                Tiêu đề: [GoBeyond - FULFILLMENT TOÀN THỜI GIAN] Họ và tên
+                Subject: [GoBeyond - FULFILLMENT FULL-TIME] Full name
               </p>
             </DetailSection>
           </div>

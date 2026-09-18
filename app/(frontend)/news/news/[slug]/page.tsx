@@ -1,1 +1,1 @@
-export { default, dynamic } from "../../../tin-tuc/[slug]/page";
+export { default, dynamic, generateMetadata } from "../../../tin-tuc/[slug]/page";

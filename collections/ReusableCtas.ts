@@ -41,7 +41,7 @@ export const ReusableCtas: CollectionConfig = {
     {
       name: "label",
       type: "text",
-      defaultValue: "Liên hệ GoBeyond",
+      defaultValue: "Contact GoBeyond",
       required: true,
     },
     {

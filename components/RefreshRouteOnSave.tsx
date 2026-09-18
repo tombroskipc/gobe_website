@@ -2,6 +2,7 @@
 
 import { RefreshRouteOnSave as PayloadRefreshRouteOnSave } from "@payloadcms/live-preview-react";
 import { useRouter } from "next/navigation";
+import { getPublicSiteUrl } from "@/lib/siteUrl";
 
 // Server-side Live Preview helper for Next.js App Router: when an editor saves
 // in the admin panel, Payload posts a message that this component listens for,
@@ -11,7 +12,7 @@ export function RefreshRouteOnSave() {
   return (
     <PayloadRefreshRouteOnSave
       refresh={() => router.refresh()}
-      serverURL={process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000"}
+      serverURL={getPublicSiteUrl()}
     />
   );
 }

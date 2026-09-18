@@ -374,7 +374,7 @@ export function LandingHeroSection({
                 <button
                   type="button"
                   className="pointer-events-auto absolute inset-0 z-[3] hidden cursor-zoom-in appearance-none border-0 bg-transparent p-0 outline-none md:block"
-                  aria-label="Phóng to quả địa cầu"
+                  aria-label="Expand 3D globe"
                   onClick={isInlineModelExpandable ? openModel : undefined}
                   tabIndex={isInlineModelExpandable ? 0 : -1}
                 />
@@ -388,7 +388,7 @@ export function LandingHeroSection({
           <button
             type="button"
             className="fixed inset-0 z-[190] cursor-zoom-out bg-[#02040c]/78 opacity-100 backdrop-blur-2xl transition-opacity duration-300"
-            aria-label="Đóng mô hình quả địa cầu"
+            aria-label="Close 3D globe model"
             onClick={closeModel}
           />
           <div
@@ -412,7 +412,7 @@ export function LandingHeroSection({
           <button
             type="button"
             className="pointer-events-auto fixed right-5 top-5 z-[210] grid h-12 w-12 place-items-center rounded-full border border-white/18 bg-white/10 text-2xl font-light leading-none text-white shadow-[0_18px_54px_rgba(0,0,0,0.38)] backdrop-blur-xl transition hover:border-[#F26522]/70 hover:bg-[#F26522]/20 sm:right-8 sm:top-8"
-            aria-label="Đóng mô hình quả địa cầu"
+            aria-label="Close 3D globe model"
             onClick={closeModel}
           >
             ×

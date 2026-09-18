@@ -2,6 +2,8 @@
 
 import { useEffect, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
+import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import { MdEmail, MdLocalPhone } from "react-icons/md";
 
 type ValueCardStyle = CSSProperties &
   Partial<
@@ -24,7 +26,7 @@ const coreValues = [
     index: "01",
     code: "G",
     title: "GOAL-ORIENTED",
-    body: "Lu\u00f4n x\u00e1c \u0111\u1ecbnh r\u00f5 r\u00e0ng m\u1ee5c ti\u00eau v\u00e0 n\u1ed7 l\u1ef1c kh\u00f4ng ng\u1eebng \u0111\u1ec3 \u0111\u1ea1t \u0111\u01b0\u1ee3c ch\u00fang.",
+    body: "We set clear goals and keep pushing until they are achieved.",
     accent: "#F26522",
     style: {
       "--panel-accent": "#F26522",
@@ -41,7 +43,7 @@ const coreValues = [
     index: "02",
     code: "O",
     title: "OPEN-MINDEDNESS",
-    body: "S\u1eb5n s\u00e0ng ti\u1ebfp thu \u00fd ki\u1ebfn m\u1edbi, h\u1ecdc h\u1ecfi v\u00e0 th\u00edch \u1ee9ng v\u1edbi s\u1ef1 thay \u0111\u1ed5i.",
+    body: "We stay receptive to new ideas, keep learning, and adapt quickly to change.",
     accent: "#2ED4A4",
     style: {
       "--panel-accent": "#2ED4A4",
@@ -58,7 +60,7 @@ const coreValues = [
     index: "03",
     code: "B",
     title: "BALANCED",
-    body: "Bi\u1ebft c\u00e2n b\u1eb1ng gi\u1eefa c\u00e1c \u01b0u ti\u00ean nh\u01b0 hi\u1ec7u qu\u1ea3 c\u00f4ng vi\u1ec7c, ph\u00e1t tri\u1ec3n c\u00e1 nh\u00e2n v\u00e0 cu\u1ed9c s\u1ed1ng gia \u0111\u00ecnh.",
+    body: "We balance performance, personal growth, and life outside work.",
     accent: "#D95B9F",
     style: {
       "--panel-accent": "#D95B9F",
@@ -75,7 +77,7 @@ const coreValues = [
     index: "04",
     code: "E",
     title: "EMPOWERMENT",
-    body: "Trao quy\u1ec1n v\u00e0 tin t\u01b0\u1edfng \u0111\u1ec3 nh\u00e2n vi\u00ean ch\u1ee7 \u0111\u1ed9ng v\u00e0 s\u00e1ng t\u1ea1o trong c\u00f4ng vi\u1ec7c.",
+    body: "We give people ownership and trust them to act proactively and creatively.",
     accent: "#5AA2E8",
     style: {
       "--panel-accent": "#5AA2E8",
@@ -92,7 +94,7 @@ const coreValues = [
     index: "05",
     code: "E",
     title: "ENTREPRENEURSHIP (HUSTLE)",
-    body: "B\u1ea3n l\u0129nh, s\u00e1ng t\u1ea1o v\u00e0 s\u1eb5n s\u00e0ng \u0111\u01b0\u01a1ng \u0111\u1ea7u v\u1edbi r\u1ee7i ro \u0111\u1ec3 t\u1ea1o ra nh\u1eefng gi\u00e1 tr\u1ecb m\u1edbi.",
+    body: "We are bold, creative, and willing to take smart risks to create new value.",
     accent: "#E9C15F",
     style: {
       "--panel-accent": "#E9C15F",
@@ -109,7 +111,7 @@ const coreValues = [
     index: "06",
     code: "R",
     title: "RESULTS-DRIVEN",
-    body: "Lu\u00f4n t\u1eadp trung v\u00e0o vi\u1ec7c ho\u00e0n th\u00e0nh m\u1ee5c ti\u00eau v\u00e0 mang l\u1ea1i k\u1ebft qu\u1ea3 c\u1ee5 th\u1ec3.",
+    body: "We stay focused on finishing goals and delivering concrete outcomes.",
     accent: "#70D17B",
     style: {
       "--panel-accent": "#70D17B",
@@ -263,7 +265,7 @@ export function CoreValuesSection() {
                     </h3>
                     <p className="mt-5 max-w-[24ch] text-sm font-semibold leading-[1.55] text-white/74">{item.body}</p>
                     <span className="mt-7 inline-flex px-4 py-2 font-black tracking-[0.12em] transition">
-                      {/* {"Xem chi ti\u1ebft"} */}
+                      {/* {"View details"} */}
                     </span>
                   </div>
                 </button>
@@ -320,7 +322,7 @@ export function CoreValuesSection() {
               [<span className="acronym-hit">{activeValue.code}</span>]{activeValue.title.slice(1)}
             </h3>
             <p className="value-focus-copy">{activeValue.body}</p>
-            {/* <span className="value-focus-note">Nhan ESC hoac click ra ngoai de dong</span> */}
+            {/* <span className="value-focus-note">Press ESC or click outside to close</span> */}
           </article>
         </div>,
             document.body,
@@ -493,16 +495,16 @@ export function ContactCtaSection() {
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-28" aria-hidden="true" />
         <div data-scroll-reveal className="relative mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur-md md:p-12">
           <h2 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="text-[clamp(2.4rem,6vw,5.8rem)] font-black leading-[0.9] tracking-normal text-white">
-            Gia nhập GoBeyond ngay!
+            Join GoBeyond today!
           </h2>
           <p data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.82" className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/65">
-            {"Li\u00ean h\u1ec7 GoBeyond v\u1ec1 s\u1ea3n ph\u1ea9m, h\u1ee3p t\u00e1c, tuy\u1ec3n d\u1ee5ng, truy\u1ec1n th\u00f4ng, ho\u1eb7c nh\u1eefng c\u01a1 h\u1ed9i li\u00ean quan \u0111\u1ebfn v\u1eadn h\u00e0nh th\u01b0\u01a1ng m\u1ea1i \u0111i\u1ec7n t\u1eed to\u00e0n c\u1ea7u."}
+            Contact GoBeyond for products, partnerships, careers, press, or opportunities connected to global e-commerce operations.
           </p>
           <a
             href="mailto:info@gobe.asia"
             className="magnetic mt-9 inline-flex min-h-12 items-center rounded-full bg-[#F26522] px-8 text-sm font-black uppercase tracking-[0.08em] text-white shadow-[0_18px_45px_rgba(242,101,34,0.28)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
           >
-            Gửi email liên hệ
+            Send email
           </a>
         </div>
       </div>
@@ -517,20 +519,19 @@ export function FooterBridge() {
 
 export function FooterSection() {
   const pageLinks = [
-    { href: "/", label: "Trang chủ" },
-    { href: "/ve-chung-toi", label: "Về chúng tôi" },
-    { href: "/tuyen-dung", label: "Tuyển dụng" },
-    { href: "/hoat-dong", label: "Hoạt động" },
-    { href: "/tin-tuc", label: "Tin tức" },
-    { href: "/privacy-policy", label: "Chính sách bảo mật" },
+    { href: "/", label: "Home" },
+    { href: "/ve-chung-toi", label: "About Us" },
+    { href: "/tuyen-dung", label: "Careers" },
+    { href: "/hoat-dong", label: "Activities" },
+    { href: "/tin-tuc", label: "News" },
+    { href: "/privacy-policy", label: "Privacy Policy" },
   ];
 
   const socialLinks = [
-    { href: "https://www.facebook.com/gobeyond.asia", label: "Facebook", mark: "f" },
-    { href: "https://www.tiktok.com/@gobeyond.asia", label: "TikTok", mark: "tt" },
-    { href: "mailto:info@gobe.asia", label: "Email", mark: "@" },
-    { href: "tel:0786541658", label: "Phone", mark: "tel" },
-    { href: "https://www.linkedin.com/company/gobeyond-asia", label: "LinkedIn", mark: "in" },
+    { href: "https://web.facebook.com/lifeatgobeyond", label: "Facebook", Icon: FaFacebookF },
+    { href: "mailto:info@gobe.asia", label: "Email", Icon: MdEmail },
+    { href: "tel:0786541658", label: "Phone", Icon: MdLocalPhone },
+    { href: "https://www.linkedin.com/company/gobeyond-llc/", label: "LinkedIn", Icon: FaLinkedinIn },
   ];
 
   return (
@@ -562,31 +563,35 @@ export function FooterSection() {
         <div>
           <img src="/Logo_2.png" alt="GoBeyond" className="w-64 max-w-full brightness-0 invert" />
           <p className="mt-8 max-w-[34rem] text-base font-semibold leading-8 text-white">
-            GoBeyond là doanh nghiệp phát triển cùng ngành thương mại điện tử xuyên biên giới, tập trung vào Print on Demand và Drop-shipping.
+            GoBeyond grows with cross-border e-commerce, focusing on Print on Demand and dropshipping.
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-3" aria-label="Liên kết mạng xã hội GoBeyond">
-            {socialLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : undefined}
-                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                aria-label={link.label}
-                className="inline-flex size-11 items-center justify-center rounded-full border-2 border-white text-sm font-black text-white transition hover:-translate-y-1 hover:bg-white hover:text-[#f04413]"
-              >
-                {link.mark}
-              </a>
-            ))}
+          <div className="mt-7 flex flex-wrap gap-3" aria-label="GoBeyond social links">
+            {socialLinks.map((link) => {
+              const Icon = link.Icon;
+
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                  aria-label={link.label}
+                  className="inline-flex size-11 items-center justify-center rounded-full border-2 border-white text-xl font-black text-white transition hover:-translate-y-1 hover:bg-white hover:text-[#f04413]"
+                >
+                  <Icon aria-hidden="true" focusable="false" />
+                </a>
+              );
+            })}
           </div>
         </div>
 
         <div>
-          <h2 className="text-3xl font-black tracking-normal text-white">Liên hệ</h2>
+          <h2 className="text-3xl font-black tracking-normal text-white">Contact</h2>
           <div className="mt-7 space-y-4 text-base font-semibold leading-7 text-white">
             <p className="flex gap-3">
               <span className="mt-1 min-w-8 text-xs font-black uppercase tracking-[0.08em]" aria-hidden="true">pin</span>
-              <span>St Moritz, 1014 Đường Phạm Văn Đồng, Phường Thủ Đức, Thành phố Hồ Chí Minh</span>
+              <span>St Moritz, 1014 Pham Van Dong Street, Hiep Binh Ward, Ho Chi Minh City</span>
             </p>
             <p className="flex gap-3">
               <span className="mt-1 min-w-8 text-xs font-black uppercase tracking-[0.08em]" aria-hidden="true">tel</span>
@@ -603,8 +608,8 @@ export function FooterSection() {
           </div>
         </div>
 
-        <nav aria-label="Các trang ở chân trang">
-          <h2 className="text-3xl font-black tracking-normal text-white">Trang</h2>
+        <nav aria-label="Footer pages">
+          <h2 className="text-3xl font-black tracking-normal text-white">Pages</h2>
           <div className="mt-7 flex flex-col gap-4 text-base font-semibold text-white">
             {pageLinks.map((link) => (
               <a key={link.href} href={link.href} className="transition hover:translate-x-1 hover:text-white/72">
@@ -616,12 +621,12 @@ export function FooterSection() {
       </div>
 
       <div className="relative mx-auto mt-14 max-w-7xl border-t border-white/78 pt-7 text-center text-sm font-semibold text-white">
-        Bản quyền © 2024 - GoBeyond. Đã đăng ký mọi quyền.
+        Copyright © 2024 - GoBeyond. All rights reserved.
       </div>
 
       <button
         type="button"
-        aria-label="Lên đầu trang"
+        aria-label="Back to top"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className="absolute bottom-10 right-7 inline-flex size-14 items-center justify-center rounded-full bg-[#31b73e] text-white shadow-[0_18px_40px_rgba(49,183,62,0.34)] transition hover:-translate-y-1 hover:bg-[#28a733]"
       >

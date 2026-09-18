@@ -3,8 +3,8 @@ import { CareersListing } from "@/components/CareersRenderer";
 import { careerListingSourceUrl, getPublishedCareers } from "@/lib/careers";
 
 export const metadata: Metadata = {
-  title: "Tuyển dụng - GoBeyond LLC",
-  description: "Danh sách vị trí tuyển dụng đang mở tại GoBeyond.",
+  title: "Careers - GoBeyond LLC",
+  description: "Open roles at GoBeyond.",
 };
 
 export default async function CareersRoute() {

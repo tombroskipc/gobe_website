@@ -10,7 +10,7 @@ export const LeadBlock: Block = {
     {
       name: "kicker",
       type: "text",
-      defaultValue: "Tin tức GoBeyond",
+      defaultValue: "GoBeyond News",
     },
     {
       name: "heading",
@@ -157,7 +157,7 @@ export const CTABlock: Block = {
     {
       name: "label",
       type: "text",
-      defaultValue: "Liên hệ GoBeyond",
+      defaultValue: "Contact GoBeyond",
       required: true,
     },
     {

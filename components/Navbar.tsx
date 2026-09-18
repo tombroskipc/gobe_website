@@ -6,11 +6,11 @@ import type { ReactNode } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 
 const menuItems = [
-  { label: "TRANG CH\u1ee6", href: "/", match: "/" },
-  { label: "V\u1ec0 CH\u00daNG T\u00d4I", href: "/ve-chung-toi", match: "/ve-chung-toi" },
-  { label: "TUY\u1ec2N D\u1ee4NG", href: "/tuyen-dung", match: "/tuyen-dung" },
-  { label: "HO\u1ea0T \u0110\u1ed8NG", href: "/hoat-dong", match: "/hoat-dong" },
-  { label: "TIN T\u1ee8C", href: "/tin-tuc", match: "/tin-tuc" },
+  { label: "HOME", href: "/", match: "/" },
+  { label: "ABOUT US", href: "/ve-chung-toi", match: "/ve-chung-toi" },
+  { label: "CAREERS", href: "/tuyen-dung", match: "/tuyen-dung" },
+  { label: "ACTIVITIES", href: "/hoat-dong", match: "/hoat-dong" },
+  { label: "NEWS", href: "/tin-tuc", match: "/tin-tuc" },
 ];
 
 function Icon({ children, className = "" }: { children: ReactNode; className?: string }) {
@@ -44,11 +44,11 @@ export function Navbar() {
   return (
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-[#0c1018]/60 shadow-[0_12px_42px_rgba(0,0,0,0.24)] backdrop-blur-2xl">
       <div className="mx-auto flex min-h-[78px] max-w-7xl items-center gap-4 px-5 sm:px-6 lg:px-8">
-        <a href="/" className="flex items-center gap-3" aria-label="Trang chủ GoBeyond">
-          <img src="/Logo_2.png" alt="GoBeyond - đi toàn cầu" className="h-auto w-[164px] object-contain md:w-[202px]" />
+        <a href="/" className="flex items-center gap-3" aria-label="GoBeyond home">
+          <img src="/Logo_2.png" alt="GoBeyond - go global" className="h-auto w-[164px] object-contain md:w-[202px]" />
         </a>
 
-        <nav aria-label="Điều hướng chính" className="ml-auto hidden items-center gap-2 lg:flex">
+        <nav aria-label="Primary navigation" className="ml-auto hidden items-center gap-2 lg:flex">
           {menuItems.map((item, index) => (
             <a
               key={item.href}
@@ -71,7 +71,7 @@ export function Navbar() {
             href="/tuyen-dung"
             className="magnetic ml-2 inline-flex min-h-11 items-center rounded-full border border-[#F26522]/45 bg-[#F26522] px-5 text-xs font-black uppercase tracking-[0.12em] text-white shadow-[0_14px_34px_rgba(242,101,34,0.26)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
           >
-            {"\u1ee8ng tuy\u1ec3n"}
+            Apply
           </a>
           <ThemeToggle className="ml-1" />
         </nav>
@@ -80,7 +80,7 @@ export function Navbar() {
           <ThemeToggle />
           <button
             type="button"
-            aria-label={open ? "Đóng menu" : "Mở menu"}
+            aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
             className="grid h-11 w-11 place-items-center rounded-full border border-[#F26522]/35 bg-white/10 text-[#F26522] transition hover:bg-[#F26522]/10"
@@ -114,7 +114,7 @@ export function Navbar() {
               <ThemeToggle className="h-10 w-10" />
               <button
                 type="button"
-                aria-label="Đóng menu"
+                aria-label="Close menu"
                 onClick={() => setOpen(false)}
                 className="grid h-10 w-10 place-items-center rounded-full bg-[#F26522]/10 text-[#F26522]"
               >
@@ -125,7 +125,7 @@ export function Navbar() {
             </div>
           </div>
 
-          <nav className="mt-10 grid gap-2" aria-label="Điều hướng di động">
+          <nav className="mt-10 grid gap-2" aria-label="Mobile navigation">
             {menuItems.map((item) => (
               <a
                 key={item.href}
@@ -139,7 +139,7 @@ export function Navbar() {
           </nav>
 
           <div className="mt-auto rounded-3xl bg-[#F26522] p-5 text-white">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-white/80">Liên hệ</p>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-white/80">Contact</p>
             <a href="mailto:info@gobe.asia" className="mt-3 block text-sm font-bold">
               info@gobe.asia
             </a>

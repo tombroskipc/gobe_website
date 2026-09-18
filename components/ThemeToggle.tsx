@@ -104,7 +104,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   return (
     <button
       type="button"
-      aria-label={theme === "dark" ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
+      aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
       aria-pressed={theme === "light"}
       title={theme === "dark" ? "Light theme" : "Dark theme"}
       onClick={toggleTheme}

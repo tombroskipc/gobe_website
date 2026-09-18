@@ -29,8 +29,8 @@ function IconFrame({ children }: { children: ReactNode }) {
 
 const traits: Trait[] = [
   {
-    title: "Hoàn thành",
-    subtext: "Mọi mục tiêu",
+    title: "Finish",
+    subtext: "Every goal",
     icon: (
       <IconFrame>
         <circle cx="32" cy="32" r="22" />
@@ -41,8 +41,8 @@ const traits: Trait[] = [
     ),
   },
   {
-    title: "Năng động",
-    subtext: "Và sáng tạo",
+    title: "Dynamic",
+    subtext: "And creative",
     icon: (
       <IconFrame>
         <ellipse cx="32" cy="32" rx="25" ry="9" />
@@ -53,8 +53,8 @@ const traits: Trait[] = [
     ),
   },
   {
-    title: "Chuyên nghiệp",
-    subtext: "Đáng tin cậy",
+    title: "Professional",
+    subtext: "And reliable",
     icon: (
       <IconFrame>
         <path d="M32 8 50 15v13c0 13-7.4 22.6-18 28-10.6-5.4-18-15-18-28V15l18-7Z" />
@@ -64,8 +64,8 @@ const traits: Trait[] = [
     ),
   },
   {
-    title: "Cầu toàn",
-    subtext: "Và học hỏi",
+    title: "Detail-driven",
+    subtext: "And always learning",
     icon: (
       <IconFrame>
         <path d="M17 9h24l8 8v34H17V9Z" />
@@ -77,8 +77,8 @@ const traits: Trait[] = [
     ),
   },
   {
-    title: "Trách nhiệm",
-    subtext: "Trong công việc",
+    title: "Responsible",
+    subtext: "At work",
     icon: (
       <IconFrame>
         <path d="M32 8 52 27 32 56 12 27 32 8Z" fill={ORANGE} stroke="none" />
@@ -87,8 +87,8 @@ const traits: Trait[] = [
     ),
   },
   {
-    title: "Đoàn kết",
-    subtext: "Tinh thần đồng đội",
+    title: "United",
+    subtext: "Team spirit",
     icon: (
       <IconFrame>
         <path d="M21 34 11 24a7 7 0 0 1 10-10l5 5" />
@@ -126,7 +126,7 @@ export function AboutUsSection() {
 
         <div className="text-center lg:text-left">
           <p className="text-sm font-black uppercase tracking-[0.08em] text-[#182452]">
-            VỀ CHÚNG TÔI
+            ABOUT US
           </p>
           <h2 className="mt-3 text-4xl font-black uppercase leading-tight tracking-tight text-[#182452] md:text-5xl">
             GO BEYOND
@@ -134,12 +134,12 @@ export function AboutUsSection() {
 
           <div className="mt-8 max-w-2xl space-y-1 text-lg leading-relaxed text-[#182452]">
             <p>
-              GoBeyond là công ty start-up tại TP HCM với tuổi đời 4 năm trong lĩnh vực
-              POD/Dropshipping tại thị trường Bắc Mỹ và Châu Âu.
+              GoBeyond is a Ho Chi Minh City startup with four years of focus in POD and
+              dropshipping across North American and European markets.
             </p>
             <p>
-              Chúng tôi tin rằng một tập thể nhỏ nhưng với tài năng và nhiệt huyết luôn
-              có thể làm nên việc lớn trên thị trường toàn cầu.
+              We believe a small, talented, and passionate team can create meaningful
+              impact in the global market.
             </p>
           </div>
 

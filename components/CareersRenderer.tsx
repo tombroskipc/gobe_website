@@ -9,13 +9,13 @@ import { Navbar } from "./Navbar";
 import { initScrollController } from "./ScrollController";
 
 const tagLabels: Record<string, string> = {
-  hiring: "Đang tuyển",
+  hiring: "Hiring",
   marketing: "Marketing",
-  creative: "Sáng tạo",
-  operations: "Vận hành",
-  customerService: "Chăm sóc khách hàng",
-  humanResource: "Nhân sự",
-  internship: "Thực tập",
+  creative: "Creative",
+  operations: "Operations",
+  customerService: "Customer Service",
+  humanResource: "Human Resource",
+  internship: "Internship",
 };
 
 const tagColors: Record<string, string> = {
@@ -66,9 +66,9 @@ function SectionMark({ current, label }: { current: string; label: string }) {
 function splitPastedListText(value: string) {
   return value
     .replace(/\r\n/g, "\n")
-    .replace(/((?:Kỹ năng\/\s*Chuyên môn|Thái độ\/Giá trị|Thu nhập|Phúc lợi khác|[A-ZÀ-Ỹ][^:\n]{1,70}):?)\s+-\s+/g, "$1\n- ")
-    .replace(/\s+(?=(?:Kỹ năng\/\s*Chuyên môn|Thái độ\/Giá trị|Thu nhập:?|Phúc lợi khác:?)\s*(?:\n|-))/g, "\n")
-    .split(/\n+|\s{2,}(?=[A-ZÀ-Ỹ][^:]{1,70}:\s*)|\s+-\s+(?=\S)/g)
+    .replace(/((?:Skills\/\s*Expertise|Mindset\/Values|Income|Other benefits|[A-Z][A-Za-z0-9 /&?]{1,70}):?)\s+-\s+/g, "$1\n- ")
+    .replace(/\s+(?=(?:Skills\/\s*Expertise|Mindset\/Values|Income:?|Other benefits:?)\s*(?:\n|-))/g, "\n")
+    .split(/\n+|\s{2,}(?=[A-Z][A-Za-z0-9 /&?]{1,70}:\s*)|\s+-\s+(?=\S)/g)
     .map((item) => item.replace(/^[-•]\s*/, "").trim())
     .filter(Boolean);
 }
@@ -76,13 +76,13 @@ function splitPastedListText(value: string) {
 function isSectionHeadingLine(text: string) {
   const trimmed = text.trim();
 
-  return /^[IVX]+\/\s+\S/i.test(trimmed) || /^(?:Mô tả công việc|Yêu cầu công việc|Quyền lợi)$/i.test(trimmed);
+  return /^[IVX]+\/\s+\S/i.test(trimmed) || /^(?:Job description|Requirements|Benefits|What you will do|What we are looking for|What you can expect)$/i.test(trimmed);
 }
 
 function isSubheadingLine(text: string) {
   const trimmed = text.trim().replace(/:$/, "");
 
-  return /^(?:Kỹ năng\/\s*Chuyên môn|Thái độ\/Giá trị|Yêu cầu khác|Thu nhập|Bạn nhận được gì\?|Phúc lợi khác|Điểm cộng)$/i.test(trimmed);
+  return /^(?:Skills\/\s*Expertise|Mindset\/Values|Other requirements|Income|What you will receive\?|Other benefits|Nice to have)$/i.test(trimmed);
 }
 
 function normalizeSegments(segments: RichTextSegment[]) {
@@ -321,6 +321,7 @@ function JobCard({ job, index }: { job: CareerItem; index: number }) {
   const tag = job.tag || "hiring";
   const accent = tagColors[tag] || "#F26522";
   const qrCodeUrl = getQrCodeUrl(job.larkUrl);
+  const title = getCareerTitle(job);
 
   return (
     <Link
@@ -351,7 +352,7 @@ function JobCard({ job, index }: { job: CareerItem; index: number }) {
 
           <div className="absolute bottom-5 left-5 z-[2] grid size-24 place-items-center border-2 border-[#F26522] bg-white p-2 shadow-[0_12px_28px_rgba(24,36,82,0.10)]">
             {qrCodeUrl ? (
-              <img src={qrCodeUrl} alt={`QR Lark JD ${job.title}`} className="h-full w-full object-contain" loading="lazy" />
+              <img src={qrCodeUrl} alt={`QR Lark JD ${title}`} className="h-full w-full object-contain" loading="lazy" />
             ) : (
               <span className="text-center text-[10px] font-black uppercase leading-tight text-[#182452]">
                 Lark
@@ -374,7 +375,7 @@ function JobCard({ job, index }: { job: CareerItem; index: number }) {
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[color:var(--accent)]">
           {tagLabels[tag] || tagLabels.hiring} / {String(index + 1).padStart(2, "0")}
         </p>
-        <h3 className="mt-3 text-2xl font-black uppercase leading-tight text-white">{job.title}</h3>
+        <h3 className="mt-3 text-2xl font-black uppercase leading-tight text-white">{title}</h3>
         <p className="mt-3 text-sm font-medium leading-6 text-white/64">{job.excerpt}</p>
       </div>
     </Link>
@@ -394,18 +395,18 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
               <SectionMark current="01" label="" />
             </div>
             <h1 data-scroll-reveal className="mobile-page-title mt-6 text-4xl font-black uppercase leading-[0.9] tracking-normal sm:text-5xl lg:text-6xl xl:text-7xl">
-              Gia nhập
+              Join
               <span className="block text-[#ff7648]">GoBeyond</span>
             </h1>
             <p data-scroll-reveal className="mt-7 max-w-2xl text-base font-medium leading-8 text-white/70 md:text-lg">
-              Các vị trí đang mở cho đội ngũ thương mại điện tử toàn cầu: marketing, sáng tạo, fulfillment, chăm sóc khách hàng và vận hành.
+              Open roles for our global e-commerce team across marketing, creative, fulfillment, customer service, and operations.
             </p>
             <div data-scroll-reveal className="mt-8 flex flex-wrap gap-3">
               <a
                 href="#open-roles"
                 className="magnetic inline-flex min-h-12 items-center rounded-full bg-[#F26522] px-7 text-sm font-black uppercase tracking-[0.1em] text-white shadow-[0_18px_45px_rgba(242,101,34,0.28)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
               >
-                Xem vị trí
+                View roles
               </a>
               {/* <a
                 href={listingSourceUrl}
@@ -413,7 +414,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
                 rel="noreferrer"
                 className="magnetic inline-flex min-h-12 items-center rounded-full border border-white/18 px-7 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-white hover:text-white"
               >
-                Danh sách Lark
+                Lark list
               </a> */}
             </div>
           </div>
@@ -422,7 +423,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
             <div className="absolute -inset-5 border border-[#F26522]/28 bg-[#F26522]/8 shadow-[0_34px_120px_rgba(242,101,34,0.14)]" />
             <img
               src="/careers/legacy-careers-list.png"
-              alt="Bản xem trước danh sách tuyển dụng GoBeyond"
+              alt="GoBeyond careers listing preview"
               className="relative aspect-[4/3] w-full object-cover object-top"
             />
           </figure>
@@ -440,11 +441,11 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
                 <SectionMark current="02" label="" />
               </div>
               <h2 data-scroll-reveal className="mobile-page-title mt-6 text-3xl font-black uppercase leading-[0.95] sm:text-4xl lg:text-5xl">
-                Tất cả vị trí <span className="text-[#ff7648]">đang tuyển</span>
+                All open <span className="text-[#ff7648]">roles</span>
               </h2>
             </div>
             {/* <p data-scroll-reveal className="max-w-2xl text-base font-medium leading-8 text-white/68 md:text-lg">
-              Mỗi vai trò đều là một mảnh ghép trong hệ thống vận hành toàn cầu của GoBeyond. Nội dung có thể chỉnh sửa trong Payload CMS.
+              Each role is one part of GoBeyond's global operating system. Content can be edited in Payload CMS.
             </p> */}
           </div>
 
@@ -456,12 +457,12 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
             </div>
           ) : (
             <div data-scroll-card className="mt-10 border border-white/12 bg-[#101520]/82 p-8 text-white shadow-[0_28px_82px_rgba(0,0,0,0.26)] backdrop-blur-md md:p-10">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Tuyển dụng</p>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Careers</p>
               <h3 className="mt-4 text-2xl font-black uppercase tracking-normal text-white md:text-4xl">
-                Chưa có tin tuyển dụng
+                No open roles yet
               </h3>
               <p className="mt-5 max-w-2xl text-base font-medium leading-8 text-white/68">
-                Hiện tại GoBeyond chưa mở vị trí tuyển dụng công khai. Khi team đăng JD mới trong Payload CMS, danh sách sẽ tự động hiển thị tại đây.
+                GoBeyond has not published any open roles yet. When the team publishes a new JD in Payload CMS, it will appear here automatically.
               </p>
               <a
                 href={listingSourceUrl}
@@ -469,7 +470,7 @@ export function CareersListing({ jobs, listingSourceUrl }: { jobs: CareerItem[];
                 rel="noreferrer"
                 className="mt-7 inline-flex min-h-12 items-center rounded-full border border-white/18 px-6 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-[#F26522] hover:text-white"
               >
-                Xem danh sách Lark
+                View Lark list
               </a>
             </div>
           )}
@@ -606,7 +607,7 @@ function formatSlugTitle(slug: string) {
     .trim()
     .replace(/\b[a-z]/g, (character) => character.toUpperCase());
 
-  return title || "Vị trí tuyển dụng";
+  return title || "Career role";
 }
 
 function getCareerTitle(job: CareerItem) {
@@ -614,7 +615,7 @@ function getCareerTitle(job: CareerItem) {
 }
 
 function getApplyUrl(job: CareerItem) {
-  const subject = encodeURIComponent(`[GoBeyond - ${getCareerTitle(job).toUpperCase()}] Ho va ten`);
+  const subject = encodeURIComponent(`[GoBeyond - ${getCareerTitle(job).toUpperCase()}] Full name`);
 
   if (isActionUrl(job.applyUrl)) {
     const applyUrl = job.applyUrl as string;
@@ -643,7 +644,7 @@ function getDisplayDate(job: CareerItem) {
     return job.publishedAt;
   }
 
-  return new Intl.DateTimeFormat("vi-VN", {
+  return new Intl.DateTimeFormat("en-US", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -655,26 +656,26 @@ function getFallbackResponsibilities(job: CareerItem) {
   const title = getCareerTitle(job);
 
   return [
-    `Theo dõi mục tiêu của vị trí ${title} và biến kế hoạch thành kết quả thực tế theo từng tuần.`,
-    "Phối hợp với các team marketing, creative, fulfillment và operations để vận hành chiến dịch e-commerce quốc tế.",
-    `Chủ động phân tích dữ liệu, phát hiện vấn đề và đề xuất cách tối ưu cho ${department}.`,
+    `Track weekly goals for the ${title} role and turn plans into measurable outcomes.`,
+    "Coordinate with marketing, creative, fulfillment, and operations teams to run international e-commerce campaigns.",
+    `Analyze data proactively, identify issues, and propose improvements for ${department}.`,
   ];
 }
 
 function getFallbackRequirements(job: CareerItem) {
   return [
-    "Có tư duy ownership, làm việc rõ ràng và thích môi trường tăng trưởng nhanh.",
-    "Biết ưu tiên công việc, giao tiếp tốt với các team liên quan và theo sát deadline.",
-    "Sẵn sàng học công cụ mới, đặc biệt là AI và các hệ thống hỗ trợ vận hành e-commerce.",
-    `Kinh nghiệm liên quan đến ${job.department || "e-commerce"} là lợi thế.`,
+    "Ownership mindset, clear communication, and comfort in a fast-growth environment.",
+    "Strong prioritization, cross-team collaboration, and deadline follow-through.",
+    "Willingness to learn new tools, especially AI and systems that support e-commerce operations.",
+    `Experience related to ${job.department || "e-commerce"} is a plus.`,
   ];
 }
 
 function getFallbackBenefits() {
   return [
-    "Môi trường trẻ, tốc độ cao, nhiều cơ hội học trực tiếp từ các bài toán scale thật.",
-    "Được tham gia vào hệ thống e-commerce toàn cầu với dữ liệu, quy trình và công cụ rõ ràng.",
-    "Review hiệu suất định kỳ, lương thưởng theo năng lực và văn hóa đề cao người chủ động.",
+    "A young, fast-moving environment with hands-on learning from real scaling problems.",
+    "Participation in a global e-commerce system with clear data, processes, and tools.",
+    "Regular performance reviews, compensation based on capability, and a culture that values ownership.",
   ];
 }
 
@@ -695,15 +696,15 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const subject = `[GoBeyond - ${title.toUpperCase()}] ${form.name || "Ho va ten"}`;
+      const subject = `[GoBeyond - ${title.toUpperCase()}] ${form.name || "Full name"}`;
     const body = [
-      `Vi tri ung tuyen: ${title}`,
-      `Ho va ten: ${form.name}`,
+      `Applied role: ${title}`,
+      `Full name: ${form.name}`,
       `Email: ${form.email}`,
-      `So dien thoai: ${form.phone}`,
+      `Phone number: ${form.phone}`,
       `CV/Portfolio link: ${form.portfolio}`,
       "",
-      "Loi nhan:",
+      "Message:",
       form.message,
     ].join("\n");
 
@@ -716,7 +717,7 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
     <form onSubmit={onSubmit} className="grid gap-4">
       <div>
         <label className="text-[10px] font-black uppercase tracking-[0.18em] text-white/42" htmlFor="career-name">
-          Họ và tên
+          Full name
         </label>
         <input
           id="career-name"
@@ -724,7 +725,7 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
           value={form.name}
           onChange={updateField("name")}
           className="mt-2 h-12 w-full border border-white/16 bg-white/[0.04] px-4 text-sm font-bold text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522] focus:bg-white/[0.06]"
-          placeholder="Nguyễn Văn A"
+          placeholder="Alex Nguyen"
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
@@ -744,7 +745,7 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
         </div>
         <div>
           <label className="text-[10px] font-black uppercase tracking-[0.18em] text-white/42" htmlFor="career-phone">
-            Số điện thoại
+            Phone number
           </label>
           <input
             id="career-phone"
@@ -770,7 +771,7 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
       </div>
       <div>
         <label className="text-[10px] font-black uppercase tracking-[0.18em] text-white/42" htmlFor="career-message">
-          Lời nhắn
+          Message
         </label>
         <textarea
           id="career-message"
@@ -778,14 +779,14 @@ function CareerApplicationForm({ applyUrl, job }: { applyUrl: string; job: Caree
           onChange={updateField("message")}
           rows={4}
           className="mt-2 w-full resize-none border border-white/16 bg-white/[0.04] px-4 py-3 text-sm font-bold leading-6 text-white outline-none transition placeholder:text-white/28 focus:border-[#F26522] focus:bg-white/[0.06]"
-          placeholder="Bạn muốn GoBeyond biết thêm điều gì?"
+          placeholder="What else would you like GoBeyond to know?"
         />
       </div>
       <button
         type="submit"
         className="mt-1 inline-flex min-h-12 items-center justify-center rounded-full bg-[#F26522] px-6 text-sm font-black uppercase tracking-[0.1em] text-white shadow-[0_18px_42px_rgba(242,101,34,0.26)] transition-colors hover:bg-[#d94d12]"
       >
-        Gửi đơn ứng tuyển
+        Submit application
       </button>
     </form>
   );
@@ -885,9 +886,9 @@ function CareerApplicationCard({ applyUrl, job }: { applyUrl: string; job: Caree
         style={fixedStyle}
       >
         <p className="text-xs font-black uppercase tracking-[0.2em] text-[#F26522]">Application form</p>
-        <h2 className="mt-4 text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-2xl">Ứng tuyển vị trí này</h2>
+        <h2 className="mt-4 text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-2xl">Apply for this role</h2>
         <p className="mt-4 text-sm font-semibold leading-7 text-white/58">
-          Điền nhanh thông tin, hệ thống sẽ mở email gửi tới team tuyển dụng GoBeyond.
+          Fill in your details and the site will open an email to the GoBeyond recruitment team.
         </p>
         <div className="mt-6">
           <CareerApplicationForm applyUrl={applyUrl} job={job} />
@@ -917,11 +918,11 @@ export function CareerDetail({ job }: { job: CareerItem }) {
   //   "";
   const displayDate = getDisplayDate(job);
   const roleFacts = [
-    ["Lĩnh vực", job.department || "Operation"],
-    ["Loại hình làm việc", job.employmentType || "Toàn thời gian"],
-    ["Số lượng", job.quantity || "01"],
-    ["Địa chỉ", job.location || "St Moritz, 1014 Đường Phạm Văn Đồng, TP. Hồ Chí Minh"],
-    ["Ngày tuyển", displayDate],
+    ["Team", job.department || "Operation"],
+    ["Employment type", job.employmentType || "Full-time"],
+    ["Headcount", job.quantity || "01"],
+    ["Location", job.location || "St Moritz, 1014 Pham Van Dong Street, Hiep Binh Ward, Ho Chi Minh City"],
+    ["Posted", displayDate],
   ];
 
   return (
@@ -955,7 +956,7 @@ export function CareerDetail({ job }: { job: CareerItem }) {
                 className="magnetic inline-flex min-h-12 items-center justify-center rounded-full bg-[#F26522] px-6 text-sm font-black uppercase tracking-[0.1em] text-white shadow-[0_18px_42px_rgba(242,101,34,0.24)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
                 href="#career-application"
               >
-                Ứng tuyển ngay
+                Apply now
               </a>
               {/* {larkUrl ? (
                 <a
@@ -964,20 +965,20 @@ export function CareerDetail({ job }: { job: CareerItem }) {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Xem JD gốc
+                  View original JD
                 </a>
               ) : null} */}
               <Link
                 href="/tuyen-dung"
                 className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/18 px-6 text-sm font-black uppercase tracking-[0.1em] text-white/76 transition hover:border-[#F26522] hover:text-white"
               >
-                Tất cả vị trí
+                All roles
               </Link>
             </div>
 
             <p className="mt-5 text-sm font-semibold leading-7 text-white/52">
-              Gửi CV tới <span className="font-black text-white">tuyendung@gobe.asia</span> với tiêu đề{" "}
-              <span className="font-black text-[#F26522]">[GoBeyond - {title.toUpperCase()}] Họ và tên</span>.
+              Send your CV to <span className="font-black text-white">tuyendung@gobe.asia</span> with the subject{" "}
+              <span className="font-black text-[#F26522]">[GoBeyond - {title.toUpperCase()}] Full name</span>.
             </p>
           </header>
 
@@ -1001,7 +1002,7 @@ export function CareerDetail({ job }: { job: CareerItem }) {
                 </div>
               </DetailSection>
               {hasJdContent ? (
-                <DetailSection eyebrow="" title="Chi tiết JD">
+                <DetailSection eyebrow="" title="JD details">
                   <DetailContentList blocks={jdContent} />
                 </DetailSection>
               ) : (
@@ -1018,7 +1019,7 @@ export function CareerDetail({ job }: { job: CareerItem }) {
                 </>
               )}
               <DetailSection eyebrow="" title="Working time">
-                <p>{job.workingTime || "Thông tin sẽ được trao đổi cụ thể trong quá trình phỏng vấn."}</p>
+                <p>{job.workingTime || "Details will be discussed during the interview process."}</p>
               </DetailSection>
             </article>
           </div>

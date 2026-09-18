@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { AboutPage } from "@/components/AboutPage";
 
 export const metadata: Metadata = {
-  title: "Về chúng tôi - GoBeyond LLC",
+  title: "About Us - GoBeyond LLC",
   description:
-    "Trang giới thiệu GoBeyond, những con số đã đạt được, tầm nhìn, sứ mệnh và hệ sinh thái nhãn hàng đồng hành.",
+    "Learn about GoBeyond, our milestones, vision, mission, and partner ecosystem.",
 };
 
 export default function AboutRoute() {

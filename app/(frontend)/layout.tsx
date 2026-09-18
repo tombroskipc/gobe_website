@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "vi_VN",
+    locale: "en_US",
     url: "/",
     siteName: "GoBeyond",
     title: siteTitle,
@@ -56,12 +56,12 @@ export default function FrontendLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="vi" className="dark mdl-js" data-theme="dark" suppressHydrationWarning>
+    <html lang="en" className="dark mdl-js" data-theme="dark" suppressHydrationWarning>
       <body className="text-[#18213d] antialiased">
         <ThemeScript />
         <SuppressDevWarnings />
         {children}
-        {/* Film grain nhẹ để nền gradient có chiều sâu hơn. */}
+        {/* Subtle film grain gives the gradient background more depth. */}
         <div className="grain-overlay" aria-hidden="true" />
       </body>
     </html>

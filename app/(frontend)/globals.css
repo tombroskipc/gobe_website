@@ -3921,8 +3921,8 @@ html.home-story-active .operation-showcase .operation-card .operation-expanded-c
   }
 }
 
-/* Mobile typography guard: Vietnamese diacritics need more line-height than
-   desktop hero type, and short phones need the home hero below fixed nav. */
+/* Mobile typography guard: accented text needs more line-height than desktop
+   hero type, and short phones need the home hero below fixed nav. */
 .mobile-page-title,
 .mobile-card-title,
 .home-hero-title {
