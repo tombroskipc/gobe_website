@@ -32,7 +32,9 @@ export type CareerItem = {
   id?: string | number;
   title: string;
   slug: string;
+  displayOrder?: number | null;
   status?: string;
+  team?: string;
   tag?: CareerTag | string;
   dateLabel?: string;
   department?: string;
@@ -55,116 +57,264 @@ export const careerListingSourceUrl = larkListingUrl;
 export const fallbackCareers: CareerItem[] = [
   {
     id: "marketing-google-ads",
-    title: "Marketing Google Ads Toàn thời gian",
+    title: "Marketing Google Ads Full-time",
     slug: "marketing-google-ads",
     tag: "marketing",
-    dateLabel: "08 Th12",
-    department: "Marketing hiệu suất",
-    employmentType: "Toàn thời gian",
+    dateLabel: "Dec 08",
+    department: "Performance Marketing",
+    employmentType: "Full-time",
     quantity: "01",
-    excerpt: "Tối ưu chiến dịch Google Ads, đọc tín hiệu thị trường và scale sản phẩm e-commerce quốc tế.",
+    excerpt: "Optimize Google Ads campaigns, read market signals, and scale international e-commerce products.",
     larkUrl: "https://gobeasia.sg.larksuite.com/wiki/Buy4wgFxqixSBikVhyVlvrKagZb?fromScene=spaceOverview",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20MARKETING%20GOOGLE%20ADS%5D%20Ho%20va%20ten",
-    description: "Vai trò dành cho người thích test nhanh, đo dữ liệu rõ ràng và tối ưu tăng trưởng theo hiệu suất.",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20MARKETING%20GOOGLE%20ADS%5D%20Full%20name",
+    description: "A role for people who enjoy fast testing, clear measurement, and performance-led growth optimization.",
   },
   {
     id: "marketing-facebook-ads",
-    title: "Marketing Facebook Ads Toàn thời gian",
+    title: "Marketing Facebook Ads Full-time",
     slug: "marketing-facebook-ads",
     tag: "marketing",
-    dateLabel: "08 Th12",
-    department: "Marketing hiệu suất",
-    employmentType: "Toàn thời gian",
+    dateLabel: "Dec 08",
+    department: "Performance Marketing",
+    employmentType: "Full-time",
     quantity: "01",
-    excerpt: "Triển khai, phân tích và scale chiến dịch Facebook Ads cho thị trường quốc tế.",
+    excerpt: "Launch, analyze, and scale Facebook Ads campaigns for international markets.",
     larkUrl: "https://gobeasia.sg.larksuite.com/wiki/ATRMwsasqifZ6zk0wullRHpOgLb?fromScene=spaceOverview",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20MARKETING%20FACEBOOK%20ADS%5D%20Ho%20va%20ten",
-    description: "Bạn sẽ phối hợp với creative và vận hành để tìm angle bán hàng, tối ưu funnel và cải thiện hiệu quả quảng cáo.",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20MARKETING%20FACEBOOK%20ADS%5D%20Full%20name",
+    description: "You will work with creative and operations teams to find sales angles, optimize funnels, and improve ad performance.",
   },
   {
     id: "creative-video",
-    title: "Sáng tạo Video",
+    title: "Creative Video",
     slug: "creative-video",
     tag: "creative",
-    dateLabel: "08 Th12",
-    department: "Sáng tạo",
-    employmentType: "Toàn thời gian",
+    dateLabel: "Dec 08",
+    department: "Creative",
+    employmentType: "Full-time",
     quantity: "01",
-    excerpt: "Sản xuất video ngắn, visual angle và nội dung sáng tạo phục vụ chiến dịch e-commerce.",
+    excerpt: "Produce short videos, visual angles, and creative content for e-commerce campaigns.",
     larkUrl: "https://gobe.asia/tuyen-dung-creative-video-full-time/",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20CREATIVE%20VIDEO%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20CREATIVE%20VIDEO%5D%20Full%20name",
   },
   {
     id: "customer-service",
-    title: "Chăm sóc khách hàng Toàn thời gian",
+    title: "Customer Service Full-time",
     slug: "customer-service",
     tag: "customerService",
-    dateLabel: "05 Th1",
-    department: "Chăm sóc khách hàng",
-    employmentType: "Toàn thời gian",
+    dateLabel: "Jan 05",
+    department: "Customer Service",
+    employmentType: "Full-time",
     quantity: "01",
-    excerpt: "Chăm sóc khách hàng, xử lý phản hồi và phối hợp vận hành để trải nghiệm mua hàng mượt mà.",
+    excerpt: "Support customers, handle feedback, and coordinate with operations for a smooth buying experience.",
     larkUrl: "https://gobe.asia/tuyen-dung-customer-service-full-time/",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20CUSTOMER%20SERVICE%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20CUSTOMER%20SERVICE%5D%20Full%20name",
   },
   {
     id: "human-resource",
-    title: "Nhân sự Toàn thời gian",
+    title: "Human Resource Full-time",
     slug: "human-resource",
     tag: "humanResource",
-    dateLabel: "29 Th8",
-    department: "Nhân sự",
-    employmentType: "Toàn thời gian",
+    dateLabel: "Aug 29",
+    department: "Human Resource",
+    employmentType: "Full-time",
     quantity: "01",
-    excerpt: "Tuyển dụng, phát triển con người và xây dựng văn hóa vận hành chủ động trong đội ngũ.",
+    excerpt: "Recruit, develop people, and build a proactive operating culture within the team.",
     larkUrl: "https://gobe.asia/tuyen-dung-human-resource/",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20HUMAN%20RESOURCE%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20HUMAN%20RESOURCE%5D%20Full%20name",
   },
   {
     id: "fulfillment-full-time",
-    title: "Fulfillment Toàn thời gian",
+    title: "Fulfillment Full-time",
     slug: "fulfillment-full-time",
     tag: "operations",
-    dateLabel: "21 Th4",
-    department: "Vận hành",
-    employmentType: "Toàn thời gian",
+    dateLabel: "Apr 21",
+    department: "Operations",
+    employmentType: "Full-time",
     quantity: "02",
-    excerpt: "Quản lý đơn hàng, điều phối supplier, logistics và theo dõi vận hành từ lúc nhận đơn đến khi giao thành công.",
+    excerpt: "Manage orders, coordinate suppliers and logistics, and monitor operations from order receipt to delivery.",
     larkUrl: "https://gobe.asia/tuyen-dung-fulfillment-full-time-3/",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20FULFILLMENT%20FULL-TIME%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20FULFILLMENT%20FULL-TIME%5D%20Full%20name",
     description:
-      "GoBeyond đang tìm kiếm nhân viên Fulfillment tài năng và nhiệt huyết để gia nhập đội ngũ vận hành e-commerce toàn cầu.",
+      "GoBeyond is looking for a talented and passionate Fulfillment teammate to join our global e-commerce operations team.",
     responsibilities: [
-      { text: "Quản lý toàn bộ quy trình xử lý và theo dõi đơn hàng từ lúc nhận đơn đến khi giao thành công." },
-      { text: "Điều phối công việc giữa Customer Support, Supplier và Logistics để đảm bảo hàng hóa đúng kế hoạch." },
-      { text: "Theo dõi chỉ số vận hành và đề xuất cải tiến liên tục." },
+      { text: "Manage the full order processing and tracking flow from order receipt to successful delivery." },
+      { text: "Coordinate work between Customer Support, Suppliers, and Logistics to keep goods on schedule." },
+      { text: "Track operational metrics and propose continuous improvements." },
     ],
     requirements: [
-      { text: "Có kinh nghiệm Fulfillment trong POD, Dropshipping hoặc E-commerce là lợi thế." },
-      { text: "Tiếng Anh khá, có khả năng làm việc với đối tác và khách hàng nước ngoài." },
-      { text: "Chủ động, trách nhiệm, nhanh nhẹn và xử lý vấn đề tốt." },
+      { text: "Fulfillment experience in POD, dropshipping, or e-commerce is a plus." },
+      { text: "Good English skills and ability to work with international partners and customers." },
+      { text: "Proactive, responsible, agile, and strong at problem solving." },
     ],
     benefits: [
-      { text: "Thu nhập 8-12 triệu/tháng + bonus theo hiệu suất." },
-      { text: "Review lương định kỳ, lương tháng 13 và các hoạt động nội bộ." },
-      { text: "Môi trường startup trẻ trung, năng động và tập trung phát triển con người." },
+      { text: "Compensation of VND 8-12M/month plus performance bonus." },
+      { text: "Regular salary reviews, 13th-month salary, and internal activities." },
+      { text: "A young, dynamic startup environment focused on people development." },
     ],
-    workingTime: "8:00-17:30, từ thứ 2 đến thứ 6, thứ 7 remote. Nghỉ trưa: 12:00-13:30.",
+    workingTime: "8:00 - 17:30, Monday to Friday and Saturday morning remote. Lunch break: 12:00 - 13:30",
   },
   {
     id: "van-hanh-san-etsy-intern",
-    title: "Thực tập Vận hành sàn Etsy",
+    title: "Etsy Marketplace Operations Intern",
     slug: "van-hanh-san-etsy-intern",
     tag: "internship",
-    dateLabel: "21 Th4",
-    department: "Vận hành marketplace",
-    employmentType: "Thực tập",
+    dateLabel: "Apr 21",
+    department: "Marketplace Operations",
+    employmentType: "Internship",
     quantity: "01",
-    excerpt: "Thực tập vận hành sàn Etsy, hỗ trợ listing, tracking và quy trình xử lý dữ liệu sản phẩm.",
+    excerpt: "Marketplace operations internship supporting Etsy listings, tracking, and product data workflows.",
     larkUrl: "https://gobe.asia/3250-2/",
-    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20ETSY%20OPERATIONS%20INTERN%5D%20Ho%20va%20ten",
+    applyUrl: "mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20ETSY%20OPERATIONS%20INTERN%5D%20Full%20name",
   },
 ];
+
+const fallbackCareersBySlug = new Map(fallbackCareers.map((career) => [career.slug, career]));
+const vietnameseCopyPattern = /[\u00C0-\u1EF9]/;
+const legacyCareerPhrasePattern = new RegExp(
+  [
+    "\\bdu" + "ong\\b",
+    "\\btp\\.?\\s*ho chi minh\\b",
+    "\\btu\\s+th" + "u\\b",
+    "\\bden\\s+th" + "u\\b",
+    "\\bnghi\\s+tr" + "ua\\b",
+    "\\bhanh\\s+ch" + "inh\\b",
+    "\\bnhan\\s+s" + "u\\b",
+    "\\btruyen\\s+th" + "ong\\b",
+    "\\bung\\s+tuy" + "en\\b",
+    "\\btuyen\\s+d" + "ung\\b",
+  ].join("|"),
+  "i",
+);
+const legacyCareerTitlePattern = new RegExp(
+  [
+    "h(?:a|\\u00e0)nh ch(?:i|\\u00ed)nh",
+    "nh(?:a|\\u00e2)n s(?:u|\\u1ef1)",
+    "truy(?:e|\\u1ec1)n th(?:o|\\u00f4)ng",
+  ].join("|"),
+  "i",
+);
+
+function hasLegacyCareerCopy(value: unknown) {
+  try {
+    const serialized = JSON.stringify(value);
+    return vietnameseCopyPattern.test(serialized) || legacyCareerPhrasePattern.test(serialized);
+  } catch {
+    return false;
+  }
+}
+
+function normalizeLegacyCareerLocation(value?: string) {
+  if (!value) {
+    return value;
+  }
+
+  return value
+    .replace(/\bDuong\b/gi, "Street")
+    .replace(/\bTP\.?\s*Ho Chi Minh\b/gi, "Ho Chi Minh City")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeLegacyCareerWorkingTime(value?: string) {
+  if (!value) {
+    return value;
+  }
+
+  if (legacyCareerPhrasePattern.test(value)) {
+    return "8:00 - 17:30, Monday to Friday and Saturday remote. Lunch break: 12:00 - 13:30.";
+  }
+
+  return value;
+}
+
+function normalizeLegacyCareerTitle(value?: string) {
+  if (!value) {
+    return value;
+  }
+
+  if (legacyCareerTitlePattern.test(value)) {
+    return "Human Resource and Internal Communications Full-time";
+  }
+
+  return value;
+}
+
+function normalizeLegacyCareer(career: CareerItem): CareerItem {
+  const fallback = fallbackCareersBySlug.get(career.slug);
+  const hasLegacyCopy = hasLegacyCareerCopy({
+    benefits: career.benefits,
+    department: career.department,
+    description: career.description,
+    excerpt: career.excerpt,
+    location: career.location,
+    requirements: career.requirements,
+    responsibilities: career.responsibilities,
+    title: career.title,
+    workingTime: career.workingTime,
+  });
+
+  const normalized: CareerItem = {
+    ...career,
+    location: normalizeLegacyCareerLocation(career.location),
+    title: normalizeLegacyCareerTitle(career.title) || career.title,
+    workingTime: normalizeLegacyCareerWorkingTime(career.workingTime),
+  };
+
+  if (!hasLegacyCopy || !fallback) {
+    return normalized;
+  }
+
+  return {
+    ...normalized,
+    benefits: fallback.benefits || normalized.benefits,
+    department: fallback.department || normalized.department,
+    description: fallback.description || normalized.description,
+    employmentType: fallback.employmentType || normalized.employmentType,
+    excerpt: fallback.excerpt || normalized.excerpt,
+    requirements: fallback.requirements || normalized.requirements,
+    responsibilities: fallback.responsibilities || normalized.responsibilities,
+    tag: fallback.tag || normalized.tag,
+    title: fallback.title || normalized.title,
+    workingTime: fallback.workingTime || normalized.workingTime,
+  };
+}
+
+function normalizeLegacyCareers(careers: CareerItem[]) {
+  return careers.map(normalizeLegacyCareer);
+}
+
+function sortByDisplayOrder<T extends { displayOrder?: null | number; publishedAt?: string; title: string }>(items: T[]) {
+  return [...items].sort((a, b) => {
+    const aHasOrder = typeof a.displayOrder === "number";
+    const bHasOrder = typeof b.displayOrder === "number";
+
+    if (aHasOrder || bHasOrder) {
+      if (!aHasOrder) {
+        return 1;
+      }
+
+      if (!bHasOrder) {
+        return -1;
+      }
+
+      const aOrder = a.displayOrder as number;
+      const bOrder = b.displayOrder as number;
+
+      if (aOrder !== bOrder) {
+        return aOrder - bOrder;
+      }
+    }
+
+    const aTime = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+    const bTime = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+
+    if (aTime !== bTime) {
+      return bTime - aTime;
+    }
+
+    return a.title.localeCompare(b.title, "en", { sensitivity: "base" });
+  });
+}
 
 export async function getPublishedCareers(): Promise<CareerItem[]> {
   try {
@@ -181,10 +331,10 @@ export async function getPublishedCareers(): Promise<CareerItem[]> {
       },
     });
 
-    return result.docs as CareerItem[];
+    return sortByDisplayOrder(normalizeLegacyCareers(result.docs as CareerItem[]));
   } catch (error) {
     console.warn("Payload careers query failed, using fallback content.", error);
-    return fallbackCareers;
+    return sortByDisplayOrder(fallbackCareers);
   }
 }
 
@@ -203,7 +353,8 @@ export async function getCareerDraftBySlug(slug: string): Promise<CareerItem | n
       },
     });
 
-    return (result.docs[0] as CareerItem | undefined) || null;
+    const career = (result.docs[0] as CareerItem | undefined) || null;
+    return career ? normalizeLegacyCareer(career) : null;
   } catch (error) {
     console.warn("Payload career draft query failed.", error);
     return null;
@@ -233,7 +384,8 @@ export async function getPublishedCareerBySlug(slug: string): Promise<CareerItem
       },
     });
 
-    return (result.docs[0] as CareerItem | undefined) || null;
+    const career = (result.docs[0] as CareerItem | undefined) || null;
+    return career ? normalizeLegacyCareer(career) : null;
   } catch (error) {
     console.warn("Payload career detail query failed, using fallback content.", error);
     return fallbackCareers.find((career) => career.slug === slug) || null;

@@ -155,7 +155,7 @@ export interface User {
 export interface Media {
   id: number;
   /**
-   * Optional. Public pages fall back to the post title or a generic GoBeyond image label when this is empty.
+   * Optional. Public pages use this for image alt text, or as fallback context for uploaded MP4 captions.
    */
   alt?: string | null;
   updatedAt: string;
@@ -185,9 +185,28 @@ export interface News {
   slug: string;
   status?: ('draft' | 'published') | null;
   /**
-   * Chọn Hoạt động để đăng bài lên các trang Hoạt động công khai.
+   * Choose Activities to publish this post on the public Activities pages.
    */
   tag: 'news' | 'activity';
+  /**
+   * Used to filter and sort posts by team in the admin.
+   */
+  team?:
+    | (
+        | 'company'
+        | 'performance'
+        | 'creative'
+        | 'fulfillment'
+        | 'operations'
+        | 'customerService'
+        | 'humanResource'
+        | 'internship'
+      )
+    | null;
+  /**
+   * Lower numbers appear first. Leave blank to sort later by team, title, and publish date.
+   */
+  displayOrder?: number | null;
   /**
    * Seeds the starter content blocks when a post is created.
    */
@@ -195,7 +214,7 @@ export interface News {
   publishedAt?: string | null;
   excerpt?: string | null;
   /**
-   * Nhập toàn bộ nội dung bài viết tại đây. Có thể dùng heading, paragraph, bullet list và format text.
+   * Enter the full post content here. You can use headings, paragraphs, bullet lists, formatted text, images, and MP4 videos.
    */
   content?: {
     root: {
@@ -341,9 +360,28 @@ export interface Career {
    * Tag shown on the recruitment card.
    */
   tag: 'hiring' | 'marketing' | 'creative' | 'operations' | 'customerService' | 'humanResource' | 'internship';
+  /**
+   * Used to filter and sort roles by team in the admin.
+   */
+  team?:
+    | (
+        | 'company'
+        | 'performance'
+        | 'creative'
+        | 'fulfillment'
+        | 'operations'
+        | 'customerService'
+        | 'humanResource'
+        | 'internship'
+      )
+    | null;
+  /**
+   * Lower numbers appear first. Leave blank to sort later by team, title, and publish date.
+   */
+  displayOrder?: number | null;
   publishedAt?: string | null;
   /**
-   * Short date shown on the card, e.g. 08 Th12.
+   * Short date shown on the card, e.g. Dec 08.
    */
   dateLabel?: string | null;
   department?: string | null;
@@ -360,7 +398,7 @@ export interface Career {
    */
   applyUrl?: string | null;
   /**
-   * Nhập toàn bộ JD ở đây: mô tả công việc, yêu cầu công việc, quyền lợi. Có thể paste heading và bullet list.
+   * Enter the full JD here: job description, requirements, and benefits. You can paste headings and bullet lists.
    */
   description?: {
     root: {
@@ -383,7 +421,7 @@ export interface Career {
   responsibilities?:
     | {
         /**
-         * Có thể paste nhiều dòng hoặc dùng bullet list.
+         * Paste multiple lines or use a bullet list.
          */
         text: {
           root: {
@@ -409,7 +447,7 @@ export interface Career {
   requirements?:
     | {
         /**
-         * Có thể paste nhiều dòng hoặc dùng bullet list.
+         * Paste multiple lines or use a bullet list.
          */
         text: {
           root: {
@@ -435,7 +473,7 @@ export interface Career {
   benefits?:
     | {
         /**
-         * Có thể paste nhiều dòng hoặc dùng bullet list.
+         * Paste multiple lines or use a bullet list.
          */
         text: {
           root: {
@@ -599,6 +637,8 @@ export interface NewsSelect<T extends boolean = true> {
   slug?: T;
   status?: T;
   tag?: T;
+  team?: T;
+  displayOrder?: T;
   template?: T;
   publishedAt?: T;
   excerpt?: T;
@@ -697,6 +737,8 @@ export interface CareersSelect<T extends boolean = true> {
   slug?: T;
   status?: T;
   tag?: T;
+  team?: T;
+  displayOrder?: T;
   publishedAt?: T;
   dateLabel?: T;
   department?: T;

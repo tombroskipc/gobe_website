@@ -1,4 +1,5 @@
 import type { CollectionAfterReadHook, CollectionBeforeValidateHook, CollectionConfig } from "payload";
+import { getPublicSiteUrl } from "../lib/siteUrl.ts";
 
 const isAuthenticated = ({ req }: { req: { user?: unknown } }) => Boolean(req.user);
 
@@ -94,7 +95,7 @@ const careerDetailRichTextField = () => ({
   type: "richText" as const,
   required: true,
   admin: {
-    description: "Có thể paste nhiều dòng hoặc dùng bullet list.",
+    description: "Paste multiple lines or use a bullet list.",
   },
 });
 
@@ -103,20 +104,32 @@ const legacyAdminConfig = {
   description: "Legacy field kept for old data fallback. Use JD Content for new roles.",
 };
 
+const teamOptions = [
+  { label: "Company", value: "company" },
+  { label: "Performance", value: "performance" },
+  { label: "Creative", value: "creative" },
+  { label: "Fulfillment", value: "fulfillment" },
+  { label: "Operations", value: "operations" },
+  { label: "Customer Service", value: "customerService" },
+  { label: "Human Resource", value: "humanResource" },
+  { label: "Internship", value: "internship" },
+];
+
 export const Careers: CollectionConfig = {
   slug: "careers",
   labels: {
     singular: "Career role",
     plural: "Careers",
   },
+  defaultSort: "displayOrder",
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "tag", "status", "updatedAt"],
+    defaultColumns: ["displayOrder", "title", "team", "tag", "status", "updatedAt"],
     group: "Website",
     description: "Manage GoBeyond recruitment roles and Lark JD links for the careers page.",
     livePreview: {
       url: ({ data }) => {
-        const base = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
+        const base = getPublicSiteUrl();
         const secret = process.env.PAYLOAD_SECRET || "";
         return `${base}/preview?type=careers&secret=${encodeURIComponent(secret)}&slug=${encodeURIComponent(data?.slug || "")}`;
       },
@@ -163,8 +176,8 @@ export const Careers: CollectionConfig = {
       type: "select",
       defaultValue: "draft",
       options: [
-        { label: "Bản nháp", value: "draft" },
-        { label: "Đã xuất bản", value: "published" },
+        { label: "Draft", value: "draft" },
+        { label: "Published", value: "published" },
       ],
       admin: {
         position: "sidebar",
@@ -176,17 +189,35 @@ export const Careers: CollectionConfig = {
       defaultValue: "hiring",
       required: true,
       options: [
-        { label: "Đang tuyển", value: "hiring" },
+        { label: "Hiring", value: "hiring" },
         { label: "Marketing", value: "marketing" },
-        { label: "Sáng tạo", value: "creative" },
-        { label: "Vận hành", value: "operations" },
-        { label: "Chăm sóc khách hàng", value: "customerService" },
-        { label: "Nhân sự", value: "humanResource" },
-        { label: "Thực tập", value: "internship" },
+        { label: "Creative", value: "creative" },
+        { label: "Operations", value: "operations" },
+        { label: "Customer Service", value: "customerService" },
+        { label: "Human Resource", value: "humanResource" },
+        { label: "Internship", value: "internship" },
       ],
       admin: {
         position: "sidebar",
         description: "Tag shown on the recruitment card.",
+      },
+    },
+    {
+      name: "team",
+      type: "select",
+      options: teamOptions,
+      admin: {
+        position: "sidebar",
+        description: "Used to filter and sort roles by team in the admin.",
+      },
+    },
+    {
+      name: "displayOrder",
+      label: "Display Order",
+      type: "number",
+      admin: {
+        position: "sidebar",
+        description: "Lower numbers appear first. Leave blank to sort later by team, title, and publish date.",
       },
     },
     {
@@ -205,23 +236,23 @@ export const Careers: CollectionConfig = {
       defaultValue: "2026",
       admin: {
         position: "sidebar",
-        description: "Short date shown on the card, e.g. 08 Th12.",
+        description: "Short date shown on the card, e.g. Dec 08.",
       },
     },
     {
       name: "department",
       type: "text",
-      defaultValue: "Thương mại điện tử",
+      defaultValue: "E-commerce",
     },
     {
       name: "employmentType",
       type: "text",
-      defaultValue: "Toàn thời gian",
+      defaultValue: "Full-time",
     },
     {
       name: "location",
       type: "text",
-      defaultValue: "St Moritz, 1014 Đường Phạm Văn Đồng, TP. Hồ Chí Minh",
+      defaultValue: "St Moritz, 1014 Pham Van Dong Street, Hiep Binh Ward, Ho Chi Minh City",
     },
     {
       name: "quantity",
@@ -254,7 +285,7 @@ export const Careers: CollectionConfig = {
       type: "richText",
       admin: {
         description:
-          "Nhập toàn bộ JD ở đây: mô tả công việc, yêu cầu công việc, quyền lợi. Có thể paste heading và bullet list.",
+          "Enter the full JD here: job description, requirements, and benefits. You can paste headings and bullet lists.",
       },
     },
     {
@@ -278,7 +309,7 @@ export const Careers: CollectionConfig = {
     {
       name: "workingTime",
       type: "textarea",
-      defaultValue: "8:00-17:30, tu thu 2 den thu 6, thu 7 remote. Nghi trua: 12:00-13:30.",
+      defaultValue: "8:00 - 17:30, Monday to Friday and Saturday morning remote. Lunch break: 12:00 - 13:30",
     },
     {
       name: "notes",

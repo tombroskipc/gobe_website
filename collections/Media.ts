@@ -11,6 +11,7 @@ export const Media: CollectionConfig = {
     delete: isAuthenticated,
   },
   upload: {
+    mimeTypes: ["image/*", "video/mp4"],
     staticDir: "public/media",
   },
   fields: [
@@ -19,7 +20,7 @@ export const Media: CollectionConfig = {
       type: "text",
       required: false,
       admin: {
-        description: "Optional. Public pages fall back to the post title or a generic GoBeyond image label when this is empty.",
+        description: "Optional. Public pages use this for image alt text, or as fallback context for uploaded MP4 captions.",
       },
     },
   ],

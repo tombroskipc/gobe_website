@@ -1,5 +1,8 @@
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import type { CollectionBeforeValidateHook, CollectionConfig } from "payload";
 import { newsBlocks } from "../blocks/NewsBlocks.ts";
+import { ExternalImageFeature } from "../features/externalImage/server/index.ts";
+import { getPublicSiteUrl } from "../lib/siteUrl.ts";
 
 const isAuthenticated = ({ req }: { req: { user?: unknown } }) => Boolean(req.user);
 
@@ -50,79 +53,79 @@ const templateLayouts: Record<string, unknown[]> = {
   standard: [
     {
       blockType: "lead",
-      kicker: "Tin tức GoBeyond",
-      heading: "Điểm cập nhật chính",
-      body: "Bắt đầu với cập nhật quan trọng nhất, lý do nội dung này đáng chú ý và nhóm đối tượng liên quan.",
+      kicker: "GoBeyond News",
+      heading: "Key update",
+      body: "Start with the most important update, why it matters, and who it is relevant to.",
     },
     {
       blockType: "cta",
-      heading: "Đồng hành cùng GoBeyond",
-      body: "Cùng xây dựng, vận hành và mở rộng hệ thống thương mại điện tử toàn cầu.",
-      label: "Liên hệ",
+      heading: "Partner with GoBeyond",
+      body: "Build, operate, and scale global e-commerce systems with us.",
+      label: "Contact",
       href: "/#contact",
     },
   ],
   editorial: [
     {
       blockType: "lead",
-      kicker: "Góc nhìn",
-      heading: "Ý tưởng chính",
-      body: "Nêu vấn đề, góc nhìn và luận điểm chính mà bài viết muốn truyền tải.",
+      kicker: "Perspective",
+      heading: "Main idea",
+      body: "State the problem, perspective, and main argument the article should communicate.",
     },
     {
       blockType: "pullQuote",
-      quote: "Thêm câu trích dẫn hoặc thông điệp nổi bật nhất tại đây.",
+      quote: "Add the strongest quote or standout message here.",
       attribution: "GoBeyond",
     },
   ],
   caseStudy: [
     {
       blockType: "lead",
-      kicker: "Câu chuyện thực tế",
-      heading: "Thử thách",
-      body: "Tóm tắt khách hàng, thị trường, ràng buộc và kết quả đạt được.",
+      kicker: "Real story",
+      heading: "Challenge",
+      body: "Summarize the customer, market, constraints, and results achieved.",
     },
     {
       blockType: "statsGrid",
       items: [
-        { value: "3x", label: "Chỉ số tăng trưởng mẫu" },
-        { value: "48h", label: "Thời gian xử lý mẫu" },
-        { value: "12", label: "Thị trường hỗ trợ" },
+        { value: "3x", label: "Sample growth metric" },
+        { value: "48h", label: "Sample handling time" },
+        { value: "12", label: "Supported markets" },
       ],
     },
     {
       blockType: "checklist",
-      heading: "GoBeyond đã xử lý",
-      items: [{ text: "Vận hành sản phẩm và listing" }, { text: "Vòng phản hồi marketing" }, { text: "Điều phối fulfillment" }],
+      heading: "What GoBeyond handled",
+      items: [{ text: "Product and listing operations" }, { text: "Marketing feedback loop" }, { text: "Fulfillment coordination" }],
     },
   ],
   companyUpdate: [
     {
       blockType: "lead",
-      kicker: "Cập nhật công ty",
-      heading: "Thông báo",
-      body: "Viết thông báo, bối cảnh nội bộ và bước tiếp theo.",
+      kicker: "Company update",
+      heading: "Announcement",
+      body: "Write the announcement, internal context, and next steps.",
     },
     {
       blockType: "checklist",
-      heading: "Điểm nổi bật",
-      items: [{ text: "Ý chính thứ nhất" }, { text: "Ý chính thứ hai" }, { text: "Ý chính thứ ba" }],
+      heading: "Highlights",
+      items: [{ text: "First key point" }, { text: "Second key point" }, { text: "Third key point" }],
     },
   ],
   activity: [
     {
       blockType: "lead",
-      kicker: "Hoạt động GoBeyond",
-      heading: "Hoạt động nổi bật",
-      body: "Tóm tắt bối cảnh, không khí sự kiện, những khoảnh khắc chính và ý nghĩa với đội ngũ GoBeyond.",
+      kicker: "GoBeyond Activities",
+      heading: "Featured activity",
+      body: "Summarize the context, event atmosphere, key moments, and meaning for the GoBeyond team.",
     },
     {
       blockType: "checklist",
-      heading: "Gợi ý nội dung recap",
+      heading: "Recap content prompts",
       items: [
-        { text: "Không khí và mục tiêu của hoạt động" },
-        { text: "Các khoảnh khắc hoặc trò chơi nổi bật" },
-        { text: "Thông điệp hoặc lời kết cho đội ngũ" },
+        { text: "Activity atmosphere and goals" },
+        { text: "Key moments or featured games" },
+        { text: "Message or closing note for the team" },
       ],
     },
   ],
@@ -161,20 +164,32 @@ const legacyAdminConfig = {
   description: "Legacy block field kept for existing data fallback. Use Content for new posts.",
 };
 
+const teamOptions = [
+  { label: "Company", value: "company" },
+  { label: "Performance", value: "performance" },
+  { label: "Creative", value: "creative" },
+  { label: "Fulfillment", value: "fulfillment" },
+  { label: "Operations", value: "operations" },
+  { label: "Customer Service", value: "customerService" },
+  { label: "Human Resource", value: "humanResource" },
+  { label: "Internship", value: "internship" },
+];
+
 export const News: CollectionConfig = {
   slug: "news",
   labels: {
-    singular: "Bài viết",
-    plural: "Tin tức",
+    singular: "Post",
+    plural: "News",
   },
+  defaultSort: "displayOrder",
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "tag", "template", "status", "updatedAt"],
+    defaultColumns: ["displayOrder", "title", "tag", "team", "status", "updatedAt"],
     group: "Website",
     description: "Template-driven posts for GoBeyond news, activities, announcements, editorials, and case studies.",
     livePreview: {
       url: ({ data }) => {
-        const base = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
+        const base = getPublicSiteUrl();
         const secret = process.env.PAYLOAD_SECRET || "";
         const type = data?.tag === "activity" ? "activity" : "news";
         return `${base}/preview?type=${type}&secret=${encodeURIComponent(secret)}&slug=${encodeURIComponent(data?.slug || "")}`;
@@ -221,8 +236,8 @@ export const News: CollectionConfig = {
       type: "select",
       defaultValue: "draft",
       options: [
-        { label: "Bản nháp", value: "draft" },
-        { label: "Đã xuất bản", value: "published" },
+        { label: "Draft", value: "draft" },
+        { label: "Published", value: "published" },
       ],
       admin: {
         position: "sidebar",
@@ -234,12 +249,30 @@ export const News: CollectionConfig = {
       defaultValue: "news",
       required: true,
       options: [
-        { label: "Tin tức", value: "news" },
-        { label: "Hoạt động", value: "activity" },
+        { label: "News", value: "news" },
+        { label: "Activities", value: "activity" },
       ],
       admin: {
         position: "sidebar",
-        description: "Chọn Hoạt động để đăng bài lên các trang Hoạt động công khai.",
+        description: "Choose Activities to publish this post on the public Activities pages.",
+      },
+    },
+    {
+      name: "team",
+      type: "select",
+      options: teamOptions,
+      admin: {
+        position: "sidebar",
+        description: "Used to filter and sort posts by team in the admin.",
+      },
+    },
+    {
+      name: "displayOrder",
+      label: "Display Order",
+      type: "number",
+      admin: {
+        position: "sidebar",
+        description: "Lower numbers appear first. Leave blank to sort later by team, title, and publish date.",
       },
     },
     {
@@ -248,11 +281,11 @@ export const News: CollectionConfig = {
       defaultValue: "standard",
       required: true,
       options: [
-        { label: "Bài viết tiêu chuẩn", value: "standard" },
-        { label: "Góc nhìn biên tập", value: "editorial" },
-        { label: "Câu chuyện thực tế", value: "caseStudy" },
-        { label: "Cập nhật công ty", value: "companyUpdate" },
-        { label: "Recap hoạt động", value: "activity" },
+        { label: "Standard post", value: "standard" },
+        { label: "Editorial perspective", value: "editorial" },
+        { label: "Case study", value: "caseStudy" },
+        { label: "Company update", value: "companyUpdate" },
+        { label: "Activity recap", value: "activity" },
       ],
       admin: {
         position: "sidebar",
@@ -279,8 +312,11 @@ export const News: CollectionConfig = {
       name: "content",
       label: "Content",
       type: "richText",
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [ExternalImageFeature(), ...defaultFeatures],
+      }),
       admin: {
-        description: "Nhập toàn bộ nội dung bài viết tại đây. Có thể dùng heading, paragraph, bullet list và format text.",
+        description: "Enter the full post content here. You can use headings, paragraphs, bullet lists, formatted text, images, and MP4 videos.",
       },
     },
     {

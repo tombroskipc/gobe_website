@@ -14,42 +14,42 @@ type NewsSurface = "news" | "activity";
 const surfaceCopy = {
   news: {
     backHref: "/tin-tuc",
-    backLabel: "Tin tức",
-    eyebrow: "Tin tức GoBeyond",
-    heading: "Câu chuyện, cập nhật và góc nhìn vận hành.",
-    heroTitle: "Tin tức",
+    backLabel: "News",
+    eyebrow: "GoBeyond News",
+    heading: "Stories, updates, and operational insights.",
+    heroTitle: "News",
     heroAccent: "GoBeyond",
     heroImageUrl: "/Recap-2025-5.png",
-    heroImageAlt: "Ảnh đại diện trang Tin tức GoBeyond",
-    listTitle: "Tất cả tin",
-    listAccent: "đang cập nhật",
-    emptyHeading: "Chưa có tin tức",
-    emptyBody: "Khi team đăng bài Tin tức trong Payload CMS, danh sách sẽ tự động hiển thị tại đây.",
-    primaryCta: "Xem tin tức",
-    readLabel: "Đọc bài viết",
+    heroImageAlt: "GoBeyond News page cover image",
+    listTitle: "All news",
+    listAccent: "updates",
+    emptyHeading: "No news yet",
+    emptyBody: "When the team publishes News posts in Payload CMS, they will appear here automatically.",
+    primaryCta: "View news",
+    readLabel: "Read article",
     metaLabel: "Newsroom",
-    overviewLabel: "Thông tin bài viết",
-    previewLabel: "Bản tin mới nhất",
+    overviewLabel: "Article information",
+    previewLabel: "Latest update",
   },
   activity: {
     backHref: "/hoat-dong",
-    backLabel: "Hoạt động",
-    eyebrow: "Hoạt động GoBeyond",
-    heading: "Những hoạt động, sự kiện và khoảnh khắc của đội ngũ GoBeyond.",
-    heroTitle: "Hoạt động",
+    backLabel: "Activities",
+    eyebrow: "GoBeyond Activities",
+    heading: "Team activities, events, and moments from GoBeyond.",
+    heroTitle: "Activities",
     heroAccent: "GoBeyond",
     heroImageUrl: "/hero-showcase.jpg",
-    heroImageAlt: "Ảnh đại diện trang Hoạt động GoBeyond",
-    listTitle: "Tất cả hoạt động",
-    listAccent: "mới nhất",
-    emptyHeading: "Chưa có hoạt động",
+    heroImageAlt: "GoBeyond Activities page cover image",
+    listTitle: "All activities",
+    listAccent: "latest",
+    emptyHeading: "No activities yet",
     emptyBody:
-      "Tạo bài trong Payload CMS, chọn tag Hoạt động, đặt trạng thái Đã xuất bản, nội dung hoạt động sẽ tự động hiển thị tại đây.",
-    primaryCta: "Xem hoạt động",
-    readLabel: "Xem hoạt động",
+      "Create a post in Payload CMS, choose the Activities tag, set it to Published, and it will appear here automatically.",
+    primaryCta: "View activities",
+    readLabel: "View activity",
     metaLabel: "Culture",
-    overviewLabel: "Thông tin hoạt động",
-    previewLabel: "Hoạt động mới nhất",
+    overviewLabel: "Activity information",
+    previewLabel: "Latest activity",
   },
 } satisfies Record<NewsSurface, Record<string, string>>;
 
@@ -93,6 +93,34 @@ function getMediaAlt(media: unknown) {
   return null;
 }
 
+function getMediaMimeType(media: unknown) {
+  if (media && typeof media === "object" && "mimeType" in media && typeof media.mimeType === "string") {
+    return media.mimeType;
+  }
+
+  return null;
+}
+
+function isVideoMedia(media: unknown, url?: string | null) {
+  const mimeType = getMediaMimeType(media);
+
+  if (mimeType?.startsWith("video/")) {
+    return true;
+  }
+
+  return Boolean(url?.split("?")[0]?.toLowerCase().endsWith(".mp4"));
+}
+
+function isMp4Url(value: string) {
+  try {
+    const url = new URL(value.trim());
+
+    return url.protocol.startsWith("http") && url.pathname.toLowerCase().endsWith(".mp4");
+  } catch {
+    return false;
+  }
+}
+
 function getText(value: unknown, fallback = "") {
   return typeof value === "string" ? value : fallback;
 }
@@ -107,7 +135,7 @@ function formatPostDate(value?: string) {
     return value;
   }
 
-  return new Intl.DateTimeFormat("vi-VN", {
+  return new Intl.DateTimeFormat("en-US", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -121,10 +149,13 @@ type RichTextSegment = {
 
 type ArticleContentBlock = {
   caption?: string;
-  kind: "heading" | "subheading" | "paragraph" | "item" | "subitem" | "quote" | "image";
+  imageAlt?: string;
+  imageUrl?: string;
+  kind: "heading" | "subheading" | "paragraph" | "item" | "subitem" | "quote" | "image" | "video";
   key: string;
   media?: unknown;
   segments: RichTextSegment[];
+  videoUrl?: string;
 };
 
 function hasTextFormat(format: RichTextSegment["format"], flag: number, name: string) {
@@ -224,11 +255,20 @@ function textToArticleBlocks(text: string, keyPrefix: string): ArticleContentBlo
     .split(/\n{2,}/)
     .map((paragraph) => paragraph.trim())
     .filter(Boolean)
-    .map<ArticleContentBlock>((paragraph, index) => ({
-      key: `${keyPrefix}-${index}`,
-      kind: "paragraph",
-      segments: [{ text: paragraph }],
-    }));
+    .map<ArticleContentBlock>((paragraph, index) =>
+      isMp4Url(paragraph)
+        ? {
+            key: `${keyPrefix}-${index}`,
+            kind: "video",
+            segments: [],
+            videoUrl: normalizeCmsAssetUrl(paragraph) || paragraph,
+          }
+        : {
+            key: `${keyPrefix}-${index}`,
+            kind: "paragraph",
+            segments: [{ text: paragraph }],
+          },
+    );
 }
 
 function extractRichTextBlocks(value?: NewsRichText, keyPrefix = "content"): ArticleContentBlock[] {
@@ -256,16 +296,44 @@ function extractRichTextBlocks(value?: NewsRichText, keyPrefix = "content"): Art
 
   const pushSegmentsBlock = (segments: RichTextSegment[], kind: ArticleContentBlock["kind"], key: string) => {
     splitSegmentsByLine(normalizeSegments(segments)).forEach((lineSegments, index) => {
-      blocks.push({ key: `${key}-${index}`, kind, segments: lineSegments });
+      const text = lineSegments.map((segment) => segment.text).join("").trim();
+
+      blocks.push(
+        isMp4Url(text)
+          ? {
+              key: `${key}-${index}`,
+              kind: "video",
+              segments: [],
+              videoUrl: normalizeCmsAssetUrl(text) || text,
+            }
+          : { key: `${key}-${index}`, kind, segments: lineSegments },
+      );
     });
   };
 
   const pushUploadBlock = (node: NewsRichTextNode, key: string) => {
+    const mediaUrl = getMediaUrl(node.value);
+
     blocks.push({
       caption: node.fields?.caption,
       key,
-      kind: "image",
+      kind: isVideoMedia(node.value, mediaUrl) ? "video" : "image",
       media: node.value,
+      segments: [],
+    });
+  };
+
+  const pushExternalImageBlock = (node: NewsRichTextNode, key: string) => {
+    if (!node.src) {
+      return;
+    }
+
+    blocks.push({
+      caption: node.title,
+      imageAlt: node.alt,
+      imageUrl: node.src,
+      key,
+      kind: "image",
       segments: [],
     });
   };
@@ -282,6 +350,12 @@ function extractRichTextBlocks(value?: NewsRichText, keyPrefix = "content"): Art
       if (child.type === "upload") {
         flushSegments(`${key}-before-upload-${index}`);
         pushUploadBlock(child, `${key}-upload-${index}`);
+        return;
+      }
+
+      if (child.type === "externalImage") {
+        flushSegments(`${key}-before-external-image-${index}`);
+        pushExternalImageBlock(child, `${key}-external-image-${index}`);
         return;
       }
 
@@ -303,13 +377,18 @@ function extractRichTextBlocks(value?: NewsRichText, keyPrefix = "content"): Art
       return;
     }
 
+    if (node.type === "externalImage") {
+      pushExternalImageBlock(node, key);
+      return;
+    }
+
     if (node.type === "list" && Array.isArray(node.children)) {
       node.children.forEach((child, index) => visit(child, `${key}-list-${index}`, listDepth));
       return;
     }
 
     if (node.type === "listitem") {
-      if (node.children?.some((child) => child.type === "upload")) {
+      if (node.children?.some((child) => child.type === "upload" || child.type === "externalImage")) {
         pushMixedChildren(node.children, listDepth > 0 ? "subitem" : "item", key, listDepth);
         return;
       }
@@ -330,7 +409,7 @@ function extractRichTextBlocks(value?: NewsRichText, keyPrefix = "content"): Art
     }
 
     if (node.type === "paragraph") {
-      if (node.children?.some((child) => child.type === "upload")) {
+      if (node.children?.some((child) => child.type === "upload" || child.type === "externalImage")) {
         pushMixedChildren(node.children, "paragraph", key, listDepth);
         return;
       }
@@ -386,11 +465,25 @@ function ArticleContentList({ blocks }: { blocks: ArticleContentBlock[] }) {
         }
 
         if (block.kind === "image") {
-          const imageUrl = getMediaUrl(block.media);
+          const imageUrl = block.imageUrl ? normalizeCmsAssetUrl(block.imageUrl) : getMediaUrl(block.media);
 
           return imageUrl ? (
             <figure key={key} className="overflow-hidden border border-white/12 bg-white/[0.035]">
-              <img src={imageUrl} alt={block.caption || getMediaAlt(block.media) || "Hình ảnh GoBeyond"} className="aspect-[16/10] w-full object-cover" />
+              <img src={imageUrl} alt={block.imageAlt || block.caption || getMediaAlt(block.media) || "GoBeyond image"} className="aspect-[16/10] w-full object-cover" />
+              {block.caption ? <figcaption className="px-5 py-4 text-sm font-semibold leading-6 text-white/58">{block.caption}</figcaption> : null}
+            </figure>
+          ) : null;
+        }
+
+        if (block.kind === "video") {
+          const videoUrl = block.videoUrl || getMediaUrl(block.media);
+          const mimeType = getMediaMimeType(block.media) || "video/mp4";
+
+          return videoUrl ? (
+            <figure key={key} className="overflow-hidden border border-white/12 bg-white/[0.035]">
+              <video className="aspect-video w-full bg-black object-contain" controls playsInline preload="metadata">
+                <source src={videoUrl} type={mimeType} />
+              </video>
               {block.caption ? <figcaption className="px-5 py-4 text-sm font-semibold leading-6 text-white/58">{block.caption}</figcaption> : null}
             </figure>
           ) : null;
@@ -426,7 +519,7 @@ function getPostHref(surface: NewsSurface, slug: string) {
 function NewsCard({ post, surface, index }: { post: NewsPost; surface: NewsSurface; index: number }) {
   const copy = surfaceCopy[surface];
   const heroUrl = getMediaUrl(post.heroImage);
-  const cardLabel = surface === "activity" ? "Hoạt động nội bộ" : "Tin GoBeyond";
+  const cardLabel = surface === "activity" ? "Internal activity" : "GoBeyond News";
 
   return (
     <Link
@@ -506,7 +599,7 @@ function renderBlock(block: NewsBlock, index: number) {
       const imageUrl = getMediaUrl(block.image);
       return imageUrl ? (
         <figure key={block.id || index} className="overflow-hidden border border-white/12 bg-white/[0.03]">
-          <img src={imageUrl} alt={getText(block.caption, "Hình ảnh tin tức GoBeyond")} className="aspect-[16/9] w-full object-cover" />
+          <img src={imageUrl} alt={getText(block.caption, "GoBeyond news image")} className="aspect-[16/9] w-full object-cover" />
           {block.caption ? <figcaption className="px-5 py-4 text-sm text-white/58">{getText(block.caption)}</figcaption> : null}
         </figure>
       ) : null;
@@ -559,7 +652,7 @@ function renderBlock(block: NewsBlock, index: number) {
           <h2 className="text-3xl font-black text-white">{getText(block.heading)}</h2>
           {block.body ? <p className="mt-4 max-w-2xl text-white/70">{getText(block.body)}</p> : null}
           <Link href={getText(block.href, "/#contact")} className="mt-7 inline-flex bg-[#F26522] px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white">
-            {getText(block.label, "Liên hệ GoBeyond")}
+            {getText(block.label, "Contact GoBeyond")}
           </Link>
         </section>
       );
@@ -574,7 +667,7 @@ function renderBlock(block: NewsBlock, index: number) {
           <h2 className="text-3xl font-black text-white">{getText(cta.heading)}</h2>
           {cta.body ? <p className="mt-4 max-w-2xl text-white/70">{getText(cta.body)}</p> : null}
           <Link href={getText(cta.href, "/#contact")} className="mt-7 inline-flex bg-[#F26522] px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white">
-            {getText(cta.label, "Liên hệ GoBeyond")}
+            {getText(cta.label, "Contact GoBeyond")}
           </Link>
         </section>
       );
@@ -587,14 +680,13 @@ function renderBlock(block: NewsBlock, index: number) {
 export function NewsArticle({ post, surface = "news" }: { post: NewsPost; surface?: NewsSurface }) {
   const copy = surfaceCopy[surface];
   const published = post.publishedAt
-    ? new Intl.DateTimeFormat("vi-VN", { dateStyle: "medium" }).format(new Date(post.publishedAt))
-    : "Bản nháp";
+    ? new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(post.publishedAt))
+    : "Draft";
   const contentBlocks = extractRichTextBlocks(post.content, "post-content");
   const heroUrl = getMediaUrl(post.heroImage);
   const facts = [
-    ["Chuyên mục", copy.backLabel],
-    ["Ngày đăng", published],
-    ["Nguồn nội dung", post.content ? "Payload text editor" : "Legacy content"],
+    ["Category", copy.backLabel],
+    ["Published", published],
   ];
 
   return (
@@ -609,7 +701,7 @@ export function NewsArticle({ post, surface = "news" }: { post: NewsPost; surfac
             data-scroll-reveal
             className="inline-flex items-center text-xs font-black uppercase tracking-[0.18em] text-[#F26522] transition hover:text-white"
           >
-            Quay lại {copy.backLabel}
+            Back to {copy.backLabel}
           </Link>
 
           <header data-scroll-reveal className="relative mt-8 border-y border-white/14 py-8 md:py-11">
@@ -624,7 +716,7 @@ export function NewsArticle({ post, surface = "news" }: { post: NewsPost; surfac
                 href={copy.backHref}
                 className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#F26522] px-6 text-sm font-black uppercase tracking-[0.1em] text-white shadow-[0_18px_42px_rgba(242,101,34,0.24)] transition hover:bg-[#d94d12]"
               >
-                Tất cả {copy.backLabel.toLowerCase()}
+                All {copy.backLabel.toLowerCase()}
               </Link>
               {post.sourceUrl ? (
                 <a
@@ -633,7 +725,7 @@ export function NewsArticle({ post, surface = "news" }: { post: NewsPost; surfac
                   rel="noreferrer"
                   className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/18 px-6 text-sm font-black uppercase tracking-[0.1em] text-white/76 transition hover:border-[#F26522] hover:text-white"
                 >
-                  Nguồn cũ
+                  Original source
                 </a>
               ) : null}
             </div>
@@ -647,7 +739,7 @@ export function NewsArticle({ post, surface = "news" }: { post: NewsPost; surfac
 
           <div className="relative mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(260px,340px)] lg:items-start">
             <article data-scroll-card className="min-w-0 border-t border-white/12 pt-9 md:pt-11">
-              <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#F26522]">Nội dung</p>
+              <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#F26522]">Content</p>
               <div className="mt-6">
                 {contentBlocks.length > 0 ? (
                   <ArticleContentList blocks={contentBlocks} />
@@ -758,7 +850,7 @@ export function NewsListing({ posts, surface = "news" }: { posts: NewsPost[]; su
                 </h3>
               </div>
               {/* <p data-scroll-reveal className="max-w-2xl text-base font-medium leading-8 text-white/68 md:text-lg">
-                Danh sách lấy từ bài đã xuất bản trong Payload CMS. Admin chỉ cần nhập tiêu đề, mô tả ngắn và nội dung bằng text editor.
+                The list is pulled from published posts in Payload CMS. Admins only need to enter the title, short excerpt, and content in the text editor.
               </p> */}
             </div>
 

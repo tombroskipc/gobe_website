@@ -5,7 +5,9 @@ export type NewsPost = {
   id?: string | number;
   title: string;
   slug: string;
+  displayOrder?: number | null;
   excerpt?: string;
+  team?: string;
   tag?: NewsTag | string;
   template?: string;
   publishedAt?: string;
@@ -22,12 +24,17 @@ export type NewsRichTextNode = {
     caption?: string;
   } | null;
   format?: number | string;
+  alt?: string;
   children?: NewsRichTextNode[];
+  height?: number;
   relationTo?: string;
+  src?: string;
   tag?: string;
   text?: string;
+  title?: string;
   type?: string;
   value?: unknown;
+  width?: number;
 };
 
 export type NewsRichText =
@@ -87,9 +94,9 @@ function legacyPost({
       },
       {
         blockType: "cta",
-        heading: tag === "activity" ? "Theo dõi thêm hoạt động của GoBeyond" : "Theo dõi thêm cập nhật của GoBeyond",
-        body: "Các nội dung này được seed từ website cũ và có thể thay thế bằng bài viết mới trong Payload CMS khi team biên tập xuất bản.",
-        label: tag === "activity" ? "Xem hoạt động" : "Xem tin tức",
+        heading: tag === "activity" ? "Explore more GoBeyond activities" : "Explore more GoBeyond updates",
+        body: "This content was seeded from the legacy website and can be replaced by new posts published by the editorial team in Payload CMS.",
+        label: tag === "activity" ? "View activities" : "View news",
         href: tag === "activity" ? "/hoat-dong" : "/tin-tuc",
       },
     ],
@@ -99,162 +106,212 @@ function legacyPost({
 export const fallbackNews: NewsPost[] = [
   legacyPost({
     id: "legacy-news-li-xi-2026",
-    title: "Lì xì khai xuân 2026 - Khởi đầu rực rỡ cùng Go Beyond",
+    title: "2026 New Year lucky money - A bright start with GoBeyond",
     slug: "li-xi-khai-xuan-2026-khoi-dau-ruc-ro-cung-go-beyond",
-    excerpt: "GoBeyond mở đầu năm mới bằng tinh thần hứng khởi, lời chúc may mắn và năng lượng tích cực dành cho toàn đội ngũ.",
+    excerpt: "GoBeyond opened the new year with excitement, warm wishes, and positive energy for the whole team.",
     tag: "news",
     publishedAt: "2026-02-24T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/li-xi-khai-xuan-2026-khoi-dau-ruc-ro-cung-go-beyond/",
-    kicker: "Khai xuân 2026",
-    body: "Không khí đầu năm tại GoBeyond luôn là thời điểm để cả team nạp lại năng lượng, gửi nhau lời chúc và bắt đầu một chặng mới với tinh thần chủ động.\n\nBên cạnh phần lì xì khai xuân, hoạt động còn là lời nhắc về mục tiêu chung: giữ nhịp làm việc tích cực, bứt phá trong từng chiến dịch và cùng nhau tạo thêm nhiều dấu mốc mới.",
+    kicker: "New year 2026",
+    body: "The start of the year at GoBeyond is always a moment for the team to recharge, exchange good wishes, and begin a new chapter with a proactive mindset.\n\nBeyond the lucky-money moment, the activity also reminded everyone of a shared goal: keep positive work momentum, break through in every campaign, and create more milestones together.",
   }),
   legacyPost({
     id: "legacy-news-100k",
-    title: "Đội ngũ Go Beyond chính thức cán mốc $100K sau 3 tháng",
+    title: "The GoBeyond team officially reached $100K after 3 months",
     slug: "doi-ngu-beyond-chinh-thuc-can-moc-100k-sau-3-thang",
-    excerpt: "Một cột mốc tăng trưởng đáng nhớ, ghi nhận nỗ lực của đội ngũ trong hành trình scale thương mại điện tử toàn cầu.",
+    excerpt: "A memorable growth milestone recognizing the team's effort in scaling global e-commerce.",
     tag: "news",
     publishedAt: "2025-11-27T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/doi-ngu-beyond-chinh-thuc-can-moc-100k-sau-3-thang/",
     kicker: "Growth milestone",
-    body: "Cột mốc $100K sau 3 tháng là kết quả của nhiều vòng thử nghiệm, tối ưu và phối hợp liên tục giữa các team creative, ads, fulfillment và operations.\n\nVới GoBeyond, con số không chỉ là thành tích kinh doanh. Đó còn là tín hiệu cho thấy hệ thống vận hành đang trưởng thành và đội ngũ có thể cùng nhau đi nhanh hơn trên thị trường quốc tế.",
+    body: "The $100K milestone after three months came from repeated testing, optimization, and close coordination between creative, ads, fulfillment, and operations teams.\n\nFor GoBeyond, the number is more than a business result. It is a signal that the operating system is maturing and that the team can move faster together in international markets.",
   }),
   legacyPost({
     id: "legacy-news-brainstorm",
-    title: 'Brainstorm - Nơi những ý tưởng "bùng cháy"',
+    title: 'Brainstorm - Where ideas catch fire',
     slug: "brainstorm-noi-nhung-y-tuong-bung-chay",
-    excerpt: "Không gian để đội ngũ GoBeyond cùng thử nghiệm góc nhìn mới, chia sẻ insight và biến ý tưởng thành hướng triển khai cụ thể.",
+    excerpt: "A space for the GoBeyond team to test new perspectives, share insights, and turn ideas into concrete directions.",
     tag: "news",
     publishedAt: "2025-06-21T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/brainstorm-noi-nhung-y-tuong-bung-chay/",
     kicker: "Inside GoBeyond",
-    body: "Những buổi brainstorm giúp team nhìn lại vấn đề từ nhiều hướng: thị trường, khách hàng, concept, nội dung và cách vận hành.\n\nTinh thần quan trọng nhất là dám đưa ra ý tưởng, dám phản biện và dám thử. Từ đó, các chiến dịch có thêm chất liệu mới để tiến nhanh hơn.",
+    body: "Brainstorming sessions help the team revisit problems from multiple angles: market, customer, concept, content, and operations.\n\nThe most important spirit is the willingness to propose ideas, challenge them, and test them. From there, campaigns gain new material and move faster.",
   }),
   legacyPost({
     id: "legacy-news-30-4-countdown",
-    title: "Đếm ngược đến đại lễ 30/4 - GoBeyond sẵn sàng cho những khoảnh khắc ý nghĩa",
+    title: "Countdown to April 30 - GoBeyond prepares for meaningful moments",
     slug: "dem-nguoc-den-dai-le-30-4-gobeyond-san-sang-cho-nhung-khoanh-khac-y-nghia",
-    excerpt: "GoBeyond chuẩn bị cho dịp lễ 30/4 bằng tinh thần tri ân, tự hào và gắn kết nội bộ.",
+    excerpt: "GoBeyond prepared for April 30 with gratitude, pride, and internal connection.",
     tag: "news",
     publishedAt: "2025-04-29T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/dem-nguoc-den-dai-le-30-4-gobeyond-san-sang-cho-nhung-khoanh-khac-y-nghia/",
-    kicker: "Dịp lễ 30/4",
-    body: "Dịp lễ 30/4 là thời điểm để đội ngũ cùng nhìn lại giá trị của sự bền bỉ, lòng biết ơn và tinh thần cùng nhau tiến lên.\n\nThông qua các hoạt động truyền thông nội bộ, GoBeyond muốn giữ lại những khoảnh khắc ý nghĩa và lan tỏa năng lượng tích cực tới toàn team.",
+    kicker: "April 30 holiday",
+    body: "April 30 is a moment for the team to reflect on perseverance, gratitude, and the spirit of moving forward together.\n\nThrough internal communication activities, GoBeyond wanted to preserve meaningful moments and spread positive energy across the team.",
   }),
   legacyPost({
     id: "legacy-news-warrior",
-    title: "Cuộc chiến bất bại giữa những chiến binh GoBeyond",
+    title: "An unstoppable challenge among GoBeyond teammates",
     slug: "cuoc-chien-bat-bai-giua-nhung-chien-binh-gobe-ers",
-    excerpt: "Một câu chuyện nội bộ về tinh thần thi đua, sự quyết liệt và năng lượng chiến đấu của GoBeyond.",
+    excerpt: "An internal story about healthy competition, determination, and GoBeyond's fighting energy.",
     tag: "news",
     publishedAt: "2025-03-29T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/cuoc-chien-bat-bai-giua-nhung-chien-binh-gobe-ers/",
     kicker: "Team energy",
-    body: "Những thử thách nội bộ là cách GoBeyond tạo thêm động lực, giúp từng thành viên nhìn rõ mục tiêu và cùng kéo nhịp làm việc lên cao hơn.\n\nTinh thần chiến binh ở đây không nằm ở khẩu hiệu, mà nằm ở cách mỗi người theo sát công việc, hỗ trợ đồng đội và giữ cam kết đến cuối cùng.",
+    body: "Internal challenges are one way GoBeyond creates motivation, helps each member see the goal clearly, and raises the team's working tempo.\n\nThe fighting spirit here is not a slogan. It is how each person follows through, supports teammates, and keeps commitments to the end.",
   }),
   legacyPost({
     id: "legacy-news-behind-pod",
-    title: "Behind the POD: Hậu trường sau mùa Black Friday cuối năm 2024",
+    title: "Behind the POD: Inside the 2024 Black Friday season",
     slug: "behind-the-pod-hau-truong-sau-mua-black-friday-cuoi-nam-2024",
-    excerpt: "Nhìn lại hậu trường mùa cao điểm POD, nơi từng bước vận hành đều cần tốc độ, độ chính xác và phối hợp chặt chẽ.",
+    excerpt: "A look behind the high season for POD, where every operating step needs speed, accuracy, and tight coordination.",
     tag: "news",
     publishedAt: "2025-03-18T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/behind-the-pod-hau-truong-sau-mua-black-friday-cuoi-nam-2024/",
     kicker: "Behind the POD",
-    body: "Black Friday luôn là bài test lớn với các team thương mại điện tử. Từ creative, ads đến fulfillment, mỗi khâu đều phải vận hành nhanh và giữ chất lượng ổn định.\n\nCâu chuyện hậu trường cho thấy sức mạnh của hệ thống nằm ở khả năng phối hợp: xử lý dữ liệu, phản hồi tình huống và tối ưu liên tục trong mùa cao điểm.",
+    body: "Black Friday is always a major test for e-commerce teams. From creative and ads to fulfillment, every step must move quickly while keeping quality stable.\n\nThe behind-the-scenes story shows that the strength of the system comes from coordination: processing data, responding to situations, and continuously optimizing during peak season.",
   }),
 ];
 
 export const fallbackActivities: NewsPost[] = [
   legacyPost({
     id: "legacy-activity-kickoff-2026",
-    title: 'Kick Off 2026: GoBeyond "bật công tắc", quyết tâm phá đảo năm mới',
+    title: 'Kick Off 2026: GoBeyond turns on the switch for a breakthrough year',
     slug: "kick-off-2026-gobe-ers-bat-cong-tac-quyet-tam-pha-dao-nam-moi",
-    excerpt: "Buổi kick-off mở đầu năm 2026 với tinh thần bứt phá, đặt mục tiêu rõ ràng và khởi động chặng tăng trưởng mới.",
+    excerpt: "The 2026 kick-off opened the year with a breakthrough spirit, clear goals, and a new growth chapter.",
     tag: "activity",
     publishedAt: "2026-03-06T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/kick-off-2026-gobe-ers-bat-cong-tac-quyet-tam-pha-dao-nam-moi/",
     kicker: "Kick off 2026",
-    body: "Kick-off là thời điểm toàn đội cùng nhìn lại mục tiêu, thống nhất hướng đi và nạp năng lượng cho một năm mới.\n\nVới GoBeyond, mỗi kế hoạch đều cần gắn với hành động cụ thể: tăng tốc chiến dịch, cải thiện vận hành và giữ văn hóa chủ động trong từng team.",
+    body: "Kick-off is the moment for the whole team to review goals, align direction, and recharge for the new year.\n\nAt GoBeyond, every plan must connect to concrete action: accelerate campaigns, improve operations, and keep a proactive culture in every team.",
   }),
   legacyPost({
     id: "legacy-activity-xuan-binh-ngo",
-    title: "Xuân Bính Ngọ 2026 | Go Beyond trao quà, gửi trọn tri ân",
+    title: "Spring 2026 | GoBeyond shares gifts and gratitude",
     slug: "xuan-binh-ngo-2026-go-beyond-trao-qua-gui-tron-tri-an",
-    excerpt: "Hoạt động trao quà đầu xuân như lời cảm ơn gửi tới những đóng góp bền bỉ của đội ngũ GoBeyond.",
+    excerpt: "The spring gift activity was a thank-you for the GoBeyond team's steady contributions.",
     tag: "activity",
     publishedAt: "2026-02-11T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/xuan-binh-ngo-2026-go-beyond-trao-qua-gui-tron-tri-an/",
-    kicker: "Xuân 2026",
-    body: "Những món quà đầu xuân là cách GoBeyond gửi lời tri ân tới các thành viên đã cùng nhau đi qua một năm nhiều thử thách.\n\nHoạt động nhỏ nhưng giữ lại tinh thần quan trọng: mỗi người đều là một phần của hành trình chung.",
+    kicker: "Spring 2026",
+    body: "Spring gifts were GoBeyond's way of thanking members who moved through a challenging year together.\n\nIt was a small activity, but it carried an important message: everyone is part of the shared journey.",
   }),
   legacyPost({
     id: "legacy-activity-yep-2025",
-    title: "YEP 2025 - Khép năm tự hào, mở chặng bứt phá cùng Go Beyond",
+    title: "YEP 2025 - Closing a proud year and opening a breakthrough chapter",
     slug: "yep-2025-khep-nam-tu-hao-mo-chang-but-pha-cung-go-beyond",
-    excerpt: "Year End Party 2025 ghi lại những dấu mốc đáng nhớ và mở ra chặng tăng trưởng tiếp theo cho GoBeyond.",
+    excerpt: "Year End Party 2025 captured memorable milestones and opened the next growth chapter for GoBeyond.",
     tag: "activity",
     publishedAt: "2026-02-09T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/yep-2025-khep-nam-tu-hao-mo-chang-but-pha-cung-go-beyond/",
     kicker: "Year End Party",
-    body: "YEP là dịp để cả đội cùng nhìn lại hành trình đã qua: những lần thử nghiệm, những cú bứt tốc và cả những bài học vận hành.\n\nKhoảnh khắc cuối năm giúp GoBeyond củng cố tinh thần đồng đội trước khi bước vào chặng mới với tham vọng lớn hơn.",
+    body: "YEP is a chance for the whole team to look back at the journey: the tests, the growth sprints, and the operating lessons.\n\nThe year-end moments helped GoBeyond strengthen team spirit before entering a new chapter with bigger ambition.",
   }),
   legacyPost({
     id: "legacy-activity-race-23m",
-    title: "Race to $2.3M - Phá mốc cuối năm cùng Go Beyond",
+    title: "Race to $2.3M - Breaking year-end targets with GoBeyond",
     slug: "race-to-2-3m-pha-moc-cuoi-nam-cung-go-beyond",
-    excerpt: "Chiến dịch nội bộ thúc đẩy tinh thần race cuối năm, tập trung vào mục tiêu tăng trưởng và phối hợp vận hành.",
+    excerpt: "An internal campaign that pushed year-end momentum around growth goals and operational coordination.",
     tag: "activity",
     publishedAt: "2025-11-27T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/race-to-2-3m-pha-moc-cuoi-nam-cung-go-beyond/",
     kicker: "Growth race",
-    body: "Cuối năm là giai đoạn tăng tốc của thương mại điện tử. Race to $2.3M giúp team cùng nhìn về một mục tiêu chung và giữ nhịp hành động mạnh mẽ.\n\nMỗi team đóng góp một phần: performance kéo tín hiệu tăng trưởng, creative tạo chất liệu bán hàng, fulfillment giữ ổn định phía sau.",
+    body: "Year-end is the acceleration period for e-commerce. Race to $2.3M helped the team focus on one shared goal and maintain strong execution momentum.\n\nEach team contributed a part: performance generated growth signals, creative produced sales material, and fulfillment kept the back end stable.",
   }),
   legacyPost({
     id: "legacy-activity-kickoff-q2",
-    title: "Go Beyond Kick Off Q2/2025 - Một chuyến đi, ngàn kỷ niệm",
+    title: "GoBeyond Kick Off Q2/2025 - One trip, countless memories",
     slug: "go-beyond-kick-off-q2-2025-mot-chuyen-di-ngan-ky-niem",
-    excerpt: "Chuyến kick-off Q2/2025 tạo thêm kết nối nội bộ và tiếp thêm năng lượng cho quý mới.",
+    excerpt: "The Q2/2025 kick-off trip created stronger internal connection and renewed energy for the new quarter.",
     tag: "activity",
     publishedAt: "2025-08-11T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/go-beyond-kick-off-q2-2025-mot-chuyen-di-ngan-ky-niem/",
     kicker: "Kick off Q2",
-    body: "Một chuyến đi cùng nhau giúp các thành viên có thêm không gian kết nối ngoài công việc thường ngày.\n\nTừ những khoảnh khắc vui vẻ đến các hoạt động chung, tinh thần đồng đội được làm mới để bước vào quý tiếp theo với nhiều năng lượng hơn.",
+    body: "A shared trip gave team members more room to connect outside daily work.\n\nFrom joyful moments to group activities, team spirit was refreshed for the next quarter.",
   }),
   legacyPost({
     id: "legacy-activity-100k-orders",
-    title: "Go Beyond vừa chốt 100.000 đơn",
+    title: "GoBeyond just reached 100,000 orders",
     slug: "go-beyond-vua-chot-100-000-don",
-    excerpt: "Dấu mốc 100.000 đơn ghi nhận năng lực vận hành và sự phối hợp của toàn hệ thống GoBeyond.",
+    excerpt: "The 100,000-order milestone recognized the operating capability and coordination of the whole GoBeyond system.",
     tag: "activity",
     publishedAt: "2025-06-20T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/go-beyond-vua-chot-100-000-don/",
-    kicker: "100.000 đơn",
-    body: "100.000 đơn là kết quả của rất nhiều bước nhỏ được thực hiện đúng: chọn sản phẩm, xây concept, chạy ads, xử lý đơn và chăm sóc khách hàng.\n\nCột mốc này giúp GoBeyond có thêm niềm tin vào hệ thống vận hành đang xây dựng.",
+    kicker: "100,000 orders",
+    body: "100,000 orders came from many small steps done right: selecting products, building concepts, running ads, processing orders, and supporting customers.\n\nThis milestone gave GoBeyond more confidence in the operating system it is building.",
   }),
   legacyPost({
     id: "legacy-activity-30-4",
-    title: "Hưởng ứng đại lễ 30/4 - Go Beyond tưởng nhớ, tri ân và tự hào",
+    title: "April 30 at GoBeyond - remembrance, gratitude, and pride",
     slug: "huong-ung-dai-le-30-4-go-beyond-tuong-nho-tri-an-va-tu-hao",
-    excerpt: "Hoạt động nội bộ nhân dịp 30/4 lan tỏa tinh thần tưởng nhớ, tri ân và tự hào dân tộc.",
+    excerpt: "An internal April 30 activity that shared a spirit of remembrance, gratitude, and national pride.",
     tag: "activity",
     publishedAt: "2025-04-30T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/huong-ung-dai-le-30-4-go-beyond-tuong-nho-tri-an-va-tu-hao/",
-    kicker: "Đại lễ 30/4",
-    body: "Dịp lễ 30/4 là cơ hội để GoBeyond cùng nhau nhắc lại giá trị của lòng biết ơn và tinh thần tự hào.\n\nCác hoạt động truyền thông nội bộ giúp kết nối văn hóa công ty với những dấu mốc ý nghĩa của đất nước.",
+    kicker: "April 30",
+    body: "April 30 is an opportunity for GoBeyond to revisit the value of gratitude and pride together.\n\nInternal communication activities helped connect company culture with meaningful national milestones.",
   }),
   legacyPost({
     id: "legacy-activity-83",
-    title: "Go Beyond chúc mừng ngày Quốc tế Phụ nữ 8/3",
+    title: "GoBeyond celebrates International Women's Day",
     slug: "go-beyond-chuc-mung-ngay-quoc-te-phu-nu-8-3",
-    excerpt: "Một hoạt động ấm áp dành cho các thành viên nữ, gửi lời chúc và sự trân trọng từ GoBeyond.",
+    excerpt: "A warm activity for women team members, sharing wishes and appreciation from GoBeyond.",
     tag: "activity",
     publishedAt: "2025-03-08T00:00:00.000Z",
     sourceUrl: "https://gobe.asia/go-beyond-chuc-mung-ngay-quoc-te-phu-nu-8-3/",
     kicker: "8/3",
-    body: "Ngày 8/3 là dịp để GoBeyond gửi lời cảm ơn tới những đóng góp của các thành viên nữ trong đội ngũ.\n\nNhững khoảnh khắc nhỏ trong ngày đặc biệt này góp phần làm văn hóa công ty trở nên gần gũi và giàu sự quan tâm hơn.",
+    body: "International Women's Day is a moment for GoBeyond to thank women team members for their contributions.\n\nSmall moments on this special day help make the company culture warmer and more caring.",
   }),
 ];
+
+const legacyFallbackPosts = [...fallbackNews, ...fallbackActivities];
+const legacyFallbackBySlug = new Map(legacyFallbackPosts.map((post) => [post.slug, post]));
+const legacySlugAliases = new Map([
+  [
+    "kick-off-2026-gobe-ers-bat-cong-tac-quyet-tam-pha-ao-nam-moi",
+    "kick-off-2026-gobe-ers-bat-cong-tac-quyet-tam-pha-dao-nam-moi",
+  ],
+]);
+const vietnameseCopyPattern = /[\u00C0-\u1EF9]/;
+
+function hasVietnameseCopy(value: unknown) {
+  try {
+    return vietnameseCopyPattern.test(JSON.stringify(value));
+  } catch {
+    return false;
+  }
+}
+
+function getLegacyFallbackPost(slug: string) {
+  return legacyFallbackBySlug.get(slug) || legacyFallbackBySlug.get(legacySlugAliases.get(slug) || "");
+}
+
+function normalizeLegacyPost(post: NewsPost): NewsPost {
+  const fallback = getLegacyFallbackPost(post.slug);
+
+  if (!fallback || !hasVietnameseCopy({
+    content: post.content,
+    excerpt: post.excerpt,
+    layout: post.layout,
+    title: post.title,
+  })) {
+    return post;
+  }
+
+  return {
+    ...post,
+    content: fallback.content,
+    excerpt: fallback.excerpt,
+    layout: fallback.layout,
+    sourceUrl: post.sourceUrl || fallback.sourceUrl,
+    tag: post.tag || fallback.tag,
+    template: post.template || fallback.template,
+    title: fallback.title,
+  };
+}
+
+function normalizeLegacyPosts(posts: NewsPost[]) {
+  return posts.map(normalizeLegacyPost);
+}
 
 const publishedNewsWhere: Where = {
   and: [
@@ -295,6 +352,39 @@ const publishedActivityWhere: Where = {
   ],
 };
 
+function sortByDisplayOrder<T extends { displayOrder?: null | number; publishedAt?: string; title: string }>(posts: T[]) {
+  return [...posts].sort((a, b) => {
+    const aHasOrder = typeof a.displayOrder === "number";
+    const bHasOrder = typeof b.displayOrder === "number";
+
+    if (aHasOrder || bHasOrder) {
+      if (!aHasOrder) {
+        return 1;
+      }
+
+      if (!bHasOrder) {
+        return -1;
+      }
+
+      const aOrder = a.displayOrder as number;
+      const bOrder = b.displayOrder as number;
+
+      if (aOrder !== bOrder) {
+        return aOrder - bOrder;
+      }
+    }
+
+    const aTime = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+    const bTime = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+
+    if (aTime !== bTime) {
+      return bTime - aTime;
+    }
+
+    return a.title.localeCompare(b.title, "en", { sensitivity: "base" });
+  });
+}
+
 export async function getPublishedNews(): Promise<NewsPost[]> {
   try {
     const payload = await getPayloadClient();
@@ -306,10 +396,10 @@ export async function getPublishedNews(): Promise<NewsPost[]> {
       where: publishedNewsWhere,
     });
 
-    return result.docs as NewsPost[];
+    return sortByDisplayOrder(normalizeLegacyPosts(result.docs as NewsPost[]));
   } catch (error) {
     console.warn("Payload news query failed, using fallback content.", error);
-    return fallbackNews;
+    return sortByDisplayOrder(fallbackNews);
   }
 }
 
@@ -324,10 +414,10 @@ export async function getPublishedActivities(): Promise<NewsPost[]> {
       where: publishedActivityWhere,
     });
 
-    return result.docs as NewsPost[];
+    return sortByDisplayOrder(normalizeLegacyPosts(result.docs as NewsPost[]));
   } catch (error) {
     console.warn("Payload activity query failed, using fallback content.", error);
-    return fallbackActivities;
+    return sortByDisplayOrder(fallbackActivities);
   }
 }
 
@@ -366,7 +456,8 @@ export async function getNewsDraftBySlug(slug: string): Promise<NewsPost | null>
       },
     });
 
-    return (result.docs[0] as NewsPost | undefined) || null;
+    const post = (result.docs[0] as NewsPost | undefined) || null;
+    return post ? normalizeLegacyPost(post) : null;
   } catch (error) {
     console.warn("Payload news draft query failed.", error);
     return null;
@@ -397,7 +488,8 @@ export async function getActivityDraftBySlug(slug: string): Promise<NewsPost | n
       },
     });
 
-    return (result.docs[0] as NewsPost | undefined) || null;
+    const post = (result.docs[0] as NewsPost | undefined) || null;
+    return post ? normalizeLegacyPost(post) : null;
   } catch (error) {
     console.warn("Payload activity draft query failed.", error);
     return null;
@@ -441,10 +533,12 @@ export async function getPublishedNewsBySlug(slug: string): Promise<NewsPost | n
       },
     });
 
-    return (result.docs[0] as NewsPost | undefined) || null;
+    const post = (result.docs[0] as NewsPost | undefined) || null;
+    return post ? normalizeLegacyPost(post) : null;
   } catch (error) {
     console.warn("Payload news detail query failed, using fallback content.", error);
-    return fallbackNews.find((post) => post.slug === slug) || null;
+    const fallback = getLegacyFallbackPost(slug);
+    return fallback?.tag === "news" ? fallback : null;
   }
 }
 
@@ -476,9 +570,11 @@ export async function getPublishedActivityBySlug(slug: string): Promise<NewsPost
       },
     });
 
-    return (result.docs[0] as NewsPost | undefined) || null;
+    const post = (result.docs[0] as NewsPost | undefined) || null;
+    return post ? normalizeLegacyPost(post) : null;
   } catch (error) {
     console.warn("Payload activity detail query failed, using fallback content.", error);
-    return fallbackActivities.find((post) => post.slug === slug) || null;
+    const fallback = getLegacyFallbackPost(slug);
+    return fallback?.tag === "activity" ? fallback : null;
   }
 }
