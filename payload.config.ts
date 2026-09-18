@@ -9,8 +9,9 @@ import { Media } from "./collections/Media.ts";
 import { News } from "./collections/News.ts";
 import { ReusableCtas } from "./collections/ReusableCtas.ts";
 import { Users } from "./collections/Users.ts";
+import { getPublicSiteUrl } from "./lib/siteUrl.ts";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
+const SITE_URL = getPublicSiteUrl();
 const STATIC_SITE_URL = process.env.NEXT_PUBLIC_STATIC_SITE_URL || "https://gobe-immersive-3d-static.joe-378.workers.dev";
 const R2_CLIENT_HANDLER = "@payloadcms/storage-r2/client#R2ClientUploadHandler";
 const LOCAL_R2_NOOP_HANDLER = "@/app/(payload)/admin/R2ClientUploadHandler.tsx#R2ClientUploadHandler";
