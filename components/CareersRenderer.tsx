@@ -325,7 +325,7 @@ function JobCard({ job, index }: { job: CareerItem; index: number }) {
 
   return (
     <Link
-      href={`/tuyen-dung/${job.slug}`}
+      href={`/careers/${job.slug}`}
       prefetch={false}
       data-scroll-card
       className="group relative min-h-[430px] overflow-hidden border border-white/12 bg-[#101520]/82 p-5 text-white shadow-[0_28px_82px_rgba(0,0,0,0.30)] backdrop-blur-md transition hover:-translate-y-2 hover:border-[#F26522]/70 hover:shadow-[0_34px_100px_rgba(242,101,34,0.16)]"
@@ -937,7 +937,7 @@ export function CareerDetail({ job }: { job: CareerItem }) {
 
         <div className="relative mx-auto max-w-6xl">
           <Link
-            href="/tuyen-dung"
+            href="/careers"
             data-scroll-reveal
             className="inline-flex items-center text-xs font-black uppercase tracking-[0.18em] text-[#F26522] transition hover:text-white"
           >
@@ -969,7 +969,7 @@ export function CareerDetail({ job }: { job: CareerItem }) {
                 </a>
               ) : null} */}
               <Link
-                href="/tuyen-dung"
+                href="/careers"
                 className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/18 px-6 text-sm font-black uppercase tracking-[0.1em] text-white/76 transition hover:border-[#F26522] hover:text-white"
               >
                 All roles

@@ -13,7 +13,7 @@ type NewsSurface = "news" | "activity";
 
 const surfaceCopy = {
   news: {
-    backHref: "/tin-tuc",
+    backHref: "/news",
     backLabel: "News",
     eyebrow: "GoBeyond News",
     heading: "Stories, updates, and operational insights.",
@@ -32,7 +32,7 @@ const surfaceCopy = {
     previewLabel: "Latest update",
   },
   activity: {
-    backHref: "/hoat-dong",
+    backHref: "/activities",
     backLabel: "Activities",
     eyebrow: "GoBeyond Activities",
     heading: "Team activities, events, and moments from GoBeyond.",

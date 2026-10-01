@@ -1,44 +1,6 @@
-import type { Metadata } from "next";
-import { draftMode } from "next/headers";
-import { notFound } from "next/navigation";
-import { NewsArticle } from "@/components/NewsRenderer";
-import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
-import { getNewsDraftBySlug, getPublishedNewsBySlug } from "@/lib/news";
+import { permanentRedirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export default async function LegacyNewsDetailRoute({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const { isEnabled: isPreview } = await draftMode();
-  const post = isPreview ? await getNewsDraftBySlug(slug) : await getPublishedNewsBySlug(slug);
-
-  if (!post) {
-    return {
-      title: "News - GoBeyond LLC",
-      description: "Company updates, milestones, and operational insights from GoBeyond.",
-    };
-  }
-
-  return {
-    title: `${post.title} - GoBeyond News`,
-    description: post.excerpt || "Company updates, milestones, and operational insights from GoBeyond.",
-  };
-}
-
-export default async function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const { isEnabled: isPreview } = await draftMode();
-
-  const post = isPreview ? await getNewsDraftBySlug(slug) : await getPublishedNewsBySlug(slug);
-
-  if (!post) {
-    notFound();
-  }
-
-  return (
-    <>
-      {isPreview ? <RefreshRouteOnSave /> : null}
-      <NewsArticle post={post} />
-    </>
-  );
+  permanentRedirect(`/news/${slug}`);
 }

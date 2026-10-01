@@ -1,1 +1,6 @@
-export { default, dynamic, generateMetadata } from "../../../tin-tuc/[slug]/page";
+import { permanentRedirect } from "next/navigation";
+
+export default async function LegacyNestedNewsDetailRoute({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  permanentRedirect(`/news/${slug}`);
+}

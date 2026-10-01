@@ -1,12 +1,5 @@
-import type { Metadata } from "next";
-import { AboutPage } from "@/components/AboutPage";
+import { permanentRedirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "About Us - GoBeyond LLC",
-  description:
-    "Learn about GoBeyond, our milestones, vision, mission, and partner ecosystem.",
-};
-
-export default function AboutRoute() {
-  return <AboutPage />;
+export default function LegacyAboutRoute() {
+  permanentRedirect("/about-us");
 }

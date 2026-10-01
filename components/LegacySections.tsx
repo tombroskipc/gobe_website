@@ -2,7 +2,8 @@
 
 import { useEffect, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
-import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import type { IconType } from "react-icons";
+import { FaBox, FaBullhorn, FaCog, FaFacebookF, FaGlobe, FaLinkedinIn, FaPalette, FaRobot, FaUsers } from "react-icons/fa";
 import { MdEmail, MdLocalPhone } from "react-icons/md";
 
 type ValueCardStyle = CSSProperties &
@@ -128,6 +129,31 @@ const coreValues = [
 
 type CoreValue = (typeof coreValues)[number];
 
+const valueIcons: Record<string, string> = {
+  "01": "/values/goal.webp",
+  "02": "/values/open-mindedness.webp",
+  "03": "/values/balanced.webp",
+  "04": "/values/empowerment.webp",
+  "05": "/values/entrepreneurship.webp",
+  "06": "/values/results.webp",
+};
+
+function ValueGlassIcon({ iconKey }: { iconKey: string }) {
+  return (
+    <span className="value-glass-icon" aria-hidden="true">
+      <img
+        src={valueIcons[iconKey] ?? valueIcons["01"]}
+        alt=""
+        className="value-glass-icon-img"
+        width={320}
+        height={320}
+        loading="lazy"
+        decoding="async"
+      />
+    </span>
+  );
+}
+
 const operations = [
   {
     index: "01",
@@ -166,27 +192,27 @@ const operations = [
   },
 ];
 
-type OperationItem = (typeof operations)[number];
-
 const scaleIntro = {
   title: "Why this is where you belong.",
-  body: "We don't scale with numbers — we scale with people who dare to go beyond.",
 };
 
 const scaleNodes = [
   {
+    index: "01",
     title: "A Strong Core Team.",
     body: "Here, you don't work for leaders — you become one. We build our team with creative, knowledgeable people who are ready for any challenge. You're empowered to decide and lead from day one.",
     // chips: ["Creative Leadership", "Knowledge-Driven", "Ready for Challenges"],
     chips: [],
   },
   {
+    index: "02",
     title: "A Global Supplier Network.",
     body: "Join GoBeyond and step onto a global stage — connecting product sources, fulfillment partners, and storefronts across markets. Your vision won't be limited by borders.",
     // chips: ["Global Suppliers", "Optimized Storefronts", "International Fulfillment"],
     chips: [],
   },
   {
+    index: "03",
     title: "AI & Automation First.",
     body: "Machines handle the repetitive; people create. AI frees you from busywork so you can focus on what matters — strategy, ideas, and impact. Work smart, not just hard.",
     // chips: ["AI-First Mindset", "Workflow Automation", "Peak Performance"],
@@ -194,13 +220,42 @@ const scaleNodes = [
   },
 ];
 
+const VALUE_AUTO_STEP_MS = 3000;
+
 export function CoreValuesSection() {
   const [activeValue, setActiveValue] = useState<CoreValue | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [autoIndex, setAutoIndex] = useState(0);
+  const [autoEnabled, setAutoEnabled] = useState(false);
+  const [autoPaused, setAutoPaused] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    setAutoEnabled(true);
+  }, []);
+
+  useEffect(() => {
+    if (!autoEnabled || autoPaused) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      setAutoIndex((current) => (current + 1) % coreValues.length);
+    }, VALUE_AUTO_STEP_MS);
+
+    return () => window.clearInterval(timer);
+  }, [autoEnabled, autoPaused]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("value-card-open", Boolean(activeValue));
@@ -239,51 +294,68 @@ export function CoreValuesSection() {
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[42%] bg-[linear-gradient(180deg,transparent,rgba(0,3,20,0.88))]" aria-hidden="true" />
 
-        <div className="core-values relative min-h-screen" aria-labelledby="values-title">
-          <div className="values-panel-stage pointer-events-none absolute inset-0 z-[2]">
-            <div className="values-panel-track pointer-events-auto" aria-label="GOBE-ER core values">
-              {coreValues.map((item) => (
-                <button
-                  key={item.index}
-                  type="button"
-                  data-scroll-card
-                  data-index={item.index}
-                  data-letter={item.code}
-                  className="value-card group absolute left-1/2 top-1/2 overflow-hidden border border-white/20 bg-[#111827]/82 p-5 text-left shadow-[0_36px_110px_rgba(0,0,0,0.52)] outline-none backdrop-blur-md"
-                  style={{ "--panel-accent": item.accent } as ValueCardStyle}
-                  onClick={() => setActiveValue(item)}
-                >
-                  <span className="value-card-corners" aria-hidden="true" />
-                  <span className="value-card-corners alt" aria-hidden="true" />
-                  <span className="absolute left-5 top-5 z-[2] text-[10px] font-black uppercase tracking-[0.16em] text-white/36">
-                    GOBE-ER / {item.index}
-                  </span>
-
-                  <div className="value-body relative z-[2]">
-                    <h3 className="max-w-[11ch] text-[clamp(1.2rem,1.6vw,1.9rem)] font-black uppercase leading-[0.94] text-white">
-                      [<span className="acronym-hit">{item.code}</span>]{item.title.slice(1)}
-                    </h3>
-                    <p className="mt-5 max-w-[24ch] text-sm font-semibold leading-[1.55] text-white/74">{item.body}</p>
-                    <span className="mt-7 inline-flex px-4 py-2 font-black tracking-[0.12em] transition">
-                      {/* {"View details"} */}
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="values-intro pointer-events-none relative z-[5] flex min-h-screen w-full max-w-[45rem] flex-col justify-center px-5 py-24 text-left sm:px-8 lg:px-[clamp(2.5rem,4.6vw,5rem)]">
-            <p data-scroll-reveal className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">CORE VALUES</p>
-
+        <div
+          className="values-glass-inner relative z-[2] mx-auto flex min-h-screen w-full max-w-7xl flex-col justify-center gap-8 px-5 py-20 sm:px-8 lg:px-12"
+          aria-labelledby="values-title"
+        >
+          <div className="values-glass-intro max-w-2xl">
+            <p data-scroll-reveal className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">
+              Core Values
+            </p>
             <h3
               id="values-title"
               data-scroll-reveal
-              className="mt-5 text-[clamp(3.9rem,7.1vw,8.35rem)] font-black uppercase leading-[0.84] tracking-normal text-white"
+              className="mobile-page-title mt-5 text-[clamp(2.4rem,5vw,4.4rem)] font-black uppercase leading-[0.9] tracking-normal text-white"
             >
-              {"CORE VALUE \n "}
-              <span className="text-[#ff7648]">GOBE-ER</span>
+              Core Value
+              <span className="block text-[#ff7648]">GOBE-ER</span>
             </h3>
+            <p data-scroll-reveal className="mt-4 max-w-xl text-sm font-medium leading-6 text-white/62 md:text-base md:leading-7">
+              The six principles that shape how we build, operate, and grow together.
+            </p>
+          </div>
+
+          <div className="values-honeycomb-bleed">
+          <div
+            className={`values-glass-honeycomb${autoEnabled && !autoPaused ? " is-auto-cycling" : ""}`}
+            aria-label="GOBE-ER core values"
+            onMouseEnter={() => setAutoPaused(true)}
+            onMouseLeave={() => setAutoPaused(false)}
+            onFocusCapture={() => setAutoPaused(true)}
+            onBlurCapture={() => setAutoPaused(false)}
+          >
+            {[coreValues.slice(0, 3), coreValues.slice(3)].map((row, rowIndex) => (
+              <div
+                key={rowIndex}
+                className={`values-glass-row${rowIndex === 1 ? " is-offset" : ""}`}
+              >
+                {row.map((item, index) => {
+                  const cycling = autoEnabled && !autoPaused;
+                  const globalIndex = rowIndex === 0 ? index : 3 + index;
+                  const isFeatured = rowIndex === 0 && index === 0 && !cycling;
+                  const isAutoActive = cycling && autoIndex === globalIndex;
+                  return (
+                  <button
+                    key={item.index}
+                    type="button"
+                    data-scroll-reveal
+                    className={`value-glass-card group relative flex flex-col items-center justify-center text-center outline-none${isFeatured ? " is-featured" : ""}${isAutoActive ? " is-auto-active" : ""}`}
+                    style={{ "--panel-accent": item.accent } as ValueCardStyle}
+                    onClick={() => setActiveValue(item)}
+                  >
+                    <ValueGlassIcon iconKey={item.index} />
+                    <div className="value-glass-body relative z-[2] flex flex-col items-center">
+                      <h3 className="value-glass-title font-black uppercase leading-[1.05] text-white">
+                        [<span className="acronym-hit">{item.code}</span>]{item.title.slice(1)}
+                      </h3>
+                    </div>
+                    <span className="value-glass-index" aria-hidden="true">{item.index}</span>
+                  </button>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
           </div>
         </div>
       </div>
@@ -332,121 +404,84 @@ export function CoreValuesSection() {
   );
 }
 
+const operationIcons: Record<string, IconType> = {
+  "01": FaPalette,
+  "02": FaBullhorn,
+  "03": FaBox,
+  "04": FaRobot,
+  "05": FaCog,
+};
+
 export function OperationsSection() {
-  const [activeOperation, setActiveOperation] = useState<OperationItem | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("operation-card-open", Boolean(activeOperation));
-
-    if (!activeOperation) {
-      return;
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setActiveOperation(null);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      document.documentElement.classList.remove("operation-card-open");
-    };
-  }, [activeOperation]);
-
   return (
-    <section id="operations" data-home-story-section data-scroll-section className="operation-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90">
+    <section
+      id="operations"
+      data-home-story-section
+      data-scroll-section
+      className="bento-scope relative z-10 min-h-screen overflow-hidden bg-[#000314]"
+    >
       <div data-home-story-content className="relative min-h-screen overflow-hidden">
         <div
-          className="absolute inset-0 bg-[radial-gradient(circle_at_54%_46%,rgba(242,101,34,0.16),transparent_24%),radial-gradient(circle_at_80%_22%,rgba(255,255,255,0.06),transparent_22%),linear-gradient(135deg,#030711_0%,#060b18_55%,#01030a_100%)]"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_72%_22%,rgba(242,101,34,0.14),transparent_30%),linear-gradient(135deg,#030711_0%,#060b18_55%,#01030a_100%)]"
           aria-hidden="true"
         />
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-24" aria-hidden="true" />
 
-        <div className="operation-content relative mx-auto grid min-h-screen max-w-[92rem] items-center gap-10 px-5 py-20 sm:px-8 lg:px-12">
-          <div data-scroll-reveal className="operation-copy relative z-[3]">
-            <p className="text-xs font-black uppercase tracking-[0.28em] text-[#F26522]">COMPANY OPERATION</p>
-            <h2 data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(4.2rem,7vw,8rem)] font-black leading-[0.9] tracking-normal text-white">
-              How GoBeyond Operates
+        <div className="bento-inner relative z-[2] mx-auto grid min-h-screen max-w-[92rem] items-center gap-12 px-5 py-24 sm:px-8 lg:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] lg:gap-16 lg:px-12">
+          <div data-scroll-reveal className="bento-copy">
+            <p className="bento-eyebrow">Company Operation</p>
+            <h2 className="bento-title">
+              How GoBeyond
+              <span className="bento-title-accent"> Operates</span>
             </h2>
+            <p className="bento-intro">
+              Five in-house engines move every product from idea to a customer&apos;s door — creative, performance,
+              fulfillment, AI, and operations.
+            </p>
           </div>
 
-          <div className="operation-core relative z-[2] hidden items-center justify-center lg:flex">
-            <div className="operation-core-orb">
-              <span>GoBeyond</span>
-              <small>COMPANY CORE</small>
-            </div>
-          </div>
+          <div className="bento-grid bento-grid--5">
+            {operations.map((item, index) => {
+              const Icon = operationIcons[item.index] ?? FaCog;
 
-          <div className="operation-list relative z-[3] grid gap-5">
-            {operations.map((item) => (
-              <button
-                key={item.title}
-                type="button"
-                data-scroll-card
-                className="operation-card relative grid gap-4 border border-white/12 bg-[#101520]/72 p-5 text-left text-white shadow-[0_28px_80px_rgba(0,0,0,0.38)] backdrop-blur-md sm:grid-cols-[72px_1fr_120px] sm:items-center"
-                aria-label={`View details for ${item.title}`}
-                onClick={() => setActiveOperation(item)}
-              >
-                <span className="operation-index">{item.index}</span>
-                <span>
-                  <h3 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="text-[clamp(2rem,3vw,3rem)] font-black leading-none text-white">{item.title}</h3>
-                  <p className="operation-summary mt-2 text-base font-medium leading-6 text-white/68">{item.body}</p>
-                  <p className="operation-expanded-copy">{item.fullBody}</p>
-                </span>
-                <span className="hidden h-[3px] w-full bg-[linear-gradient(90deg,#F26522,transparent)] opacity-75 sm:block" aria-hidden="true" />
-              </button>
-            ))}
+              return (
+                <article
+                  key={item.title}
+                  data-scroll-card
+                  className={`bento-card${index === 0 ? " is-featured" : ""}`}
+                >
+                  <div className="bento-card-head">
+                    <span className="bento-card-icon" aria-hidden="true">
+                      <Icon />
+                    </span>
+                    <span className="bento-card-index">{item.index}</span>
+                  </div>
+                  <h3 className="bento-card-title">{item.title}</h3>
+                  <p className="bento-card-body">{item.body}</p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </div>
-
-      {activeOperation && mounted
-        ? createPortal(
-            <div
-              className="operation-focus-overlay"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="operation-focus-title"
-              onMouseDown={(event) => {
-                if (event.target === event.currentTarget) {
-                  setActiveOperation(null);
-                }
-              }}
-            >
-              <article className="operation-focus-card">
-                <button
-                  className="operation-focus-close"
-                  type="button"
-                  aria-label="Close operation detail"
-                  onClick={() => setActiveOperation(null)}
-                >
-                  x
-                </button>
-                <p className="operation-focus-kicker">{activeOperation.index} — GoBeyond scale engine</p>
-                <h3 id="operation-focus-title" className="operation-focus-title">
-                  {activeOperation.title}
-                </h3>
-                <p className="operation-focus-copy">{activeOperation.fullBody}</p>
-              </article>
-            </div>,
-            document.body,
-          )
-        : null}
     </section>
   );
 }
 
+const scaleIcons: Record<string, IconType> = {
+  "01": FaUsers,
+  "02": FaGlobe,
+  "03": FaRobot,
+};
+
 export function ScaleSection() {
   return (
-    <section id="proof" data-home-story-section data-scroll-section className="scale-showcase relative z-10 min-h-screen overflow-hidden bg-[#000314] opacity-90">
+    <section
+      id="proof"
+      data-home-story-section
+      data-scroll-section
+      className="scale-showcase bento-scope relative z-10 min-h-screen overflow-hidden bg-[#000314]"
+    >
       <div data-home-story-content className="relative min-h-screen overflow-hidden">
         <div
           className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(242,101,34,0.12),transparent_26%),linear-gradient(135deg,#050911_0%,#070a13_48%,#120806_100%)]"
@@ -454,32 +489,37 @@ export function ScaleSection() {
         />
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-24" aria-hidden="true" />
 
-        <div className="scale-content relative z-[2] mx-auto grid min-h-screen max-w-[94rem] items-center gap-12 px-5 py-24 sm:px-8 lg:px-12">
+        <div className="scale-content relative z-[2] mx-auto grid min-h-screen max-w-[94rem] items-center gap-12 px-5 py-24 sm:px-8 lg:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] lg:gap-16 lg:px-12">
           <div data-scroll-reveal className="scale-copy">
-            <p className="text-xs font-black uppercase tracking-[0.36em] text-white/62">Company scale</p>
-            <h2 data-pretext-fit data-pretext-max-lines="3" data-pretext-min-scale="0.82" className="mt-7 text-[clamp(3rem,5.2vw,6.2rem)] font-black leading-[0.92] tracking-normal text-white">
-              How GoBeyond Scales
+            <p className="bento-eyebrow">Company Scale</p>
+            <h2 className="bento-title">
+              How GoBeyond
+              <span className="bento-title-accent"> Scales</span>
             </h2>
-            <div className="scale-intro-copy">
-              <h3 className="scale-intro-title">{scaleIntro.title}</h3>
-              <p className="scale-intro-body">{scaleIntro.body}</p>
-            </div>
+            <p className="bento-lead">{scaleIntro.title}</p>
           </div>
 
-          <div className="scale-card-stack grid gap-6">
-            {scaleNodes.map((node) => (
-              <article key={node.title} data-scroll-card className="scale-card border border-white/12 bg-[#111622]/76 p-7 shadow-[0_28px_82px_rgba(0,0,0,0.32)] backdrop-blur-md">
-                <h3 data-pretext-fit data-pretext-max-lines="2" data-pretext-min-scale="0.82" className="text-[clamp(1.9rem,2.4vw,3rem)] font-black leading-tight text-white">{node.title}</h3>
-                <p className="mt-4 text-lg font-medium leading-8 text-white/66">{node.body}</p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {node.chips.map((chip) => (
-                    <span key={chip} className="rounded-full border border-white/12 bg-white/[0.035] px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-white/78">
-                      {chip}
+          <div className="bento-grid bento-grid--3">
+            {scaleNodes.map((node, index) => {
+              const Icon = scaleIcons[node.index] ?? FaRobot;
+
+              return (
+                <article
+                  key={node.title}
+                  data-scroll-card
+                  className={`bento-card${index === 0 ? " is-featured" : ""}`}
+                >
+                  <div className="bento-card-head">
+                    <span className="bento-card-icon" aria-hidden="true">
+                      <Icon />
                     </span>
-                  ))}
-                </div>
-              </article>
-            ))}
+                    <span className="bento-card-index">{node.index}</span>
+                  </div>
+                  <h3 className="bento-card-title">{node.title}</h3>
+                  <p className="bento-card-body">{node.body}</p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -487,10 +527,55 @@ export function ScaleSection() {
   );
 }
 
+const teamPhotos = [
+  { src: "/team/team-01.webp", grow: 1.35 },
+  { src: "/team/team-02.webp", grow: 1 },
+  { src: "/team/team-03.webp", grow: 1.25 },
+  { src: "/team/team-04.webp", grow: 1.5 },
+  { src: "/team/team-05.webp", grow: 1.5 },
+  { src: "/team/team-06.webp", grow: 1.2 },
+  { src: "/team/team-07.webp", grow: 1 },
+  { src: "/team/team-08.webp", grow: 1.3 },
+  { src: "/team/team-09.webp", grow: 1.1 },
+  { src: "/team/team-10.webp", grow: 1.4 },
+  { src: "/team/team-11.webp", grow: 1.2 },
+  { src: "/team/team-12.webp", grow: 1 },
+];
+
+export function OurTeamSection() {
+  return (
+    <section id="team" data-scroll-section className="our-team-showcase relative z-10 overflow-hidden pt-20 pb-6 md:pt-28 md:pb-8">
+      <div className="our-team-head">
+        <h2 data-scroll-reveal className="our-team-title">Our Team</h2>
+        <p data-scroll-reveal className="our-team-quote">
+          “People are at the heart of GoBeyond. We cultivate a workplace where creativity, collaboration, and continuous growth thrive.”
+        </p>
+      </div>
+
+      <div className="our-team-collage" aria-hidden="true">
+        {[0, 1, 2].map((row) => (
+          <div
+            key={row}
+            data-team-row
+            data-team-dir={row === 1 ? "right" : "left"}
+            className={`our-team-row our-team-row--${row + 1}`}
+          >
+            {teamPhotos.slice(row * 4, row * 4 + 4).map((photo) => (
+              <figure key={photo.src} className="our-team-photo" style={{ flexGrow: photo.grow }}>
+                <img src={photo.src} alt="" loading="lazy" decoding="async" />
+              </figure>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function ContactCtaSection() {
   return (
-    <section id="contact" data-home-story-section data-scroll-section className="relative z-10 overflow-hidden px-0 py-20 md:py-28">
-      <div data-home-story-content className="relative z-[2] flex min-h-screen items-center overflow-hidden px-5 sm:px-6 lg:px-8">
+    <section id="contact" data-home-story-section data-scroll-section className="relative z-10 overflow-hidden px-0 pt-12 md:pt-16">
+      <div data-home-story-content className="relative z-[2] overflow-hidden px-5 sm:px-6 lg:px-8">
         <div className="absolute inset-0 bg-[#101726]/36 backdrop-blur-[1px]" aria-hidden="true" />
         <div className="grid-mask pointer-events-none absolute inset-0 opacity-28" aria-hidden="true" />
         <div data-scroll-reveal className="relative mx-auto max-w-5xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_28px_90px_rgba(0,0,0,0.22)] backdrop-blur-md md:p-12">
@@ -508,7 +593,7 @@ export function ContactCtaSection() {
           </a>
         </div>
       </div>
-      <div className="contact-footer-bridge pointer-events-none absolute inset-x-0 bottom-0 h-44" aria-hidden="true" />
+      <div className="contact-footer-bridge pointer-events-none relative w-full" aria-hidden="true" />
     </section>
   );
 }
@@ -520,10 +605,10 @@ export function FooterBridge() {
 export function FooterSection() {
   const pageLinks = [
     { href: "/", label: "Home" },
-    { href: "/ve-chung-toi", label: "About Us" },
-    { href: "/tuyen-dung", label: "Careers" },
-    { href: "/hoat-dong", label: "Activities" },
-    { href: "/tin-tuc", label: "News" },
+    { href: "/about-us", label: "About Us" },
+    { href: "/careers", label: "Careers" },
+    { href: "/activities", label: "Activities" },
+    { href: "/news", label: "News" },
     { href: "/privacy-policy", label: "Privacy Policy" },
   ];
 

@@ -1,14 +1,5 @@
-import type { Metadata } from "next";
-import { ActivityListing } from "@/components/NewsRenderer";
-import { getPublishedActivities } from "@/lib/news";
+import { permanentRedirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Activities - GoBeyond LLC",
-  description: "Team activities, company events, and culture moments from GoBeyond.",
-};
-
-export default async function ActivitiesPage() {
-  const posts = await getPublishedActivities();
-
-  return <ActivityListing posts={posts} />;
+export default function LegacyActivitiesRoute() {
+  permanentRedirect("/activities");
 }

@@ -7,10 +7,10 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const menuItems = [
   { label: "HOME", href: "/", match: "/" },
-  { label: "ABOUT US", href: "/ve-chung-toi", match: "/ve-chung-toi" },
-  { label: "CAREERS", href: "/tuyen-dung", match: "/tuyen-dung" },
-  { label: "ACTIVITIES", href: "/hoat-dong", match: "/hoat-dong" },
-  { label: "NEWS", href: "/tin-tuc", match: "/tin-tuc" },
+  { label: "ABOUT US", href: "/about-us", match: "/about-us" },
+  { label: "CAREERS", href: "/careers", match: "/careers" },
+  { label: "ACTIVITIES", href: "/activities", match: "/activities" },
+  { label: "NEWS", href: "/news", match: "/news" },
 ];
 
 function Icon({ children, className = "" }: { children: ReactNode; className?: string }) {
@@ -68,7 +68,7 @@ export function Navbar() {
             </a>
           ))}
           <a
-            href="/tuyen-dung"
+            href="/careers"
             className="magnetic ml-2 inline-flex min-h-11 items-center rounded-full border border-[#F26522]/45 bg-[#F26522] px-5 text-xs font-black uppercase tracking-[0.12em] text-white shadow-[0_14px_34px_rgba(242,101,34,0.26)] transition hover:-translate-y-0.5 hover:bg-[#d94d12]"
           >
             Apply

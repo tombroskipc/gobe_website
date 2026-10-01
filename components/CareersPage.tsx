@@ -18,49 +18,49 @@ const jobs: Job[] = [
   {
     date: "Dec 08",
     excerpt: "Looking for a talented Google Ads marketer who can test, optimize, and read market signals.",
-    href: "/tuyen-dung/marketing-google-ads",
+    href: "/careers/marketing-google-ads",
     title: "Marketing Google Ads",
     tone: "#F26522",
   },
   {
     date: "Dec 08",
     excerpt: "Partner with the performance team to scale Facebook Ads campaigns for international markets.",
-    href: "/tuyen-dung/marketing-facebook-ads",
+    href: "/careers/marketing-facebook-ads",
     title: "Marketing Facebook Ads",
     tone: "#5AA2E8",
   },
   {
     date: "Dec 08",
     excerpt: "Produce short videos, visual angles, and creative content for e-commerce campaigns.",
-    href: "/tuyen-dung/creative-video",
+    href: "/careers/creative-video",
     title: "Creative Video",
     tone: "#D95B9F",
   },
   {
     date: "Jan 05",
     excerpt: "Support customers, handle feedback, and coordinate with operations for a smooth buying experience.",
-    href: "/tuyen-dung/customer-service",
+    href: "/careers/customer-service",
     title: "Customer Service",
     tone: "#2ED4A4",
   },
   {
     date: "Aug 29",
     excerpt: "Recruit, develop people, and build a proactive operating culture within the team.",
-    href: "/tuyen-dung/human-resource",
+    href: "/careers/human-resource",
     title: "Human Resource",
     tone: "#E9C15F",
   },
   {
     date: "Apr 21",
     excerpt: "Manage orders, coordinate suppliers and logistics, and monitor operations from order receipt to delivery.",
-    href: "/tuyen-dung/fulfillment-full-time",
+    href: "/careers/fulfillment-full-time",
     title: "Fulfillment Full-time",
     tone: "#F26522",
   },
   {
     date: "Apr 21",
     excerpt: "Marketplace operations internship supporting Etsy listings, tracking, and product data workflows.",
-    href: "/tuyen-dung/van-hanh-san-etsy-intern",
+    href: "/careers/van-hanh-san-etsy-intern",
     title: "Etsy Marketplace Operations Intern",
     tone: "#5AA2E8",
   },
@@ -125,7 +125,7 @@ function SectionMark({ current, label }: { current: string; label: string }) {
 }
 
 function JobCard({ job, index }: { job: Job; index: number }) {
-  const isPrimary = job.href === "/tuyen-dung/fulfillment-full-time";
+  const isPrimary = job.href === "/careers/fulfillment-full-time";
 
   return (
     <a
@@ -297,7 +297,7 @@ export function FulfillmentJobPage() {
               <a className="rounded-full bg-[#F26522] px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white transition hover:bg-[#d94d12]" href="mailto:tuyendung@gobe.asia?subject=%5BGoBeyond%20-%20FULFILLMENT%20FULL-TIME%5D%20Full%20name">
                 Send CV
               </a>
-              <a className="rounded-full border border-white/20 px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-white hover:text-white" href="/tuyen-dung">
+              <a className="rounded-full border border-white/20 px-6 py-3 text-sm font-black uppercase tracking-[0.1em] text-white/78 transition hover:border-white hover:text-white" href="/careers">
                 View other roles
               </a>
             </div>

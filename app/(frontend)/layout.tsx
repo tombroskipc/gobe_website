@@ -4,7 +4,7 @@ import { SuppressDevWarnings } from "@/components/SuppressDevWarnings";
 import { ThemeScript } from "@/components/ThemeScript";
 import "./globals.css";
 
-const siteTitle = "GoBeyond - Go Big Or Go Home";
+const siteTitle = "GoBeyond - Go global or go home";
 const siteDescription =
   "From Vietnam to the world. GoBeyond is building a global e-commerce powerhouse — 5 million orders by 2030.";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gobe.asia";

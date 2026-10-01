@@ -7,7 +7,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import * as THREE from "three";
 
 const EXTERNAL_MODEL_URL = process.env.NEXT_PUBLIC_GOBE_MODEL_URL;
-const LOCAL_MODEL_PATH = "/models/gobe-3d-globe.web.glb?v=original-22mb-20260607";
+const LOCAL_MODEL_PATH = "/models/gobe-3d-globe.web.glb?v=logo-hq-rest-lite-8mb-20261001";
 const LOCAL_MODEL_CHUNKS: string[] = [];
 const CAMERA_POSITION = new THREE.Vector3(0, 1.2, 7.7);
 const CAMERA_TARGET = new THREE.Vector3(0, 0.08, 0);
@@ -19,8 +19,9 @@ const MAIN_RING_ROTATE_SPEED = 0.05;
 const ORBIT_ROTATE_SPEED = 0.042;
 const GLASS_OPACITY = 0.16;
 const MODEL_BASE_ROTATION = new THREE.Euler(-0.04, -0.82, 0);
-const ACTIVE_CANVAS_DPR: [number, number] = [0.65, 0.95];
-const IDLE_CANVAS_DPR: [number, number] = [0.5, 0.75];
+const ACTIVE_CANVAS_DPR: [number, number] = [0.5, 0.8];
+const IDLE_CANVAS_DPR: [number, number] = [0.35, 0.55];
+const TARGET_FPS = 30;
 
 interface GobeModelProps {
   active?: boolean;
@@ -79,8 +80,7 @@ function makeUpperGlobeTransparent(scene: THREE.Object3D) {
     const materials = Array.isArray(child.material) ? child.material : [child.material];
     const hasGlassMaterial = materials.some(
       (material) =>
-        material instanceof THREE.MeshPhysicalMaterial &&
-        ((material.transmission ?? 0) > 0 || (material.ior ?? 1) > 1)
+        material instanceof THREE.MeshPhysicalMaterial && (material.transmission ?? 0) > 0
     );
     const isUpperGlass =
       child.name.toLowerCase().includes("sphere") ||
@@ -97,7 +97,7 @@ function makeUpperGlobeTransparent(scene: THREE.Object3D) {
       glass.transparent = true;
       glass.opacity = GLASS_OPACITY;
       glass.depthWrite = false;
-      glass.side = THREE.DoubleSide;
+      glass.side = THREE.FrontSide;
       glass.needsUpdate = true;
 
       if (glass instanceof THREE.MeshStandardMaterial) {
@@ -105,6 +105,14 @@ function makeUpperGlobeTransparent(scene: THREE.Object3D) {
         glass.metalness = 0.02;
         glass.roughness = 0.3;
         glass.envMapIntensity = 0.58;
+      }
+
+      if (glass instanceof THREE.MeshPhysicalMaterial) {
+        glass.transmission = 0;
+        glass.thickness = 0;
+        glass.ior = 1;
+        glass.clearcoat = 0;
+        glass.sheen = 0;
       }
 
       return glass;
@@ -412,6 +420,34 @@ function ModelContent({
   );
 }
 
+function FrameLimiter({ active }: { active: boolean }) {
+  const invalidate = useThree((state) => state.invalidate);
+
+  useEffect(() => {
+    if (!active) {
+      return;
+    }
+
+    let frame = 0;
+    let last = 0;
+    const interval = 1000 / TARGET_FPS;
+
+    const loop = (time: number) => {
+      if (time - last >= interval) {
+        last = time;
+        invalidate();
+      }
+      frame = window.requestAnimationFrame(loop);
+    };
+
+    frame = window.requestAnimationFrame(loop);
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [active, invalidate]);
+
+  return null;
+}
+
 export function GobeModel({
   active = true,
   scale = 1,
@@ -432,10 +468,11 @@ export function GobeModel({
       <Canvas
         camera={{ position: CAMERA_POSITION.toArray(), fov: CAMERA_FOV, near: 0.05, far: 80 }}
         dpr={active ? ACTIVE_CANVAS_DPR : IDLE_CANVAS_DPR}
-        frameloop={active ? "always" : "demand"}
+        frameloop="demand"
         gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
         style={{ background: "transparent", display: "block", height: "100%", width: "100%" }}
       >
+        <FrameLimiter active={active} />
         <ambientLight intensity={0.86} />
         <hemisphereLight args={["#ffffff", "#29385a", 0.92]} />
         <directionalLight position={[4.8, 6.5, 8]} intensity={2.2} />

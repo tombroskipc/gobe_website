@@ -97,7 +97,7 @@ function legacyPost({
         heading: tag === "activity" ? "Explore more GoBeyond activities" : "Explore more GoBeyond updates",
         body: "This content was seeded from the legacy website and can be replaced by new posts published by the editorial team in Payload CMS.",
         label: tag === "activity" ? "View activities" : "View news",
-        href: tag === "activity" ? "/hoat-dong" : "/tin-tuc",
+        href: tag === "activity" ? "/activities" : "/news",
       },
     ],
   };

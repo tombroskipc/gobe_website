@@ -7,6 +7,7 @@ import {
   HOME_STORY_ACTIVE_SECTION_EVENT,
   isHeroModelAnimationActive,
 } from "./homeSectionStory";
+import { SHOW_HERO_GLOBE_MODEL } from "./globeVisibility";
 
 type HeroStyle = CSSProperties & {
   "--mx": string;
@@ -327,9 +328,12 @@ export function LandingHeroSection({
                 data-scroll-reveal
                 className="home-hero-title max-w-full text-4xl font-black leading-[0.9] tracking-normal text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
               >
-                GoBeyond LLC
-                <span className="mt-2 block text-lg font-medium italic leading-tight text-white/86 sm:text-xl md:text-2xl lg:text-3xl">
-                  Go Big Or Go Home
+                <span className="hero-brand">
+                  <span className="hero-brand-line">GoBeyond</span>
+                  <span className="hero-brand-line">LLC</span>
+                </span>
+                <span className="mt-2 block text-lg font-medium italic leading-tight text-[#F26522] sm:text-xl md:text-2xl lg:text-3xl">
+                  Go global or go home
                 </span>
               </h1>
               <p
@@ -358,7 +362,7 @@ export function LandingHeroSection({
                   className="pointer-events-none absolute left-1/2 top-1/2 h-[58%] w-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full"
                   aria-hidden="true"
                 />
-                {!isModelOpen ? (
+                {SHOW_HERO_GLOBE_MODEL && !isModelOpen ? (
                   shouldLoadInlineModel ? (
                     <LazyGobeModel
                       active={inlineModelActive}
@@ -371,19 +375,21 @@ export function LandingHeroSection({
                     />
                   ) : null
                 ) : null}
-                <button
-                  type="button"
-                  className="pointer-events-auto absolute inset-0 z-[3] hidden cursor-zoom-in appearance-none border-0 bg-transparent p-0 outline-none md:block"
-                  aria-label="Expand 3D globe"
-                  onClick={isInlineModelExpandable ? openModel : undefined}
-                  tabIndex={isInlineModelExpandable ? 0 : -1}
-                />
+                {SHOW_HERO_GLOBE_MODEL ? (
+                  <button
+                    type="button"
+                    className="pointer-events-auto absolute inset-0 z-[3] hidden cursor-zoom-in appearance-none border-0 bg-transparent p-0 outline-none md:block"
+                    aria-label="Expand 3D globe"
+                    onClick={isInlineModelExpandable ? openModel : undefined}
+                    tabIndex={isInlineModelExpandable ? 0 : -1}
+                  />
+                ) : null}
               </div>
             </div>
           </div>
         </div>
       </section>
-      {isModelOpen ? (
+      {SHOW_HERO_GLOBE_MODEL && isModelOpen ? (
         <>
           <button
             type="button"

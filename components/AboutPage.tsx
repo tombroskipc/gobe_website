@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, type CSSProperties, type ReactNode } from "react";
+import type { IconType } from "react-icons";
+import { FaBox, FaBullhorn, FaCode, FaCog, FaPalette } from "react-icons/fa";
 import { CustomCursor } from "./CustomCursor";
 import { FooterBridge, FooterSection } from "./LegacySections";
 import { Navbar } from "./Navbar";
@@ -37,50 +39,180 @@ const stats = [
   },
 ];
 
-const principles = [
-  "Continuous innovation",
-  "Entrepreneurial spirit",
-  "Products beyond expectations",
-  "Systematic operations",
-];
+type JourneyMilestone = {
+  year: string;
+  phase: string;
+  description: string;
+  accent: string;
+  photo: string;
+  icon: string;
+};
 
-const journey = [
+const journey: JourneyMilestone[] = [
   {
     year: "2022",
     phase: "Positioning",
     description: "Establishing our business foundation and focusing on e-commerce as our core direction",
-    accent: "#ffb15f",
-    symbol: "01",
+    accent: "#f2a24c",
+    photo: "/team/team-03.webp",
+    icon: "/journey/positioning.webp",
   },
   {
     year: "2023",
     phase: "Establishment",
     description: "Founded the company and launched key products across Shopify, Amazon, and Etsy",
-    accent: "#ff6b4d",
-    symbol: "02",
+    accent: "#ef5744",
+    photo: "/team/team-06.webp",
+    icon: "/journey/establishment.webp",
   },
   {
     year: "2024",
     phase: "Consolidation",
     description: "Focused on developing POD and dropshipping products, optimizing operations, and enhancing quality",
-    accent: "#58a8ef",
-    symbol: "03",
+    accent: "#3b93db",
+    photo: "/team/team-02.webp",
+    icon: "/journey/consolidation.webp",
   },
   {
     year: "2025",
     phase: "Development",
     description:
       "Expanded our global market presence, enhanced our business infrastructure, and drove sustainable revenue growth",
-    accent: "#f4bc34",
-    symbol: "04",
+    accent: "#f2b134",
+    photo: "/team/team-04.webp",
+    icon: "/journey/development.webp",
   },
   {
     year: "2026",
     phase: "Expansion",
     description:
       "Optimized our operations end-to-end, diversified our product categories, and enhanced the overall customer experience",
-    accent: "#ff6a10",
-    symbol: "05",
+    accent: "#ef7c22",
+    photo: "/team/team-01.webp",
+    icon: "/journey/expansion.webp",
+  },
+];
+
+function JourneyTimeline() {
+  return (
+    <ol className="journey-timeline">
+      {journey.map((milestone, index) => (
+        <li
+          key={milestone.year}
+          className={`journey-stop ${index % 2 === 0 ? "is-left" : "is-right"}`}
+          style={{ "--journey-accent": milestone.accent } as CSSProperties}
+        >
+          <figure className="journey-stop-media">
+            <img
+              className="journey-stop-photo"
+              src={milestone.photo}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <span className="journey-stop-year">{milestone.year}</span>
+          </figure>
+          <span className="journey-stop-floater" aria-hidden="true">
+            <img src={milestone.icon} alt="" loading="lazy" decoding="async" />
+          </span>
+          <article className="journey-stop-card">
+            <h3 className="journey-stop-phase">{milestone.phase}</h3>
+            <p className="journey-stop-copy">{milestone.description}</p>
+          </article>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+type TeamMember = {
+  name: string;
+  role: string;
+  note?: string;
+  initials: string;
+  photo?: string;
+};
+
+type TeamGroup = {
+  id: string;
+  label: string;
+  icon: IconType;
+  accent: string;
+  description: string;
+  department: string;
+  region: string;
+  focus: string[];
+  members: TeamMember[];
+};
+
+const teams: TeamGroup[] = [
+  {
+    id: "operation",
+    label: "Operation",
+    icon: FaCog,
+    accent: "#f26522",
+    description: "Leading our operations and people, ensuring the company runs smoothly and efficiently.",
+    department: "Operation Department",
+    region: "Vietnam",
+    focus: ["People & culture", "Process & SOP", "Cross-team coordination"],
+    members: [
+      {
+        name: "Pham Thi Thu Trang",
+        role: "Acting Operation Leader",
+        note: "Optimizing processes, empowering people, driving results.",
+        initials: "TT",
+      },
+      {
+        name: "Le Minh Hoang",
+        role: "Human Resources",
+        note: "Building a great place to work, for a greater tomorrow.",
+        initials: "MH",
+      },
+    ],
+  },
+  {
+    id: "developer",
+    label: "Developer",
+    icon: FaCode,
+    accent: "#2f80ed",
+    description: "Building the platforms, automations, and internal tools that keep our stores fast and reliable.",
+    department: "Engineering Department",
+    region: "Vietnam",
+    focus: ["Platform & infra", "Automation", "Internal tools"],
+    members: [],
+  },
+  {
+    id: "marketing",
+    label: "Marketing",
+    icon: FaBullhorn,
+    accent: "#27ae60",
+    description: "Driving demand through paid media, creative testing, and market research across channels.",
+    department: "Marketing Department",
+    region: "Vietnam",
+    focus: ["Paid media", "Creative testing", "Market research"],
+    members: [],
+  },
+  {
+    id: "designer",
+    label: "Designer",
+    icon: FaPalette,
+    accent: "#9b51e0",
+    description: "Crafting products, storefronts, and brand visuals that stand out in global markets.",
+    department: "Design Department",
+    region: "Vietnam",
+    focus: ["Product design", "Storefront & brand", "Visual systems"],
+    members: [],
+  },
+  {
+    id: "fulfillment",
+    label: "Fulfillment",
+    icon: FaBox,
+    accent: "#14b8a6",
+    description: "Coordinating suppliers, production, and delivery so every order reaches customers on time.",
+    department: "Fulfillment Department",
+    region: "Vietnam",
+    focus: ["Supplier network", "Production & QC", "Delivery & CS"],
+    members: [],
   },
 ];
 
@@ -157,7 +289,7 @@ export function AboutPage() {
         data-home-story-nav
         className="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 grid-cols-1 gap-3 lg:grid"
       >
-        {["about-gobeyond", "our-journey", "about-numbers", "about-vision", "about-brands"].map((id) => (
+        {["about-gobeyond", "our-journey", "about-vision", "our-team", "about-brands"].map((id) => (
           <a
             key={id}
             href={`#${id}`}
@@ -168,132 +300,48 @@ export function AboutPage() {
       </nav>
 
       <SectionFrame id="about-gobeyond">
-        <div className="relative mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center gap-8 py-5 lg:grid-cols-[minmax(0,0.52fr)_minmax(0,0.48fr)]">
-          <div className="min-w-0">
-            <div data-scroll-reveal>
-              <SectionMark current="01" label="" />
-            </div>
-            <h1 data-scroll-reveal className="mobile-page-title mt-6 max-w-4xl text-4xl font-black uppercase leading-[0.86] tracking-normal text-white sm:text-4xl lg:text-6xl xl:text-8xl">
-              About
-              <span className="block text-[#ff7648]">GoBeyond</span>
-            </h1>
-            <div data-scroll-reveal className="mt-6 max-w-2xl space-y-4 text-base font-medium leading-7 text-white/72 md:text-lg md:leading-8">
-              <p>
-                GoBeyond is a Ho Chi Minh City startup with four years of focus in POD and dropshipping across North
-                American and European markets.
-              </p>
-              <p>
-                Guided by the spirit of <strong className="text-white">go global, keep moving</strong>, we believe a
-                small, talented, and passionate team can create meaningful impact in the global market.
-              </p>
-            </div>
-            <div data-scroll-reveal className="mt-7 flex flex-wrap gap-3">
-              {principles.map((item) => (
-                <span
-                  key={item}
-                  className="border border-white/14 bg-white/[0.045] px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-white/74"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <figure data-scroll-media className="relative mx-auto w-full max-w-[500px] xl:max-w-[580px]">
-            <div
-              className="absolute -inset-4 border border-[#F26522]/28 bg-[#F26522]/8 shadow-[0_34px_110px_rgba(242,101,34,0.12)]"
-              aria-hidden="true"
-            />
+        <div className="relative mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl flex-col justify-center py-8 lg:py-10">
+          <figure data-scroll-media className="about-hero relative w-full">
             <img
-              src="/about/ly-anh-post-website-7.png"
-              alt="GoBeyond meeting and brand message"
-              className="relative aspect-[16/10] w-full object-cover"
+              src="/team/team-11.webp"
+              alt="GoBeyond team building at the beach"
+              className="about-hero-img w-full object-cover"
+              loading="eager"
+              decoding="async"
             />
+            <span className="about-hero-pill">About GoBeyond</span>
           </figure>
         </div>
       </SectionFrame>
 
-      <SectionFrame id="our-journey" className="bg-[#06101d]">
+      <SectionFrame id="our-journey" className="our-journey-section bg-[#06101d]">
         <div className="relative mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl flex-col justify-center py-8 lg:py-10">
-          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-            <div>
-              <div data-scroll-reveal>
-                <SectionMark current="02" label="Our story in motion" />
-              </div>
-              <h2 data-scroll-reveal className="mobile-page-title mt-5 text-5xl font-black uppercase leading-[0.88] tracking-normal sm:text-6xl lg:text-7xl xl:text-8xl">
-                Our <span className="text-[#ff7648]">Journey</span>
-              </h2>
-            </div>
-            <p data-scroll-reveal className="max-w-md text-sm font-medium leading-6 text-white/62 md:text-right md:text-base md:leading-7">
-              Every stage made the next one possible. Here is how GoBeyond has grown from a focused idea into a global
-              e-commerce operation.
-            </p>
-          </div>
-
-          <div className="relative mt-8 lg:mt-10">
-            <div
-              className="absolute left-5 right-5 top-[2.35rem] hidden h-px bg-gradient-to-r from-[#ffb15f] via-[#58a8ef] to-[#ff6a10] lg:block"
-              aria-hidden="true"
-            />
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:gap-3">
-              {journey.map((milestone) => (
-                <article
-                  key={milestone.year}
-                  data-scroll-card
-                  className="group relative min-w-0 border border-white/10 bg-[#0d1a2b]/85 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.22)] transition duration-300 hover:-translate-y-1 hover:border-[color:var(--journey-accent)] hover:bg-[#102238] lg:pt-14"
-                  style={{ "--journey-accent": milestone.accent } as CSSProperties}
-                >
-                  <div className="flex items-center justify-between lg:absolute lg:left-5 lg:right-5 lg:top-0 lg:-translate-y-1/2">
-                    <span className="grid h-10 w-10 place-items-center rounded-full border-4 border-[#06101d] bg-[color:var(--journey-accent)] text-[10px] font-black tracking-wider text-[#07101c]">
-                      {milestone.symbol}
-                    </span>
-                    <span className="text-2xl font-black tracking-tight text-white lg:text-xl">
-                      {milestone.year}
-                    </span>
-                  </div>
-                  <div className="mt-6 h-1 w-9 bg-[color:var(--journey-accent)] transition-all duration-300 group-hover:w-full lg:mt-0" />
-                  <h3 className="mt-5 text-lg font-black uppercase leading-[0.95] text-white">{milestone.phase}</h3>
-                  <p className="mt-4 text-sm font-medium leading-6 text-white/64">{milestone.description}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </div>
-      </SectionFrame>
-
-      <SectionFrame id="about-numbers" className="bg-[#030711]">
-        <div className="relative mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center gap-8 py-5 lg:grid-cols-[minmax(0,0.38fr)_minmax(0,0.62fr)]">
-          <div className="min-w-0">
-            <div data-scroll-reveal>
-              <SectionMark current="03" label="" />
-            </div>
-            <h2 data-scroll-reveal className="mobile-page-title mt-6 text-5xl font-black uppercase leading-[0.9] tracking-normal sm:text-6xl lg:text-6xl xl:text-7xl">
-              GoBeyond
-              <span className="block text-[#ff7648]">GoBeyond</span>
+          <header className="text-center">
+            <h2
+              data-scroll-reveal
+              className="our-journey-title mobile-page-title text-5xl font-black uppercase leading-[0.9] tracking-normal text-white sm:text-6xl lg:text-7xl xl:text-8xl"
+            >
+              Our <span className="text-[#ff7648]">Journey</span>
             </h2>
-            <p data-scroll-reveal className="mt-6 max-w-xl text-base font-medium leading-7 text-white/68 md:text-lg md:leading-8">
-              We keep improving demand-led e-commerce so we can create high-quality products at accessible prices.
+            <p
+              data-scroll-reveal
+              className="our-journey-subtitle mt-4 text-[11px] font-black uppercase tracking-[0.42em] text-white/50 sm:text-sm"
+            >
+              Go Beyond Together
             </p>
+          </header>
+
+          <div className="journey-stats" data-scroll-reveal>
+            {stats.map((stat) => (
+              <div key={stat.label} className="journey-stat" style={{ "--accent": stat.accent } as AccentStyle}>
+                <span className="journey-stat-value">{stat.value}</span>
+                <span className="journey-stat-label">{stat.label}</span>
+              </div>
+            ))}
           </div>
 
-          <div className="grid min-w-0 gap-4 sm:grid-cols-2">
-            {stats.map((stat, index) => (
-              <article
-                key={stat.label}
-                data-scroll-card
-                className="min-h-[190px] border border-white/12 bg-[#101520]/78 p-5 shadow-[0_28px_80px_rgba(0,0,0,0.30)] backdrop-blur-md transition hover:-translate-y-1 hover:border-[color:var(--accent)]"
-                style={{ "--accent": stat.accent } as AccentStyle}
-              >
-                <span className="text-sm font-black uppercase tracking-[0.18em] text-white/38">
-                  0{index + 1}
-                </span>
-                <div className="mt-5 text-5xl font-black leading-none text-[color:var(--accent)] lg:text-6xl xl:text-7xl">
-                  {stat.value}
-                </div>
-                <h3 className="mt-4 text-lg font-black uppercase leading-tight text-white">{stat.label}</h3>
-                <p className="mt-2 text-sm font-medium leading-6 text-white/62">{stat.body}</p>
-              </article>
-            ))}
+          <div className="journey-panel" data-scroll-reveal>
+            <JourneyTimeline />
           </div>
         </div>
       </SectionFrame>
@@ -334,6 +382,65 @@ export function AboutPage() {
                 in e-commerce.
               </p>
             </article>
+          </div>
+        </div>
+      </SectionFrame>
+
+      <SectionFrame id="our-team" className="our-team-section">
+        <div className="relative mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl flex-col justify-center py-8 lg:py-10">
+          <div className="our-team-shell">
+            <header className="our-team-header" data-scroll-reveal>
+              <div className="our-team-head-main">
+                <p className="our-team-eyebrow">Our Team</p>
+                <h2 className="our-team-heading mobile-page-title text-4xl font-black uppercase leading-[0.92] tracking-normal text-white sm:text-5xl lg:text-6xl xl:text-7xl">
+                  People Build
+                  <span className="our-team-heading-line">
+                    What&apos;s <span className="our-team-heading-accent">Beyond</span>
+                  </span>
+                </h2>
+              </div>
+              <p className="our-team-lede">
+                We are a diverse team of strategists, creators, marketers, and operators, working together to build and
+                scale global e-commerce brands.
+              </p>
+            </header>
+
+            <ul className="our-team-grid" data-scroll-reveal>
+              {teams.map((team, index) => {
+                const TeamIcon = team.icon;
+
+                return (
+                  <li
+                    key={team.id}
+                    className="our-team-tile"
+                    style={{ "--team-accent": team.accent } as CSSProperties}
+                  >
+                    <div className="our-team-tile-top">
+                      <span className="our-team-tile-icon" aria-hidden="true">
+                        <TeamIcon />
+                      </span>
+                      <span className="our-team-tile-index">{String(index + 1).padStart(2, "0")}</span>
+                    </div>
+                    <h3 className="our-team-tile-label">{team.label}</h3>
+                    <p className="our-team-tile-focus">{team.focus[0]}</p>
+                    <div className="our-team-tile-foot">
+                      {team.members.length > 0 ? (
+                        <span className="our-team-tile-avatars" aria-hidden="true">
+                          {team.members.slice(0, 3).map((member) => (
+                            <span key={member.name} className="our-team-tile-avatar">
+                              {member.initials}
+                            </span>
+                          ))}
+                        </span>
+                      ) : null}
+                      <span className="our-team-tile-badge">
+                        {team.members.length > 0 ? `${team.members.length} members` : "Growing"}
+                      </span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
       </SectionFrame>

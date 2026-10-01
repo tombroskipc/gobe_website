@@ -123,6 +123,33 @@ function activateScrollController() {
       });
     });
 
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const teamCollage = document.querySelector<HTMLElement>(".our-team-collage");
+
+    if (!prefersReducedMotion && teamCollage) {
+      const distance = Math.min(96, window.innerWidth * 0.06);
+
+      gsap.utils.toArray<HTMLElement>("[data-team-row]").forEach((row) => {
+        const toLeft = row.dataset.teamDir !== "right";
+
+        gsap.fromTo(
+          row,
+          { x: toLeft ? distance : -distance, force3D: true },
+          {
+            x: toLeft ? -distance : distance,
+            ease: "none",
+            force3D: true,
+            scrollTrigger: {
+              trigger: teamCollage,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 0.35,
+            },
+          },
+        );
+      });
+    }
+
     gsap.utils.toArray<HTMLElement>("[data-logo-marquee]").forEach((track) => {
       const width = track.scrollWidth / 2;
       if (width <= 0) return;

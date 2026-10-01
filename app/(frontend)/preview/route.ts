@@ -19,12 +19,12 @@ export async function GET(req: NextRequest) {
   draft.enable();
 
   if (type === "careers") {
-    redirect(`/tuyen-dung/${slug || ""}`);
+    redirect(`/careers/${slug || ""}`);
   }
 
   if (type === "activity") {
-    redirect(`/hoat-dong/${slug || ""}`);
+    redirect(`/activities/${slug || ""}`);
   }
 
-  redirect(`/tin-tuc/${slug || ""}`);
+  redirect(`/news/${slug || ""}`);
 }

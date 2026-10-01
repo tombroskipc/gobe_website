@@ -1,2 +1,5 @@
-export { metadata } from "../../tin-tuc/page";
-export { default } from "../../tin-tuc/page";
+import { permanentRedirect } from "next/navigation";
+
+export default function LegacyNestedNewsRoute() {
+  permanentRedirect("/news");
+}

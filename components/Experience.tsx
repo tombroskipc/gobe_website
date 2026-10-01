@@ -3,11 +3,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { LandingHeroSection } from "./LandingHeroSection";
 import { PageLoadingOverlay } from "./PageLoadingOverlay";
+import { SHOW_HERO_GLOBE_MODEL } from "./globeVisibility";
 import {
   ContactCtaSection,
   CoreValuesSection,
   FooterSection,
   OperationsSection,
+  OurTeamSection,
   ScaleSection,
 } from "./LegacySections";
 import { Navbar } from "./Navbar";
@@ -118,7 +120,7 @@ function useDeferredEnhancements() {
 export function Experience() {
   const enhancementsEnabled = useDeferredEnhancements();
   const [showLoadingOverlay] = useState(() => !hasSeenHomeLoading());
-  const [initialModelReady, setInitialModelReady] = useState(false);
+  const [initialModelReady, setInitialModelReady] = useState(!SHOW_HERO_GLOBE_MODEL);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -164,10 +166,14 @@ export function Experience() {
     <main id="scroll-story" className="relative min-h-screen overflow-x-hidden bg-[#0c1018]/45 text-white">
       <Navbar />
       {showLoadingOverlay ? <PageLoadingOverlay ready={initialModelReady} /> : null}
-      <LandingHeroSection forceInitialModelLoad={!initialModelReady} onInitialModelLoaded={handleInitialModelLoaded} />
+      <LandingHeroSection
+        forceInitialModelLoad={SHOW_HERO_GLOBE_MODEL && !initialModelReady}
+        onInitialModelLoaded={handleInitialModelLoaded}
+      />
       <CoreValuesSection />
       <OperationsSection />
       <ScaleSection />
+      <OurTeamSection />
       <ContactCtaSection />
       <FooterSection />
     </main>
